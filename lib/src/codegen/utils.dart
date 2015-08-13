@@ -107,15 +107,3 @@ String libraryName(String package, String path) {
 
   return buffer.toString();
 }
-
-String libraryPath(String name) {
-  // Split based on the '.' and remove the package name
-  var split = name.split('.').sublist(1);
-
-  // Append .dart to the last value in the name
-  var lastIndex = split.length - 1;
-  var last = split[lastIndex];
-  split[lastIndex] = last + '.dart';
-
-  return posix.join('lib', posix.joinAll(split));
-}

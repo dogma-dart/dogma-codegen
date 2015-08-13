@@ -28,9 +28,8 @@ const String _internalConstructorName = '_internal';
 /// The name of the variable used in the factory constructor.
 const String _factoryVariableName = 'model';
 
-String generateModel(ModelMetadata metadata) {
-  var buffer = new StringBuffer();
-
+/// Writes out the class definition of a model using its [metadata] to the [buffer].
+void generateModel(ModelMetadata metadata, StringBuffer buffer) {
   // Get the names
   var name = metadata.name;
 
@@ -41,19 +40,27 @@ String generateModel(ModelMetadata metadata) {
   var explicit = metadata.explicitSerialization;
 
   for (var field in metadata.fields) {
+    // Write out the field comment
+    var comments = field.comments;
+
+    if (comments.isNotEmpty) {
+      buffer.writeln('/// $comments');
+    }
+
+    // Write out the explicit serialization metadata
     if (explicit) {
       buffer.writeln('@Serialize.field(\'${field.serializationName}\')');
     }
 
-    buffer.writeln('${field.type.name} ${field.name};');
+    // Write out the field definition
+    buffer.writeln('${typeName(field.type)} ${field.name};');
   }
 
+  // Close the class declaration
   buffer.writeln('}');
-
-  return buffer.toString();
 }
 
-/// Writes out the class definition for an unmodifiable view over the model using its [metadata].
+/// Writes out the class definition for an unmodifiable view over the model using its [metadata] to the [buffer].
 ///
 /// The generated class definition implements the model but prevents
 /// modification. Because it implements the model it can be used interchangeably
@@ -61,9 +68,7 @@ String generateModel(ModelMetadata metadata) {
 /// For cases where the field is a List or Map it creates instances of
 /// [UnmodifiableListView] and [UnmodifiableMapView] respectively, wrapping the
 /// data.
-String generateUnmodifiableModelView(ModelMetadata metadata) {
-  var buffer = new StringBuffer();
-
+void generateUnmodifiableModelView(ModelMetadata metadata, StringBuffer buffer) {
   // Get the names
   var name = metadata.name;
   var unmodifiableName = 'Unmodifiable${name}View';
@@ -161,8 +166,6 @@ String generateUnmodifiableModelView(ModelMetadata metadata) {
 
   // Close the class declaration
   buffer.writeln('}');
-
-  return buffer.toString();
 }
 
 /// Creates the code to create an unmodifiable view over the [field] with the given [type].

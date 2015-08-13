@@ -32,6 +32,8 @@ class FieldMetadata extends Metadata {
   final bool decode;
   /// Whether the field should be encoded.
   final bool encode;
+  /// Comments for the field.
+  final String comments;
   /// The serialization name.
   final String _serializationName;
 
@@ -44,7 +46,9 @@ class FieldMetadata extends Metadata {
   /// Serialization is specified in the [decode] and [encode] fields. If the
   /// name to serialize to is different than the name of field then
   /// [serializationName] should be specified.
-  FieldMetadata(String name, this.type, this.decode, this.encode, {String serializationName})
+  ///
+  /// Additionally code comments can be provided through [comments].
+  FieldMetadata(String name, this.type, this.decode, this.encode, {String serializationName, this.comments: ''})
       :  _serializationName = serializationName ?? ''
       , super(name);
 

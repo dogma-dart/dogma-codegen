@@ -23,18 +23,31 @@ import 'type_metadata.dart';
 
 /// Contains metadata for a library using Dogma Data for serialization.
 class LibraryMetadata extends Metadata {
-  Uri uri = new Uri();
-  final String filename;
-  final List<LibraryMetadata> imported;
-  final List<LibraryMetadata> exported;
+  //---------------------------------------------------------------------
+  // Member variables
+  //---------------------------------------------------------------------
 
+  /// The location of the library.
+  final Uri uri;
+  /// The libraries imported by the library.
+  final List<LibraryMetadata> imported;
+  /// The libraries exported by the library.
+  final List<LibraryMetadata> exported;
+  /// The models contained within the library.
   final List<ModelMetadata> models;
+  /// The enumerations contained within the library.
   final List<EnumMetadata> enumerations;
+  /// The converters contained within the library.
   final List<ConverterMetadata> converters;
+  /// The functions contained within the library.
   final List<FunctionMetadata> functions;
 
+  //---------------------------------------------------------------------
+  // Construction
+  //---------------------------------------------------------------------
+
   factory LibraryMetadata(String name,
-                  String filename,
+                  Uri uri,
                  {List<LibraryMetadata> imported,
                   List<LibraryMetadata> exported,
                   List<ModelMetadata> models,
@@ -51,7 +64,7 @@ class LibraryMetadata extends Metadata {
 
     return new LibraryMetadata._internal(
         name,
-        filename,
+        uri,
         imported,
         exported,
         models,
@@ -62,7 +75,7 @@ class LibraryMetadata extends Metadata {
   }
 
   LibraryMetadata._internal(String name,
-                            this.filename,
+                            this.uri,
                             this.imported,
                             this.exported,
                             this.models,
@@ -70,7 +83,6 @@ class LibraryMetadata extends Metadata {
                             this.converters,
                             this.functions)
       : super(name);
-
 }
 
 //---------------------------------------------------------------------

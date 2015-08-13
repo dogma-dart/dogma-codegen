@@ -53,6 +53,28 @@ class ModelMetadata extends Metadata {
     return false;
   }
 
+  /// Whether the model uses a list type.
+  bool get usesList {
+    for (var field in fields) {
+      if (field.type.isList) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /// Whether the model uses a map type.
+  bool get usesMap {
+    for (var field in fields) {
+      if (field.type.isMap) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   /// Gets the fields that are convertable within the model.
   Iterable<FieldMetadata> get convertableFields
       => fields.where((field) => field.decode || field.encode);
@@ -64,6 +86,14 @@ class ModelMetadata extends Metadata {
   /// Get the fields that are encodable within the model.
   Iterable<FieldMetadata> get encodableFields
       => fields.where((field) => field.encode);
+
+  /// Get the fields that are list types.
+  Iterable<FieldMetadata> get listFields
+      => fields.where((field) => field.type.isList);
+
+  /// Get the fields that are map types.
+  Iterable<FieldMetadata> get mapFields
+      => fields.where((field) => field.type.isMap);
 }
 
 /// Retrieves all the dependent types from the [metadata].

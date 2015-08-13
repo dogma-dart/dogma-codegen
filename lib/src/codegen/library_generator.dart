@@ -10,132 +10,61 @@ library dogma_codegen.src.codegen.library_generator;
 //---------------------------------------------------------------------
 
 import 'package:dogma_codegen/metadata.dart';
-import 'package:path/path.dart' show posix;
+import 'package:dogma_codegen/template.dart';
 
-import 'code_formatter.dart';
 import 'enum_converter_generator.dart';
 import 'model_converter_generator.dart';
 import 'model_generator.dart';
-import 'template.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
-String generateConverters(LibraryMetadata metadata) {
-  var buffer = new StringBuffer();
-  print(libraryTemplateValues(metadata));
+/// Definition of a source code generator.
+typedef void _SourceGenerator(LibraryMetadata library, StringBuffer buffer);
 
-  // Write the models
-  for (var model in metadata.models) {
-    buffer.writeln(generateModelDecoder(model));
-    buffer.writeln(generateModelEncoder(model));
+/// Generates the source code for models within a [library] into the [buffer].
+void generateModelsSource(LibraryMetadata library, StringBuffer buffer) {
+  for (var model in library.models) {
+    generateModel(model, buffer);
   }
-
-  // Write the enumerations
-  for (var enumeration in metadata.enumerations) {
-    buffer.writeln(generateEnumConverter(enumeration));
-  }
-
-  return formatCode(buffer);
 }
 
-String generateUnmodifiableModels(LibraryMetadata metadata) {
-  var buffer = new StringBuffer();
-  print(libraryTemplateValues(metadata));
-
-  for (var model in metadata.models) {
-    buffer.writeln(generateUnmodifiableModelView(model));
+/// Generates the source code for unmodifiable model views within a [library] into the [buffer].
+void generateUnmodifiableModelViewsSource(LibraryMetadata library, StringBuffer buffer) {
+  for (var model in library.models) {
+    generateUnmodifiableModelView(model, buffer);
   }
-
-  return formatCode(buffer);
 }
 
-String generateModels(LibraryMetadata metadata) {
-  var buffer = new StringBuffer();
-
-  for (var model in metadata.models) {
-    buffer.writeln(generateModel(model));
-  }
-
-  return formatCode(buffer);
+/// Generates the source code for converters within a [library] into the [buffer].
+void generateConvertersSource(LibraryMetadata library, StringBuffer buffer) {
+  // \TODO
 }
 
-String generateModelLibrary(LibraryMetadata metadata) {
+/// Generates the source code for a [library] that has no content.
+///
+/// This is used to handle root libraries which just export libraries.
+String generateRootLibrary(LibraryMetadata library)
+    => renderLibrary(library, '');
+
+/// Generates the source code for a [library] containing models.
+String generateModelsLibrary(LibraryMetadata library)
+    => _renderLibrary(library, generateModelsSource);
+
+/// Generates the source code for a [library] containing unmodifiable views of models.
+String generateUnmodifiableModelViewsLibrary(LibraryMetadata library)
+    => _renderLibrary(library, generateUnmodifiableModelViewsSource);
+
+/// Generates the source code for a [library] containing converters for models.
+String generateConvertersLibrary(LibraryMetadata library)
+    => _renderLibrary(library, generateConvertersSource);
+
+/// Generates the source code for a [library] with the given source [generator].
+String _renderLibrary(LibraryMetadata library, _SourceGenerator generator) {
   var buffer = new StringBuffer();
 
-  for (var model in metadata.models) {
-    buffer.writeln(generateModel(model));
-  }
+  generator(library, buffer);
 
-  var values = libraryTemplateValues(metadata);
-  values['code'] = formatCode(buffer);
-  values['generatedHeader'] = '';
-  values['header'] = '';
-
-  return template().renderString(values);
-}
-
-Map libraryTemplateValues(LibraryMetadata metadata) {
-  var values = {
-      'libraryName': metadata.name
-  };
-
-  // Get the directory containing the library
-  var libraryDirectory = posix.dirname(metadata.uri.toFilePath(windows: false));
-
-  // Get information on the imports
-  var standardLibraries = [];
-  var packageImports = [];
-  var relativeImports = [];
-
-  for (var import in metadata.imported) {
-    var uri = import.uri;
-
-    switch (uri.scheme) {
-      case 'dart':
-        standardLibraries.add(uri.toString());
-        break;
-      case 'package':
-        packageImports.add(uri.toString());
-        break;
-      case 'file':
-        relativeImports.add(posix.relative(uri.toFilePath(windows: false), from: libraryDirectory));
-        break;
-    }
-  }
-
-  // Add the standardLibraries information if applicable
-  values['standardLibraries'] = standardLibraries.isNotEmpty
-      ? { 'libraries': standardLibraries }
-      : null;
-
-  // Add the imports information if applicable
-  values['imports'] = packageImports.isNotEmpty || relativeImports.isNotEmpty
-      ? { 'packages': packageImports, 'relative': relativeImports }
-      : null;
-
-  // Get information on the exports
-  var packageExports = [];
-  var relativeExports = [];
-
-  for (var export in metadata.exported) {
-    var uri = export.uri;
-
-    switch (uri.scheme) {
-      case 'package':
-        packageExports.add(uri.toString());
-        break;
-      case 'file':
-        relativeExports.add(posix.relative(uri.toFilePath(windows: false), from: libraryDirectory));
-        break;
-    }
-  }
-
-  // Add the exports information if applicable
-  values['exports'] = packageExports.isNotEmpty || relativeExports.isNotEmpty
-      ? { 'packages': packageExports, 'relative': relativeExports }
-      : null;
-
-  return values;
+  return renderLibrary(library, buffer.toString().trim());
 }
