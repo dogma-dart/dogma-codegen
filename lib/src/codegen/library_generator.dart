@@ -20,6 +20,8 @@ import 'model_generator.dart';
 // Library contents
 //---------------------------------------------------------------------
 
+/// Definition of a library generator.
+typedef String LibraryGenerator(LibraryMetadata library);
 /// Definition of a source code generator.
 typedef void _SourceGenerator(LibraryMetadata library, StringBuffer buffer);
 
@@ -38,8 +40,39 @@ void generateUnmodifiableModelViewsSource(LibraryMetadata library, StringBuffer 
 }
 
 /// Generates the source code for converters within a [library] into the [buffer].
-void generateConvertersSource(LibraryMetadata library, StringBuffer buffer) {
-  // \TODO
+void generateConvertersSource(LibraryMetadata library,
+                              StringBuffer buffer)
+{
+  for (var converter in library.converters) {
+    var model = findModel(library, converter.type.name);
+
+    if (converter.decoder) {
+      generateModelDecoder(model, buffer);
+    } else {
+      generateModelEncoder(model, buffer);
+    }
+  }
+
+  // Look for enumerations
+  for (var function in library.functions) {
+    if (function.defaultConverter) {
+      var isDecoder = function.decoder;
+
+      var name = isDecoder
+          ? function.output.name
+          : function.input.name;
+
+      var enumeration = findEnumeration(library, name);
+
+      if (enumeration != null) {
+        if (isDecoder) {
+          generateEnumDecoder(enumeration, buffer);
+        } else {
+          generateEnumEncoder(enumeration, buffer);
+        }
+      }
+    }
+  }
 }
 
 /// Generates the source code for a [library] that has no content.

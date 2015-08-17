@@ -1,5 +1,5 @@
 # Don’t commit the following directories created by pub.
-build/
+/build/
 packages/
 .buildlog
 .pub

@@ -20,6 +20,14 @@ const String _decoded = '_decoded';
 /// Name for the list containing encoded values.
 const String _encoded = '_encoded';
 
+void generateEnumDecoder(EnumMetadata metadata, StringBuffer buffer) {
+
+}
+
+void generateEnumEncoder(EnumMetadata metadata, StringBuffer buffer) {
+
+}
+
 /// Writes out the converters for an enumeration with the given [metadata].
 ///
 /// For enumerations a set of functions are generated to provide the

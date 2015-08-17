@@ -17,7 +17,7 @@ import 'package:dogma_codegen/metadata.dart';
 //---------------------------------------------------------------------
 
 /// Writes out the class definition for a model decoder using the model's [metadata].
-String generateModelDecoder(ModelMetadata metadata) {
+void generateModelDecoder(ModelMetadata metadata, StringBuffer buffer) {
   // Get the decodable fields
   var builtinDecodableFields = new List<FieldMetadata>();
   var modelDecodableFields = new List<FieldMetadata>();
@@ -33,11 +33,10 @@ String generateModelDecoder(ModelMetadata metadata) {
   }
 
   if (builtinDecodableFields.isEmpty) {
-    return '';
+    return;
   }
 
   // Get the names
-  var buffer = new StringBuffer();
   var modelName = metadata.name;
   var name = modelName + 'Decoder';
 
@@ -70,13 +69,10 @@ String generateModelDecoder(ModelMetadata metadata) {
   buffer.writeln('}');
 
   buffer.writeln('}');
-
-  return buffer.toString();
 }
 
-String generateModelEncoder(ModelMetadata metadata) {
+void generateModelEncoder(ModelMetadata metadata, StringBuffer buffer) {
   // Get the names
-  var buffer = new StringBuffer();
   var modelName = metadata.name;
   var name = modelName + 'Encoder';
 
@@ -91,6 +87,4 @@ String generateModelEncoder(ModelMetadata metadata) {
   buffer.writeln('}');
 
   buffer.writeln('}');
-
-  return buffer.toString();
 }

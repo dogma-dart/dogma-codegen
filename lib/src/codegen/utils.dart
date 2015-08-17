@@ -94,7 +94,7 @@ String snakeCase(String value) {
 }
 
 /// Determines the name of a library in the [package] with the given [path].
-String libraryName(String package, String path) {
+String libraryNameOld(String package, String path) {
   var buffer = new StringBuffer();
   var split = posix.split(posix.withoutExtension(path)).sublist(1);
 

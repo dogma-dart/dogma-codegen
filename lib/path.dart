@@ -10,7 +10,7 @@ library dogma_codegen.path;
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:path/path.dart' as path;
+import 'package:path/path.dart' as p;
 
 //---------------------------------------------------------------------
 // Library contents
@@ -22,37 +22,43 @@ import 'package:path/path.dart' as path;
 /// converts to a posix style. This is done to ensure that paths are handled
 /// consistently as all path operations will be done using the posix
 /// implementation held in path.
-final _currentPath = path.toUri(path.current).toFilePath(windows: false);
+final currentPath = p.toUri(p.current).toFilePath(windows: false);
 
 Uri join(dynamic value, {dynamic base}) {
-  base ??= _currentPath;
+  base ??= currentPath;
 
   if (base is Uri) {
     base = base.toFilePath(windows: false);
   }
 
-  var joined = path.posix.join(base, value);
+  var joined = p.posix.join(base, value);
 
-  return path.posix.toUri(joined);
+  return p.posix.toUri(joined);
 }
 
 String relative(dynamic value, {dynamic from}) {
-  from ??= _currentPath;
+  from ??= currentPath;
 
   // Turn into a file path
   from = _filePath(from);
   value = _filePath(value);
 
   // Convert from into the dirname
-  from = _isDirectory(from) ? from : path.posix.dirname(from);
+  from = _isDirectory(from) ? from : p.posix.dirname(from);
 
-  return path.posix.relative(value, from: from);
+  return p.posix.relative(value, from: from);
 }
 
 String dirname(dynamic value) {
   value = _filePath(value);
 
-  return path.posix.dirname(value);
+  return p.posix.dirname(value);
+}
+
+String basenameWithoutExtension(dynamic value) {
+  value = _filePath(value);
+
+  return p.posix.basenameWithoutExtension(value);
 }
 
 Uri libraryPath(String value) {
@@ -60,13 +66,22 @@ Uri libraryPath(String value) {
   var split = value.split('.').sublist(1);
 
   var base = _isInLib(split[0])
-      ? path.posix.join(_currentPath, 'lib')
-      : _currentPath;
+      ? p.posix.join(currentPath, 'lib')
+      : currentPath;
 
   // Add .dart to the last value
   split[split.length - 1] += '.dart';
 
-  return path.posix.toUri(path.posix.join(base, path.posix.joinAll(split)));
+  return p.posix.toUri(p.posix.join(base, p.posix.joinAll(split)));
+}
+
+String libraryName(String package, dynamic path) {
+  path = _filePath(path);
+
+  var relative = p.posix.relative(path, from: currentPath);
+  var split = [package]..addAll(p.posix.split(relative));
+
+  return split.join('.');
 }
 
 /// Converts the [value] into a file path.
@@ -83,4 +98,4 @@ bool _isInLib(String value) {
 }
 
 bool _isDirectory(String value)
-    => path.posix.withoutExtension(value) == value;
+    => p.posix.withoutExtension(value) == value;

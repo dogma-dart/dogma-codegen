@@ -24,15 +24,21 @@ import 'package:dogma_codegen/template.dart';
 // Library contents
 //---------------------------------------------------------------------
 
-/// Creates a directory at the given [path].
+/// Creates a directory at the given [path] and returns whether it was created.
 ///
 /// The function determines if the directory is present on the disk and if not
 /// goes through the process of creating it.
-Future<Null> createDirectory(String path) async {
+Future<bool> createDirectory(String path) async {
   var directory = new Directory(path);
 
   if (!await directory.exists()) {
     await directory.create(recursive: true);
+
+    // Was not present
+    return false;
+  } else {
+    // Was present
+    return true;
   }
 }
 
