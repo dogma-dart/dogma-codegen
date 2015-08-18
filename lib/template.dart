@@ -85,7 +85,7 @@ void templateSource(String source) {
 /// Renders the source code for the [library] with the given [source] contents.
 ///
 /// The value of [source] will be run through the dart style formatter. The
-/// behavior of the formating can be changed through [formatter].
+/// behavior of the formatting can be changed through [formatter].
 String renderLibrary(LibraryMetadata library, String source) {
   // If not specified use the default template
   if (_template == null) {

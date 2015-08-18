@@ -75,8 +75,8 @@ class ModelMetadata extends Metadata {
     return false;
   }
 
-  /// Gets the fields that are convertable within the model.
-  Iterable<FieldMetadata> get convertableFields
+  /// Gets the fields that are convertible within the model.
+  Iterable<FieldMetadata> get convertibleFields
       => fields.where((field) => field.decode || field.encode);
 
   /// Gets the fields that are decodable within the model.
@@ -102,7 +102,7 @@ Iterable<TypeMetadata> modelDependencies(ModelMetadata metadata)
 
 /// Retrieves all the dependent types for converters from the [metadata].
 Iterable<TypeMetadata> modelConverterDependencies(ModelMetadata metadata)
-    => _dependencies(metadata.convertableFields);
+    => _dependencies(metadata.convertibleFields);
 
 /// Retrieves all the dependent types for decoders from the [metadata].
 Iterable<TypeMetadata> modelDecoderDependencies(ModelMetadata metadata)

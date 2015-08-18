@@ -34,7 +34,7 @@ class ConverterMetadata extends Metadata {
 
   /// Creates an instance of [ConverterMetadata] for the given [type].
   ///
-  /// Whehter or not the coverter will handle decoding is specified in
+  /// Whether or not the converter will handle decoding is specified in
   /// [decoder].
   ConverterMetadata(String name, this.type, this.decoder)
       : super(name);

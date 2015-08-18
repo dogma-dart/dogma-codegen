@@ -5,19 +5,28 @@
 
 library dogma_codegen.src.build.unmodifiable_model_views;
 
-import 'dart:async';
-import 'dart:io';
+//---------------------------------------------------------------------
+// Standard libraries
+//---------------------------------------------------------------------
 
-import 'package:dogma_codegen/codegen.dart';
+import 'dart:async';
+
+//---------------------------------------------------------------------
+// Imports
+//---------------------------------------------------------------------
+
 import 'package:dogma_codegen/metadata.dart';
 import 'package:dogma_codegen/io.dart';
 import 'package:dogma_codegen/path.dart';
-import 'package:dogma_codegen/template.dart';
 
 import 'libraries.dart';
 import 'search.dart';
 
-Future<LibraryMetadata> buildUnmodifiableViews(LibraryMetadata models,
+//---------------------------------------------------------------------
+// Library contents
+//---------------------------------------------------------------------
+
+Future<Null> buildUnmodifiableViews(LibraryMetadata models,
                                                Uri libraryPath,
                                                Uri sourcePath) async
 {
@@ -26,26 +35,11 @@ Future<LibraryMetadata> buildUnmodifiableViews(LibraryMetadata models,
   }
 
   for (var export in models.exported) {
-    await _writeModelLibrary(export);
+    await writeUnmodifiableModelViewsLibrary(export);
   }
 
-  await _writeModelLibrary(models);
+  await writeRootLibrary(models);
 }
-
-Future<Null> _writeModelLibrary(LibraryMetadata library) async {
-  var file = new File(library.uri.toFilePath());
-
-  if (await file.exists()) {
-    var lines = await file.readAsLines();
-
-    if (!isGeneratedSource(lines)) {
-      return;
-    }
-  }
-
-  await file.writeAsString(generateUnmodifiableModelViewsLibrary(library));
-}
-
 
 LibraryMetadata unmodifiableModelViewsLibrary(LibraryMetadata modelLibrary,
                                               Uri libraryPath,

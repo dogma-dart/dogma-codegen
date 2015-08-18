@@ -62,7 +62,6 @@ String camelCase(String value) {
   var splitCount = words.length;
 
   var word = words[0];
-  var substring = word.substring(1);
 
   buffer.write(word[0].toLowerCase());
   buffer.write(word.substring(1));

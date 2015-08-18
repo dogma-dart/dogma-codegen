@@ -5,47 +5,42 @@
 
 library dogma_codegen.src.build.converters;
 
+//---------------------------------------------------------------------
+// Standard libraries
+//---------------------------------------------------------------------
+
 import 'dart:async';
-import 'dart:io';
+
+//---------------------------------------------------------------------
+// Imports
+//---------------------------------------------------------------------
 
 import 'package:dogma_codegen/codegen.dart';
 import 'package:dogma_codegen/metadata.dart';
 import 'package:dogma_codegen/io.dart';
 import 'package:dogma_codegen/path.dart';
-import 'package:dogma_codegen/template.dart';
 
 import 'libraries.dart';
 import 'search.dart';
 
-Future<LibraryMetadata> buildConverters(LibraryMetadata models,
-                                        Uri libraryPath,
-                                        Uri sourcePath) async
+//---------------------------------------------------------------------
+// Library contents
+//---------------------------------------------------------------------
+
+Future<Null> buildConverters(LibraryMetadata models,
+                             Uri libraryPath,
+                             Uri sourcePath) async
 {
   await for (var library in findUserDefinedLibraries(sourcePath)) {
     print(library.uri);
   }
 
   for (var export in models.exported) {
-    await _writeConverterLibrary(export);
+    await writeConvertersLibrary(export);
   }
 
-  await _writeConverterLibrary(models);
+  await writeRootLibrary(models);
 }
-
-Future<Null> _writeConverterLibrary(LibraryMetadata library) async {
-  var file = new File(library.uri.toFilePath());
-
-  if (await file.exists()) {
-    var lines = await file.readAsLines();
-
-    if (!isGeneratedSource(lines)) {
-      return;
-    }
-  }
-
-  await file.writeAsString(generateConvertersLibrary(library));
-}
-
 
 LibraryMetadata convertersLibrary(LibraryMetadata modelLibrary,
                                   Uri libraryPath,
@@ -70,13 +65,13 @@ LibraryMetadata convertersLibrary(LibraryMetadata modelLibrary,
 }
 
 LibraryMetadata _convertersLibrary(LibraryMetadata library,
-                                  LibraryMetadata modelLibrary,
-                                  String packageName,
-                                  Uri sourcePath,
-                                 {bool decoders: true,
-                                  bool encoders: true})
+                                   LibraryMetadata modelLibrary,
+                                   String packageName,
+                                   Uri sourcePath,
+                                  {bool decoders: true,
+                                   bool encoders: true})
 {
-  var imported = [modelLibrary, dartConvert, dogmaData] as List<LibraryMetadata>;
+  var imported = [modelLibrary] as List<LibraryMetadata>;
 
   // Create the converters
   var converters = [];
@@ -99,6 +94,10 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
     // \TODO Add dependencies
   }
 
+  if (converters.isNotEmpty) {
+    imported.addAll([dartConvert, dogmaData]);
+  }
+
   // Create the enum converters
   var functions = [];
 
@@ -106,14 +105,30 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
     // Create the type
     var name = enumeration.name;
     var type = new TypeMetadata(name);
+    // \TODO Get the actual type
+    var encodeType = new TypeMetadata('String');
 
     if (decoders) {
-
+      functions.add(new FunctionMetadata(
+          decodeEnumFunction(name),
+          encodeType, // Input
+          type,       // Output
+          decoder: true
+      ));
     }
 
     if (encoders) {
-
+      functions.add(new FunctionMetadata(
+          encodeEnumFunction(name),
+          type,       // Input
+          encodeType, // Output
+          decoder: false
+      ));
     }
+  }
+
+  if (functions.isNotEmpty) {
+    imported.add(dogmaSerialize);
   }
 
   // Get the path

@@ -5,30 +5,35 @@
 
 library dogma_codegen.src.build.models;
 
+//---------------------------------------------------------------------
+// Standard libraries
+//---------------------------------------------------------------------
+
 import 'dart:async';
-import 'dart:io';
 
-import 'package:dogma_codegen/codegen.dart';
+//---------------------------------------------------------------------
+// Imports
+//---------------------------------------------------------------------
+
+import 'package:dogma_codegen/io.dart';
 import 'package:dogma_codegen/metadata.dart';
-import 'package:dogma_codegen/template.dart';
 
-Future<Null> writeModels(LibraryMetadata models) async {
-  // Write the exported models
+import 'search.dart';
+
+//---------------------------------------------------------------------
+// Library contents
+//---------------------------------------------------------------------
+
+Future<Null> buildModels(LibraryMetadata models,
+                         Uri sourcePath) async
+{
+  await for (var library in findUserDefinedLibraries(sourcePath)) {
+    print(library.uri);
+  }
+
   for (var export in models.exported) {
-
-  }
-}
-
-Future<Null> _writeModelLibrary(LibraryMetadata library) async {
-  var file = new File(library.uri.toFilePath());
-
-  if (await file.exists()) {
-    var lines = await file.readAsLines();
-
-    if (!isGeneratedSource(lines)) {
-      return;
-    }
+    await writeModelsLibrary(export);
   }
 
-  await file.writeAsString(generateModelsLibrary(library));
+  await writeRootLibrary(models);
 }

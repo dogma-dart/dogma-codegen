@@ -11,6 +11,8 @@ library dogma_codegen.src.codegen.enum_converter_generator;
 
 import 'package:dogma_codegen/metadata.dart';
 
+import 'argument_buffer.dart';
+
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
@@ -19,22 +21,10 @@ import 'package:dogma_codegen/metadata.dart';
 const String _decoded = '_decoded';
 /// Name for the list containing encoded values.
 const String _encoded = '_encoded';
+/// Name for the defaults to parameter.
+const String _defaultsTo = 'defaultsTo';
 
 void generateEnumDecoder(EnumMetadata metadata, StringBuffer buffer) {
-
-}
-
-void generateEnumEncoder(EnumMetadata metadata, StringBuffer buffer) {
-
-}
-
-/// Writes out the converters for an enumeration with the given [metadata].
-///
-/// For enumerations a set of functions are generated to provide the
-/// conversion. For decoding this is backed by a map which
-String generateEnumConverter(EnumMetadata metadata) {
-  var buffer = new StringBuffer();
-
   // Get the name
   var name = metadata.name;
 
@@ -48,7 +38,7 @@ String generateEnumConverter(EnumMetadata metadata) {
   var isString = encoded[0] is String;
 
   // Write out the decoding map
-  buffer.writeln('final Map<$encodeType, $name> $_decoded = {');
+  var argumentBuffer = new ArgumentBuffer();
 
   for (var i = 0; i < valueCount; ++i) {
     var encode = encoded[i];
@@ -57,18 +47,35 @@ String generateEnumConverter(EnumMetadata metadata) {
       encode = '\'$encode\'';
     }
 
-    buffer.writeln('$encode: $name.${values[i]},');
+    argumentBuffer.write('$encode: $name.${values[i]}');
   }
 
+  buffer.writeln('final Map<$encodeType, $name> $_decoded = {');
+  buffer.writeln(argumentBuffer.toString());
   buffer.writeln('};\n');
 
   // Write out the decode function
-  buffer.writeln('$name ${decodeEnumFunction(name)}($encodeType value, [$name defaultTo = $name.${values[0]}]) {');
-  buffer.writeln('return $_decoded[value] ?? defaultTo;');
+  buffer.writeln('@Serialize.decodeThrough');
+  buffer.writeln('$name ${decodeEnumFunction(name)}($encodeType value, [$name $_defaultsTo = $name.${values[0]}]) {');
+  buffer.writeln('return $_decoded[value] ?? $_defaultsTo;');
   buffer.writeln('}');
+}
+
+void generateEnumEncoder(EnumMetadata metadata, StringBuffer buffer) {
+  // Get the name
+  var name = metadata.name;
+
+  // Get the values
+  var values = metadata.values;
+  var valueCount = values.length;
+
+  // Determine the encoding
+  var encoded = metadata.encoded;
+  var encodeType = encoded[0].runtimeType.toString();
+  var isString = encoded[0] is String;
 
   // Write out the encoding list
-  buffer.writeln('final List<$encodeType> $_encoded = [');
+  var argumentBuffer = new ArgumentBuffer.lineBreak();
 
   for (var i = 0; i < valueCount; ++i) {
     var encode = encoded[i];
@@ -77,16 +84,18 @@ String generateEnumConverter(EnumMetadata metadata) {
       encode = '\'$encode\'';
     }
 
-    buffer.writeln('$encode,');
+    argumentBuffer.write(encode);
   }
+
+  buffer.writeln('final List<$encodeType> $_encoded = [');
+  buffer.writeln(argumentBuffer.toString());
   buffer.writeln('];\n');
 
   // Write out the encode function
+  buffer.writeln('@Serialize.encodeThrough');
   buffer.writeln('$encodeType ${encodeEnumFunction(name)}($name value) {');
   buffer.writeln('return $_encoded[value.index];');
   buffer.writeln('}');
-
-  return buffer.toString();
 }
 
 /// Derives the encode function name for the given enumeration [name].

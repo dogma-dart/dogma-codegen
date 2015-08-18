@@ -5,28 +5,53 @@
 
 library dogma_codegen.src.build.libraries;
 
+//---------------------------------------------------------------------
+// Imports
+//---------------------------------------------------------------------
+
 import 'package:dogma_codegen/metadata.dart';
 
+//---------------------------------------------------------------------
+// Library contents
+//---------------------------------------------------------------------
+
+/// The dart:convert library.
+///
+/// This is required for generated converters as they implement Converter.
 final LibraryMetadata dartConvert = new LibraryMetadata(
     'dart:convert',
     Uri.parse('dart:convert')
 );
 
+/// The dart:collection library.
+///
+/// This is required when UnmodifiableListView or UnmodifiableMapView are
+/// needed for unmodifiable views over models.
 final LibraryMetadata dartCollection = new LibraryMetadata(
     'dart:collection',
     Uri.parse('dart:collection')
 );
 
-final LibraryMetadata dataSerialize = new LibraryMetadata(
+/// The dogma_data.serialize library.
+///
+/// This is required when generating code that uses the Serialize annotation.
+final LibraryMetadata dogmaSerialize = new LibraryMetadata(
     'dogma_data.serialize',
     Uri.parse('package:dogma_data/serialize.dart')
 );
 
+/// The dogma_data.data library.
+///
+/// This is required for generated Converters.
 final LibraryMetadata dogmaData = new LibraryMetadata(
     'dogma_data',
     Uri.parse('package:dogma_data/data.dart')
 );
 
+/// Converts a library from a file URI into a package URI.
+///
+/// Will just return the library if it is already either a dart or package
+/// library.
 LibraryMetadata packageLibrary(LibraryMetadata library) {
   // Check if the library is already a package library
   if (library.uri.scheme != 'file') {

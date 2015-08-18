@@ -18,6 +18,8 @@ import 'dart:io';
 //---------------------------------------------------------------------
 
 import 'package:path/path.dart' as p;
+import 'package:dogma_codegen/codegen.dart';
+import 'package:dogma_codegen/metadata.dart';
 import 'package:dogma_codegen/template.dart';
 
 //---------------------------------------------------------------------
@@ -65,4 +67,38 @@ Future<bool> _isGeneratedFile(File file) async {
   var lines = await file.readAsLines();
 
   return isGeneratedSource(lines);
+}
+
+/// Writes the root [library] to disk.
+///
+/// This is used to handle root libraries which just export libraries.
+Future<Null> writeRootLibrary(LibraryMetadata library)
+    => _writeLibrary(library, generateRootLibrary);
+
+/// Writes the [library] of models to disk.
+Future<Null> writeModelsLibrary(LibraryMetadata library)
+    => _writeLibrary(library, generateModelsLibrary);
+
+/// Writes the [library] of unmodifiable model views to disk.
+Future<Null> writeUnmodifiableModelViewsLibrary(LibraryMetadata library)
+    => _writeLibrary(library, generateUnmodifiableModelViewsLibrary);
+
+/// Writes the [library] of converters to disk.
+Future<Null> writeConvertersLibrary(LibraryMetadata library)
+    => _writeLibrary(library, generateConvertersLibrary);
+
+/// Writes the [library] to disk using the [generator].
+Future<Null> _writeLibrary(LibraryMetadata library, LibraryGenerator generator) async {
+  var file = new File(library.uri.toFilePath());
+
+  // Determine if the file was generated
+  if (await file.exists()) {
+    var lines = await file.readAsLines();
+
+    if (!isGeneratedSource(lines)) {
+      return;
+    }
+  }
+
+  await file.writeAsString(generator(library));
 }

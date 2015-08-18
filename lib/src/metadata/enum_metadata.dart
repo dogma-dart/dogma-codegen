@@ -48,4 +48,20 @@ class EnumMetadata extends Metadata {
   /// Creates an instance of [EnumMetadata].
   EnumMetadata._internal(String name, this.values, this.encoded)
       : super(name);
+
+  /// Whether the enum uses explicit serialization.
+  ///
+  /// Compares [values] and [encoded] to see if there are any differences. If
+  /// so returns true; false otherwise.
+  bool get explicitSerialization {
+    var count = values.length;
+
+    for (var i = 0; i < count; ++i) {
+      if (values[i] != encoded[i]) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }

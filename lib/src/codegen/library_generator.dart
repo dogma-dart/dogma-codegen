@@ -12,6 +12,7 @@ library dogma_codegen.src.codegen.library_generator;
 import 'package:dogma_codegen/metadata.dart';
 import 'package:dogma_codegen/template.dart';
 
+import 'enum_generator.dart';
 import 'enum_converter_generator.dart';
 import 'model_converter_generator.dart';
 import 'model_generator.dart';
@@ -29,6 +30,10 @@ typedef void _SourceGenerator(LibraryMetadata library, StringBuffer buffer);
 void generateModelsSource(LibraryMetadata library, StringBuffer buffer) {
   for (var model in library.models) {
     generateModel(model, buffer);
+  }
+
+  for (var enumeration in library.enumerations) {
+    generateEnum(enumeration, buffer);
   }
 }
 
