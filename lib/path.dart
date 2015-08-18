@@ -79,7 +79,8 @@ String libraryName(String package, dynamic path) {
   path = _filePath(path);
 
   var relative = p.posix.relative(path, from: currentPath);
-  var split = [package]..addAll(p.posix.split(relative));
+  var withoutExtension = p.posix.withoutExtension(relative);
+  var split = [package]..addAll(p.posix.split(withoutExtension));
 
   return split.join('.');
 }
