@@ -78,9 +78,20 @@ Uri libraryPath(String value) {
 String libraryName(String package, dynamic path) {
   path = _filePath(path);
 
+  // Get the relative path
   var relative = p.posix.relative(path, from: currentPath);
   var withoutExtension = p.posix.withoutExtension(relative);
-  var split = [package]..addAll(p.posix.split(withoutExtension));
+
+  // Split the path
+  var split = p.posix.split(withoutExtension);
+
+  // Check if the value is in lib
+  if (_isInLib(split[0])) {
+    split = split.sublist(1);
+  }
+
+  // Append the package name at the front
+  split = [package]..addAll(split);
 
   return split.join('.');
 }
