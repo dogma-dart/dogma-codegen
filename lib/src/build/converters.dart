@@ -33,6 +33,14 @@ Future<Null> buildConverters(LibraryMetadata models,
 {
   await for (var library in findUserDefinedLibraries(sourcePath)) {
     print(library.uri);
+
+    for (var converter in library.converters) {
+      print(converter.name);
+    }
+
+    for (var function in library.functions) {
+      print(function.name);
+    }
   }
 
   for (var export in models.exported) {

@@ -35,7 +35,7 @@ LibraryMetadata libraryMetadata(String path, AnalysisContext context) {
 
 bool _shouldLoadLibraryMetadata(LibraryElement library) {
   var scheme = library.definingCompilationUnit.source.uri.scheme;
-  print('Filename: ${library.definingCompilationUnit.source.uri}');
+
   return scheme != 'dart' && scheme != 'package';
 }
 
@@ -119,9 +119,6 @@ LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMeta
       modelDecoders.length +
       encodeFunctions.length +
       decodeFunctions.length;
-
-  print('Name: $name');
-
 
   if (metadataCount > 0) {
     var metadata = new LibraryMetadata(
