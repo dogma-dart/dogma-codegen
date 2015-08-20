@@ -52,8 +52,13 @@ Future<Null> buildConverters(LibraryMetadata models,
 
 LibraryMetadata convertersLibrary(LibraryMetadata modelLibrary,
                                   Uri libraryPath,
-                                  Uri sourcePath)
+                                  Uri sourcePath,
+                                 {Map<String, LibraryMetadata> userDefined,
+                                  bool decoders: true,
+                                  bool encoders: true})
 {
+  userDefined ??= {};
+
   var packageName = modelLibrary.name.split('.')[0];
 
   // Convert the modelLibrary into the equivalent using package notation.
@@ -61,9 +66,19 @@ LibraryMetadata convertersLibrary(LibraryMetadata modelLibrary,
 
   // Get the exported libraries
   var exported = new List<LibraryMetadata>();
+  var loaded = {};
 
   for (var export in modelLibrary.exported) {
-    exported.add(_convertersLibrary(export, modelLibrary, packageName, sourcePath));
+    exported.add(_convertersLibrary(
+        export,
+        modelLibrary,
+        packageName,
+        sourcePath,
+        loaded,
+        userDefined,
+        decoders,
+        encoders
+    ));
   }
 
   // Get the package name from the library
@@ -76,9 +91,19 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
                                    LibraryMetadata modelLibrary,
                                    String packageName,
                                    Uri sourcePath,
-                                  {bool decoders: true,
-                                   bool encoders: true})
+                                   Map<String, LibraryMetadata> loaded,
+                                   Map<String, LibraryMetadata> userDefined,
+                                   bool decoders,
+                                   bool encoders)
 {
+  // Check to see if the library was already loaded
+  var loadingName = library.name;
+
+  if (loaded.containsKey(loadingName)) {
+    return loaded[loadingName];
+  }
+
+  // Model library should always be included
   var imported = [modelLibrary] as List<LibraryMetadata>;
 
   // Create the converters
@@ -99,7 +124,24 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
       converters.add(new ConverterMetadata('${name}Encoder', type, false));
     }
 
-    // \TODO Add dependencies
+    // Add the dependencies
+    //
+    // \TODO this currently assumes that everything is going to be used which
+    // might not be the case
+    for (var import in library.imported) {
+      if (import.uri.scheme == 'file') {
+        imported.add(_convertersLibrary(
+            import,
+            modelLibrary,
+            packageName,
+            sourcePath,
+            loaded,
+            userDefined,
+            decoders,
+            encoders
+        ));
+      }
+    }
   }
 
   if (converters.isNotEmpty) {
@@ -139,16 +181,23 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
     imported.add(dogmaSerialize);
   }
 
-  // Get the path
+  // Get the library name and path
   var baseName = basenameWithoutExtension(library.uri);
   var uri = join('${baseName}_converter.dart', base: sourcePath);
   var name = libraryName(packageName, uri);
 
-  return new LibraryMetadata(
+  var generatedLibrary = new LibraryMetadata(
       name,
       uri,
       imported: imported,
       converters: converters,
       functions: functions
   );
+
+  // Note that the library is loaded
+  //
+  // The name of the library being converted is used as that is already known
+  loaded[loadingName] = generatedLibrary;
+
+  return generatedLibrary;
 }
