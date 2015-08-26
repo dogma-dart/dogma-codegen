@@ -60,7 +60,7 @@ LibraryMetadata packageLibrary(LibraryMetadata library) {
 
   // Generate the package uri
   var joined = library.name.replaceAll('.', '/');
-  var packageUri = Uri.parse('package:${joined}.dart');
+  var packageUri = Uri.parse('package:$joined.dart');
 
   // Create a new library with everything the same but the uri
   return new LibraryMetadata(

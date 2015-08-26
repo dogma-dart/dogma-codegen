@@ -94,7 +94,7 @@ void generateModelDecoder(ModelMetadata metadata,
   // Write the model fields
   for (var field in modelDecodableFields) {
     var fieldName = field.name;
-    var fieldIdentifier = 'model.${fieldName}';
+    var fieldIdentifier = 'model.$fieldName';
     var type = field.type;
     var typeName = type.name;
     var convertSource;
@@ -143,7 +143,7 @@ void _writeMemberVariables(List<TypeMetadata> dependencies,
   for (var dependency in dependencies) {
     var typeName = dependency.name;
 
-    buffer.writeln('final Model$append<${typeName}> _${_converterName(typeName, append)};');
+    buffer.writeln('final Model$append<$typeName> _${_converterName(typeName, append)};');
   }
 
   buffer.writeln();

@@ -6,7 +6,7 @@
 // \TODO Remove this file after https://github.com/dart-lang/test/issues/36 is resolved.
 
 /// Runs all the tests to handle code coverage generation.
-library dogma_data.test.all;
+library dogma_codegen.test.all;
 
 //---------------------------------------------------------------------
 // Imports
