@@ -3,8 +3,18 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
+library dogma_codegen.src.build.search;
+
+//---------------------------------------------------------------------
+// Standard libraries
+//---------------------------------------------------------------------
+
 import 'dart:async';
 import 'dart:io';
+
+//---------------------------------------------------------------------
+// Imports
+//---------------------------------------------------------------------
 
 import 'package:cli_util/cli_util.dart';
 import 'package:dogma_codegen/analyzer.dart';
@@ -12,6 +22,10 @@ import 'package:dogma_codegen/metadata.dart';
 import 'package:dogma_codegen/io.dart';
 import 'package:dogma_codegen/path.dart';
 import 'package:dogma_codegen/template.dart';
+
+//---------------------------------------------------------------------
+// Library contents
+//---------------------------------------------------------------------
 
 /// Finds all user defined libraries within the [path].
 Stream<LibraryMetadata> findUserDefinedLibraries(Uri path) async* {
