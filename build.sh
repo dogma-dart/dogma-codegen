@@ -1,3 +1,5 @@
+git clone https://github.com/dogma-dart/dogma-data.git -b features/simplify-serialization ../dogma-data
+
 pub install
 
 pub global activate linter
