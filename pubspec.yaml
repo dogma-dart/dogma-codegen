@@ -9,7 +9,8 @@ dependencies:
   dart_style: ^0.2.0
   dogma_data:
     path: ../dogma-data
-  mustache: any
+  mustache: '^0.2.3'
+  yaml: '^2.1.3'
 dev_dependencies:
   coverage: ^0.7.1
   test: ^0.12.3+9
