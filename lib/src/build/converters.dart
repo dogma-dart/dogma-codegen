@@ -183,7 +183,7 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
 
   // Get the library name and path
   var baseName = basenameWithoutExtension(library.uri);
-  var uri = join('${baseName}_converter.dart', base: sourcePath);
+  var uri = join('${baseName}_convert.dart', base: sourcePath);
   var name = libraryName(packageName, uri);
 
   var generatedLibrary = new LibraryMetadata(
