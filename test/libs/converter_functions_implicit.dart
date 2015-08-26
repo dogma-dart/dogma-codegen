@@ -3,7 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma_data.test.libs.converter_functions_implicit;
+library dogma_codegen.test.libs.converter_functions_implicit;
 
 // These functions should be picked up as potential converters
 int encodeDuration(Duration value) => value.inMilliseconds;

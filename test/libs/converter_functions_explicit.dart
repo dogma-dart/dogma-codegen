@@ -3,7 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma_data.test.libs.converter_functions_explicit;
+library dogma_codegen.test.libs.converter_functions_explicit;
 
 import 'package:dogma_data/serialize.dart';
 
