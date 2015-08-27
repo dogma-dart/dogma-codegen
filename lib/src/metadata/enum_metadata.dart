@@ -49,6 +49,10 @@ class EnumMetadata extends Metadata {
   EnumMetadata._internal(String name, this.values, this.encoded)
       : super(name);
 
+  //---------------------------------------------------------------------
+  // Properties
+  //---------------------------------------------------------------------
+
   /// Whether the enum uses explicit serialization.
   ///
   /// Compares [values] and [encoded] to see if there are any differences. If

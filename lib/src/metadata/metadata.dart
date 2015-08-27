@@ -12,8 +12,16 @@ library dogma_codegen.src.metadata.metadata;
 
 /// Base class for metadata involved in the serialization process.
 class Metadata {
+  //---------------------------------------------------------------------
+  // Member variables
+  //---------------------------------------------------------------------
+
   /// The name associated with this metadata.
   final String name;
+
+  //---------------------------------------------------------------------
+  // Construction
+  //---------------------------------------------------------------------
 
   /// Creates an instance of the [Metadata] class with the given [name].
   Metadata(this.name);

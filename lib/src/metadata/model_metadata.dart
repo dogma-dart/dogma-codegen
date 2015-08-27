@@ -18,7 +18,7 @@ import 'type_metadata.dart';
 // Library contents
 //---------------------------------------------------------------------
 
-///
+/// Contains metadata for a model.
 class ModelMetadata extends Metadata {
   //---------------------------------------------------------------------
   // Member variables
