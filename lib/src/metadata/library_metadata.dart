@@ -14,6 +14,7 @@ import 'converter_metadata.dart';
 import 'enum_metadata.dart';
 import 'function_metadata.dart';
 import 'metadata.dart';
+import 'mapper_metadata.dart';
 import 'model_metadata.dart';
 import 'type_metadata.dart';
 
@@ -21,7 +22,7 @@ import 'type_metadata.dart';
 // Library contents
 //---------------------------------------------------------------------
 
-/// Contains metadata for a library using Dogma Data for serialization.
+/// Contains metadata for a dart library.
 class LibraryMetadata extends Metadata {
   //---------------------------------------------------------------------
   // Member variables
@@ -41,6 +42,8 @@ class LibraryMetadata extends Metadata {
   final List<ConverterMetadata> converters;
   /// The functions contained within the library.
   final List<FunctionMetadata> functions;
+  /// The mappers contained within the library.
+  final List<MapperMetadata> mappers;
 
   //---------------------------------------------------------------------
   // Construction
@@ -53,7 +56,8 @@ class LibraryMetadata extends Metadata {
                   List<ModelMetadata> models,
                   List<EnumMetadata> enumerations,
                   List<ConverterMetadata> converters,
-                  List<FunctionMetadata> functions})
+                  List<FunctionMetadata> functions,
+                  List<MapperMetadata> mappers})
   {
     imported ??= [];
     exported ??= [];
@@ -61,6 +65,7 @@ class LibraryMetadata extends Metadata {
     enumerations ??= [];
     converters ??= [];
     functions ??= [];
+    mappers ??= [];
 
     return new LibraryMetadata._internal(
         name,
@@ -70,7 +75,8 @@ class LibraryMetadata extends Metadata {
         models,
         enumerations,
         converters,
-        functions
+        functions,
+        mappers
     );
   }
 
@@ -81,7 +87,8 @@ class LibraryMetadata extends Metadata {
                             this.models,
                             this.enumerations,
                             this.converters,
-                            this.functions)
+                            this.functions,
+                            this.mappers)
       : super(name);
 }
 
