@@ -4,7 +4,7 @@
 // the LICENSE file.
 
 /// Contains the [Commented] interface.
-library dogma_codegen.src.build.build_system;
+library dogma_codegen.src.build.commented;
 
 //---------------------------------------------------------------------
 // Library contents

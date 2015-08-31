@@ -4,7 +4,7 @@
 // the LICENSE file.
 
 /// Contains the default paths for the generated libraries.
-library dogma_codegen.build.default_paths;
+library dogma_codegen.src.build.default_paths;
 
 //---------------------------------------------------------------------
 // Library contents
