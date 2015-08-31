@@ -44,7 +44,7 @@ final LibraryMetadata dogmaSerialize = new LibraryMetadata(
 ///
 /// This is required for generated Converters.
 final LibraryMetadata dogmaData = new LibraryMetadata(
-    'dogma_data',
+    'dogma_data.data',
     Uri.parse('package:dogma_data/data.dart')
 );
 
