@@ -71,6 +71,7 @@ LibraryMetadata packageLibrary(LibraryMetadata library) {
       models: library.models,
       enumerations: library.enumerations,
       converters: library.converters,
-      functions: library.functions
+      functions: library.functions,
+      mappers: library.mappers
   );
 }

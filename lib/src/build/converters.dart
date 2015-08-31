@@ -19,6 +19,7 @@ import 'package:dogma_codegen/codegen.dart';
 import 'package:dogma_codegen/metadata.dart';
 import 'package:dogma_codegen/io.dart';
 import 'package:dogma_codegen/path.dart';
+import 'package:logging/logging.dart';
 
 import 'libraries.dart';
 import 'search.dart';
@@ -27,29 +28,60 @@ import 'search.dart';
 // Library contents
 //---------------------------------------------------------------------
 
+/// The logger for the library.
+final Logger _logger = new Logger('dogma_codegen.src.build.converters');
+
+/// Builds the convert library from the given [models] library.
+///
+/// The value of [models] is passed to [convertersLibrary] which transforms the
+/// library into the equivalent unmodifiable version. The root of the library
+/// is set to [libraryPath] while any exported libraries will be generated into
+/// [sourcePath].
+///
+/// Additionally the [sourcePath] will be searched for any user defined
+/// libraries which will be preferred over the generated equivalents.
+///
+/// The function will also write the resulting libraries to disk based on the
+/// paths specified using the [writeUnmodifiableViews] function.
 Future<Null> buildConverters(LibraryMetadata models,
                              Uri libraryPath,
                              Uri sourcePath) async
 {
+  // Search for any user defined libraries
   await for (var library in findUserDefinedLibraries(sourcePath)) {
-    print(library.uri);
-
     for (var converter in library.converters) {
-      print(converter.name);
+      _logger.info('Found ${converter.name} in ${library.name}');
     }
 
     for (var function in library.functions) {
-      print(function.name);
+      _logger.info('Found ${function.name} in ${library.name}');
     }
   }
 
-  for (var export in models.exported) {
+  // Create the equivalent library
+  var convert = convertersLibrary(models, libraryPath, sourcePath);
+
+  await writeConvert(convert);
+}
+
+/// Writes the [convert] library to disk.
+///
+/// The value of [views] should be the root library which exports the others.
+Future<Null> writeConvert(LibraryMetadata convert) async {
+  for (var export in convert.exported) {
+    _logger.info('Writing ${export.name} to disk at ${export.uri}');
     await writeConvertersLibrary(export);
   }
 
-  await writeRootLibrary(models);
+  _logger.info('Writing ${convert.name} to disk at ${convert.uri}');
+  await writeRootLibrary(convert);
 }
 
+/// Transforms the [models] library into the equivalent library containing
+/// converters.
+///
+/// The root of the library is set to [libraryPath] while any exported
+/// libraries will be generated into [sourcePath].
 LibraryMetadata convertersLibrary(LibraryMetadata modelLibrary,
                                   Uri libraryPath,
                                   Uri sourcePath,

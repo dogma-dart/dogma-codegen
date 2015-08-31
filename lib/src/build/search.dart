@@ -29,7 +29,6 @@ import 'package:dogma_codegen/template.dart';
 
 /// Finds all user defined libraries within the [path].
 Stream<LibraryMetadata> findUserDefinedLibraries(Uri path) async* {
-  // \TODO USE URI
   var directoryExists = await createDirectory(path.toFilePath());
   var userDefinedLibraries = [];
 

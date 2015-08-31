@@ -17,6 +17,7 @@ import 'dart:async';
 //---------------------------------------------------------------------
 
 import 'package:args/args.dart';
+import 'package:logging/logging.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -28,6 +29,9 @@ const String _machine = 'machine';
 const String _changed = 'changed';
 /// The name of the option containing a list of removed files.
 const String _removed = 'removed';
+
+/// The logger for the library.
+final Logger _logger = new Logger('dogma_codegen.src.build.build_system');
 
 /// Determines whether a build should be triggered.
 ///
@@ -56,6 +60,7 @@ Future<bool> shouldBuild(List<String> args, List<String> paths) async {
 
   // Rebuild everything if build was invoked directly
   if (!parsed[_machine]) {
+    _logger.info('Rebuild requested');
     return true;
   }
 
@@ -63,7 +68,7 @@ Future<bool> shouldBuild(List<String> args, List<String> paths) async {
   var notGenerated = [];
 
   for (var changed in parsed[_changed]) {
-    print(changed);
+    _logger.info('File changed $changed');
   }
 
   // Nothing was found to trigger the build
