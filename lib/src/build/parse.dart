@@ -3,7 +3,10 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma_codegen.src.build.file;
+/// Contains functions to parse files.
+///
+/// Currently supports reading JSON and YAML files.
+library dogma_codegen.src.build.parse;
 
 //---------------------------------------------------------------------
 // Standard libraries
