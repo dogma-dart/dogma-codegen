@@ -54,7 +54,7 @@ class MapperMetadata extends ClassMetadata {
   // Properties
   //---------------------------------------------------------------------
 
-  TypeMetadata get type {
+  TypeMetadata get modelType {
     return decoder != null
         ? decoder.type
         : encoder.type;

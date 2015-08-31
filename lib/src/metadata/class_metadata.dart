@@ -10,6 +10,9 @@ library dogma_codegen.src.metadata.class_metadata;
 // Imports
 //---------------------------------------------------------------------
 
+import 'annotated.dart';
+import 'commented.dart';
+import 'field_metadata.dart';
 import 'metadata.dart';
 import 'type_metadata.dart';
 
@@ -18,21 +21,35 @@ import 'type_metadata.dart';
 //---------------------------------------------------------------------
 
 /// Contains metadata for a class.
-class ClassMetadata extends Metadata {
+class ClassMetadata extends Metadata implements Annotated, Commented {
   //---------------------------------------------------------------------
   // Member variables
   //---------------------------------------------------------------------
 
-  /// The parent class.
-  final ClassMetadata superclass;
-  /// The classes this class implements.
-  final List<ClassMetadata> implements;
-  /// The type arguments for the class.
-  ///
-  /// If the values contain [ClassMetadata] then the class is not defined as a
-  /// generic. However if they contain [TypeMetadata] then the class is
-  /// defined as generic.
-  final List<Metadata> typeArguments;
+  /// The type of the class.
+  final TypeMetadata type;
+  /// The parent class type.
+  final TypeMetadata supertype;
+  /// The types this class implements.
+  final List<TypeMetadata> implements;
+  /// The type parameters for the class.
+  final List<TypeMetadata> typeParameters;
+  /// The fields for the class.
+  final List<FieldMetadata> fields;
+
+  //---------------------------------------------------------------------
+  // Annotated
+  //---------------------------------------------------------------------
+
+  @override
+  final List annotations;
+
+  //---------------------------------------------------------------------
+  // Commented
+  //---------------------------------------------------------------------
+
+  @override
+  final String comments;
 
   //---------------------------------------------------------------------
   // Construction
@@ -46,8 +63,12 @@ class ClassMetadata extends Metadata {
   /// Currently this is implementation is ignoring mixins so this information
   /// is not available to query.
   ClassMetadata(String name,
-               {this.superclass,
+               {this.supertype,
                 this.implements: const [],
-                this.typeArguments: const[]})
-      : super(name);
+                this.typeParameters: const [],
+                this.fields: const [],
+                this.annotations,
+                this.comments})
+      : type = new TypeMetadata(name)
+      , super(name);
 }

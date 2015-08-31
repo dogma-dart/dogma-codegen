@@ -31,7 +31,7 @@ class TypeMetadata extends Metadata {
   // Construction
   //---------------------------------------------------------------------
 
-  /// Creates an instance of [TypeMetadata] with the given name.
+  /// Creates an instance of [TypeMetadata] with the given [name].
   ///
   /// If the type is generic then [arguments] should be used to fully type the
   /// metadata.
