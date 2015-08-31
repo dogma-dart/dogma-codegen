@@ -4,7 +4,7 @@
 // the LICENSE file.
 
 /// Utility functions for file I/O when generating files.
-library dogma_codegen.io;
+library dogma_codegen.src.build.io;
 
 //---------------------------------------------------------------------
 // Standard libraries
@@ -57,6 +57,7 @@ Future<bool> canGenerateFileAt(Uri uri) async {
       : true;
 }
 
+/// Gets the
 File _getFile(Uri uri) {
   var path = p.posix.fromUri(uri);
 
