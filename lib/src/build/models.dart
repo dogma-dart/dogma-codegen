@@ -15,25 +15,27 @@ import 'dart:async';
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_codegen/io.dart';
 import 'package:dogma_codegen/metadata.dart';
+import 'package:logging/logging.dart';
 
-import 'search.dart';
+import 'io.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
-Future<Null> buildModels(LibraryMetadata models,
-                         Uri sourcePath) async
-{
-  await for (var library in findUserDefinedLibraries(sourcePath)) {
-    print(library.uri);
-  }
+/// The logger for the library.
+final Logger _logger = new Logger('dogma_codegen.src.build.models');
 
+/// Writes the [models] library to disk.
+///
+/// The value of [models] should be the root library which exports the others.
+Future<Null> writeModels(LibraryMetadata models) async {
   for (var export in models.exported) {
+    _logger.info('Writing ${export.name} to disk at ${export.uri}');
     await writeModelsLibrary(export);
   }
 
+  _logger.info('Writing ${models.name} to disk at ${models.uri}');
   await writeRootLibrary(models);
 }
