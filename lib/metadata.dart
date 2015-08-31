@@ -18,4 +18,5 @@ export 'src/metadata/library_metadata.dart';
 export 'src/metadata/mapper_metadata.dart';
 export 'src/metadata/metadata.dart';
 export 'src/metadata/model_metadata.dart';
+export 'src/metadata/query_metadata.dart';
 export 'src/metadata/type_metadata.dart';
