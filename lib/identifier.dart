@@ -27,6 +27,23 @@ String camelCase(String name) {
 
 }
 
+/// Converts a list of [words] to camel case.
+String camelCaseFromWords(List<String> words) {
+  var buffer = new StringBuffer();
+  var wordCount = words.length;
+
+  buffer.write(words[0].toLowerCase());
+
+  for (var i = 1; i < wordCount; ++i) {
+    var word = words[i];
+
+    buffer.write(word[0].toUpperCase());
+    buffer.write(word.substring(1));
+  }
+
+  return buffer.toString();
+}
+
 /// Converts a camel case [name] to pascal case.
 ///
 /// Assumes that [name] is in camel case.
@@ -48,6 +65,18 @@ String camelToSnakeCase(String name) {
 /// determine the casing.
 String pascalCase(String name) {
 
+}
+
+/// Converts a list of [words] to pascal case.
+String pascalCaseFromWords(List<String> words) {
+  var buffer = new StringBuffer();
+
+  for (var word in words) {
+    buffer.write(word[0].toUpperCase());
+    buffer.write(word.substring(1));
+  }
+
+  return buffer.toString();
 }
 
 /// Converts a pascal case [name] to camel case.
@@ -73,49 +102,8 @@ String snakeCase(String name) {
 
 }
 
-/// Converts a snake case [name] to pascal case.
-///
-/// Assumes that [name] is actually in snake case.
-String snakeToPascalCase(String name)
-    => _pascalCase(name.split('_'));
-
-/// Converts snake case to camel case.
-///
-/// Assumes that [name] is actually in snake case.
-String snakeToCamelCase(String name)
-    => _camelCase(name.split('_'));
-
-/// Writes out a list of [words] to camel case.
-String _camelCase(List<String> words) {
-  var buffer = new StringBuffer();
-  var wordCount = words.length;
-
-  buffer.write(words[0].toLowerCase());
-
-  for (var i = 1; i < wordCount; ++i) {
-    var word = words[i];
-
-    buffer.write(word[0].toUpperCase());
-    buffer.write(word.substring(1));
-  }
-
-  return buffer.toString();
-}
-
-/// Writes out a list of [words] to pascal case.
-String _pascalCase(List<String> words) {
-  var buffer = new StringBuffer();
-
-  for (var word in words) {
-    buffer.write(word[0].toUpperCase());
-    buffer.write(word.substring(1));
-  }
-
-  return buffer.toString();
-}
-
-/// Writes out a list of [words] to snake case.
-String _snakeCase(List<String> words) {
+/// Converts a list of [words] to snake case.
+String snakeCaseFromWords(List<String> words) {
   var buffer = new StringBuffer();
   var wordCount = words.length;
 
@@ -128,3 +116,15 @@ String _snakeCase(List<String> words) {
 
   return buffer.toString();
 }
+
+/// Converts a snake case [name] to pascal case.
+///
+/// Assumes that [name] is actually in snake case.
+String snakeToPascalCase(String name)
+    => pascalCaseFromWords(name.split('_'));
+
+/// Converts snake case to camel case.
+///
+/// Assumes that [name] is actually in snake case.
+String snakeToCamelCase(String name)
+    => camelCaseFromWords(name.split('_'));
