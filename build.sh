@@ -1,6 +1,6 @@
 set -e
 
-git clone https://github.com/dogma-dart/dogma-data.git -b features/simplify-serialization ../dogma-data
+git clone https://github.com/dogma-dart/dogma-data.git ../dogma-data
 
 pub install
 
