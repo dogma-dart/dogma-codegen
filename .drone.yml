@@ -1,4 +1,5 @@
 build:
-  image: google/dart:1.12.0-dev.5.10
+  image: google/dart
+  pull: true
   commands:
     - sh build.sh
