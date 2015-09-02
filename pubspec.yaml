@@ -2,7 +2,7 @@ name: dogma_codegen
 version: 0.0.1
 description: Code generation for the Dogma libraries.
 environment:
-  sdk: '>=1.12.0-dev.4.0 <2.0.0'
+  sdk: '>=1.12.0 <2.0.0'
 dependencies:
   args: ^0.13.2
   cli_util: ^0.0.1+2
@@ -15,3 +15,5 @@ dependencies:
 dev_dependencies:
   coverage: ^0.7.1
   test: ^0.12.3+9
+author: Don Olmstead <don.j.olmstead@gmail.com>
+homepage: http://dogma-dart.github.io/
