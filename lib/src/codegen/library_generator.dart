@@ -37,14 +37,16 @@ void generateModelsSource(LibraryMetadata library, StringBuffer buffer) {
   }
 }
 
-/// Generates the source code for unmodifiable model views within a [library] into the [buffer].
+/// Generates the source code for unmodifiable model views within a [library]
+/// into the [buffer].
 void generateUnmodifiableModelViewsSource(LibraryMetadata library, StringBuffer buffer) {
   for (var model in library.models) {
     generateUnmodifiableModelView(model, buffer);
   }
 }
 
-/// Generates the source code for converters within a [library] into the [buffer].
+/// Generates the source code for converters within a [library] into the
+/// [buffer].
 void generateConvertersSource(LibraryMetadata library,
                               StringBuffer buffer)
 {

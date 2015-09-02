@@ -79,7 +79,7 @@ final Logger _logger = new Logger('dogma_codegen.build');
 /// should just export all the libraries contained in [modelPath]. All the root
 /// library locations, [modelLibrary], [unmodifiableLibrary], and
 /// [convertLibrary], along with the output paths, [modelPath],
-/// [unmodifiablePath], and [convertPath], can be explictly set as well.
+/// [unmodifiablePath], and [convertPath], can be explicitly set as well.
 /// Deviating from the conventions should not break the codegen process, but
 /// they should be followed for publicly available libraries to be consistent
 /// with other clients using Dogma.

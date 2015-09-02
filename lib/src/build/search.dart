@@ -31,7 +31,6 @@ import 'io.dart';
 /// Finds all user defined libraries within the [path].
 Stream<LibraryMetadata> findUserDefinedLibraries(Uri path) async* {
   var directoryExists = await createDirectory(path.toFilePath());
-  var userDefinedLibraries = [];
 
   // Search through the directory for converters
   if (directoryExists) {

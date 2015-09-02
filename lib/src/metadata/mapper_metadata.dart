@@ -41,22 +41,40 @@ class MapperMetadata extends ClassMetadata {
                         {ConverterMetadata decoder,
                          ConverterMetadata encoder})
   {
-    return new MapperMetadata._internal(name, decoder, encoder);
+    var modelType = decoder != null
+        ? decoder.modelType
+        : encoder.modelType;
+
+    return new MapperMetadata._internal(name, modelType, decoder, encoder);
   }
 
   /// Creates an instance of [MapperMetadata].
   ///
   /// For internal use by the factory constructor.
-  MapperMetadata._internal(String name, this.decoder, this.encoder)
-      : super(name);
+  MapperMetadata._internal(String name,
+                           TypeMetadata modelType,
+                           this.decoder,
+                           this.encoder)
+      : super(name, supertype: mapper(modelType));
 
   //---------------------------------------------------------------------
   // Properties
   //---------------------------------------------------------------------
 
+  /// The type of model the mapper accepts.
   TypeMetadata get modelType {
     return decoder != null
-        ? decoder.type
-        : encoder.type;
+        ? decoder.modelType
+        : encoder.modelType;
   }
+
+  //---------------------------------------------------------------------
+  // Class methods
+  //---------------------------------------------------------------------
+
+  /// Creates a generic Mapper type from the [modelType].
+  ///
+  /// Used to generate the supertype of the [MapperMetadata].
+  static TypeMetadata mapper(TypeMetadata modelType)
+      => new TypeMetadata('FluentQuery', arguments: [modelType]);
 }

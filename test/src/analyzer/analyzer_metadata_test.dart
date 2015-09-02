@@ -96,4 +96,20 @@ void main() {
     expect(enumeration.values, ['red', 'green', 'blue']);
     expect(enumeration.encoded, enumeration.values);
   });
+
+  test('ModelMetadata explicit', () {
+    var metadata = libraryMetadata('test/libs/model_explicit.dart', context);
+
+    expect(metadata.imported.isEmpty, true);
+    expect(metadata.exported.isEmpty, true);
+    expect(metadata.models.length, 1);
+    expect(metadata.converters.isEmpty, true);
+    expect(metadata.enumerations.isEmpty, true);
+    expect(metadata.functions.isEmpty, true);
+
+    var model = metadata.models.firstWhere((value) => value.name == 'Explicit');
+    var convertibleFields = model.convertibleFields.toList();
+    var decodableFields = model.decodableFields.toList();
+    var encodableFields = model.encodableFields.toList();
+  });
 }

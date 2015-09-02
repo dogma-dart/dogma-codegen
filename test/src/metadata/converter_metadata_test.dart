@@ -27,9 +27,9 @@ void main() {
     var type = new TypeMetadata(_typeName);
 
     var decoder = new ConverterMetadata(_metadataName, type, true);
-    expect(decoder.encoder, false);
+    expect(decoder.isEncoder, false);
 
     var encoder = new ConverterMetadata(_metadataName, type, false);
-    expect(encoder.encoder, true);
+    expect(encoder.isEncoder, true);
   });
 }

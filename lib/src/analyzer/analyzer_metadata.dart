@@ -173,7 +173,7 @@ ModelMetadata modelMetadata(ClassElement element) {
       if ((decode) || (encode)) {
         var type = typeMetadata(field.type);
         var serializationName = serialize?.name;
-        fields.add(new FieldMetadata(field.name, type, decode, encode, serializationName: serializationName));
+        fields.add(new SerializableFieldMetadata(field.name, type, decode, encode, serializationName: serializationName));
       }
     }
   }

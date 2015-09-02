@@ -36,14 +36,14 @@ TypeMetadata _nestedMap() => new TypeMetadata('NestedMap');
 /// Test entry point.
 void main() {
   var fields = [
-      new FieldMetadata('n', new TypeMetadata('num'), true, true),
-      new FieldMetadata('d0', _dateTime(), true, true),
-      new FieldMetadata('d1', _dateTime(), true, true),
-      new FieldMetadata('no', _noConvert(), false, false),
-      new FieldMetadata('decodeOnly', _decodeOnly(), true, false),
-      new FieldMetadata('encodeOnly', _encodeOnly(), false, true),
-      new FieldMetadata('l', new TypeMetadata('List', arguments: [_nestedList()]), true, true),
-      new FieldMetadata('n', new TypeMetadata('Map', arguments: [new TypeMetadata('String'), _nestedMap()]), true, true)
+      new SerializableFieldMetadata('n', new TypeMetadata('num'), true, true),
+      new SerializableFieldMetadata('d0', _dateTime(), true, true),
+      new SerializableFieldMetadata('d1', _dateTime(), true, true),
+      new SerializableFieldMetadata('no', _noConvert(), false, false),
+      new SerializableFieldMetadata('decodeOnly', _decodeOnly(), true, false),
+      new SerializableFieldMetadata('encodeOnly', _encodeOnly(), false, true),
+      new SerializableFieldMetadata('l', new TypeMetadata('List', arguments: [_nestedList()]), true, true),
+      new SerializableFieldMetadata('n', new TypeMetadata('Map', arguments: [new TypeMetadata('String'), _nestedMap()]), true, true)
   ];
   var metadata = new ModelMetadata('test', fields);
 

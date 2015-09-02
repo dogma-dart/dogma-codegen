@@ -10,8 +10,9 @@ library dogma_codegen.src.metadata.model_metadata;
 // Imports
 //---------------------------------------------------------------------
 
+import 'class_metadata.dart';
 import 'field_metadata.dart';
-import 'metadata.dart';
+import 'serializable_field_metadata.dart';
 import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
@@ -19,20 +20,15 @@ import 'type_metadata.dart';
 //---------------------------------------------------------------------
 
 /// Contains metadata for a model.
-class ModelMetadata extends Metadata {
-  //---------------------------------------------------------------------
-  // Member variables
-  //---------------------------------------------------------------------
-
-  /// The fields present on the model.
-  final List<FieldMetadata> fields;
-
+class ModelMetadata extends ClassMetadata {
   //---------------------------------------------------------------------
   // Construction
   //---------------------------------------------------------------------
 
-  ModelMetadata(String name, this.fields)
-      : super(name);
+  /// Creates an instance of the [ModelMetadata] class with the given [name]
+  /// and the given [fields].
+  ModelMetadata(String name, List<SerializableFieldMetadata> fields)
+      : super(name, fields: fields);
 
   //---------------------------------------------------------------------
   // Properties
@@ -76,15 +72,15 @@ class ModelMetadata extends Metadata {
   }
 
   /// Gets the fields that are convertible within the model.
-  Iterable<FieldMetadata> get convertibleFields
+  Iterable<SerializableFieldMetadata> get convertibleFields
       => fields.where((field) => field.decode || field.encode);
 
   /// Gets the fields that are decodable within the model.
-  Iterable<FieldMetadata> get decodableFields
+  Iterable<SerializableFieldMetadata> get decodableFields
       => fields.where((field) => field.decode);
 
   /// Get the fields that are encodable within the model.
-  Iterable<FieldMetadata> get encodableFields
+  Iterable<SerializableFieldMetadata> get encodableFields
       => fields.where((field) => field.encode);
 
   /// Get the fields that are list types.
@@ -112,7 +108,7 @@ Iterable<TypeMetadata> modelDecoderDependencies(ModelMetadata metadata)
 Iterable<TypeMetadata> modelEncoderDependencies(ModelMetadata metadata)
     => _dependencies(metadata.encodableFields);
 
-Iterable<TypeMetadata> _dependencies(Iterable<FieldMetadata> fields) sync* {
+Iterable<TypeMetadata> _dependencies(Iterable<SerializableFieldMetadata> fields) sync* {
   var set = [];
 
   for (var field in fields) {

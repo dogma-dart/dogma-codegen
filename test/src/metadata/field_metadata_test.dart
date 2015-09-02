@@ -25,7 +25,7 @@ const String _serializationName = 'encode';
 TypeMetadata _type() => new TypeMetadata('foo');
 
 /// Checks the [metadata] values are equivalent to [name] and [serializationName].
-void _checkValues(FieldMetadata metadata, String name, String serializationName) {
+void _checkValues(SerializableFieldMetadata metadata, String name, String serializationName) {
   expect(metadata.name, name);
   expect(metadata.serializationName, serializationName);
 }
@@ -33,13 +33,13 @@ void _checkValues(FieldMetadata metadata, String name, String serializationName)
 /// Test entry point.
 void main() {
   test('Construction without explicit serialization', () {
-    var metadata = new FieldMetadata(_metadataName, _type(), true, true);
+    var metadata = new SerializableFieldMetadata(_metadataName, _type(), true, true);
 
     _checkValues(metadata, _metadataName, _metadataName);
   });
 
   test('Construction with explicit serialization', () {
-    var metadata = new FieldMetadata(_metadataName, _type(), true, true, serializationName: _serializationName);
+    var metadata = new SerializableFieldMetadata(_metadataName, _type(), true, true, serializationName: _serializationName);
 
     _checkValues(metadata, _metadataName, _serializationName);
   });

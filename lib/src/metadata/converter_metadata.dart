@@ -10,7 +10,7 @@ library dogma_codegen.src.metadata.converter_metadata;
 // Imports
 //---------------------------------------------------------------------
 
-import 'metadata.dart';
+import 'class_metadata.dart';
 import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
@@ -18,16 +18,7 @@ import 'type_metadata.dart';
 //---------------------------------------------------------------------
 
 /// Contains metadata for a converter.
-class ConverterMetadata extends Metadata {
-  //---------------------------------------------------------------------
-  // Member variables
-  //---------------------------------------------------------------------
-
-  /// The type that can be converted.
-  final TypeMetadata type;
-  /// Whether the converter handles decoding.
-  final bool decoder;
-
+class ConverterMetadata extends ClassMetadata {
   //---------------------------------------------------------------------
   // Construction
   //---------------------------------------------------------------------
@@ -36,13 +27,59 @@ class ConverterMetadata extends Metadata {
   ///
   /// Whether or not the converter will handle decoding is specified in
   /// [decoder].
-  ConverterMetadata(String name, this.type, this.decoder)
-      : super(name);
+  ConverterMetadata(String name, TypeMetadata modelType, bool decoder)
+      : super(name,
+              supertype: converter(modelType, decoder),
+              implements: [modelConverter(modelType, decoder)]);
+
+  /// Creates a decodable instance of [ConverterMetadata] using the given
+  /// [type].
+  ///
+  /// The name of the class is generated based on the [modelType].
+  ConverterMetadata.decoder(TypeMetadata modelType)
+      : super('${modelType.name}Decoder',
+              supertype: converter(modelType, true),
+              implements: [modelDecoder(modelType)]);
+
+  /// Creates a decodable instance of [ConverterMetadata] using the given
+  /// [type].
+  ///
+  /// The name of the class is generated based on the [modelType].
+  ConverterMetadata.encoder(TypeMetadata modelType)
+      : super('${modelType.name}Encoder',
+              supertype: converter(modelType, true),
+              implements: [modelDecoder(modelType)]);
 
   //---------------------------------------------------------------------
   // Properties
   //---------------------------------------------------------------------
 
   /// Whether the converter handles encoding.
-  bool get encoder => !decoder;
+  bool get isEncoder => !isDecoder;
+  /// Whether the converter handles decoding.
+  bool get isDecoder => implements[0].name == 'ModelDecoder';
+  /// The type of model the converter accepts.
+  TypeMetadata get modelType => implements[0].arguments[0];
+
+  //---------------------------------------------------------------------
+  // Class methods
+  //---------------------------------------------------------------------
+
+  static TypeMetadata converter(TypeMetadata modelType, bool decoder) {
+    var mapType = new TypeMetadata('Map');
+    var arguments = decoder
+        ? [mapType, modelType]
+        : [modelType, mapType];
+
+    return new TypeMetadata('Converter', arguments: arguments);
+  }
+
+  static TypeMetadata modelConverter(TypeMetadata modelType, bool decoder)
+      => decoder ? modelDecoder(modelType) : modelEncoder(modelType);
+
+  static TypeMetadata modelDecoder(TypeMetadata modelType)
+      => new TypeMetadata('ModelDecoder', arguments: [modelType]);
+
+  static TypeMetadata modelEncoder(TypeMetadata modelType)
+      => new TypeMetadata('ModelEncoder', arguments: [modelType]);
 }

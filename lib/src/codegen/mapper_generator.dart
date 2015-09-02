@@ -11,6 +11,7 @@ library dogma_codegen.src.codegen.enum_converter_generator;
 
 import 'package:dogma_codegen/metadata.dart';
 
+import 'class_generator.dart';
 import 'type_generator.dart';
 
 //---------------------------------------------------------------------
@@ -23,7 +24,7 @@ void generateMapper(MapperMetadata metadata, StringBuffer buffer) {
   var modelName = metadata.type.name;
 
   // Write the class declaration
-  buffer.writeln('class $name extends Mapper<$modelName> {');
+  generateClassDeclaration(metadata, buffer);
 
   // Write the default constructor
   buffer.writeln('$name()');

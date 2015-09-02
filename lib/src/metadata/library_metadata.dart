@@ -199,7 +199,7 @@ FunctionMetadata findDecodeFunctionByType(LibraryMetadata library,
                                          {bool searchImports: true,
                                           bool searchExports: true})
 {
-return null;
+  return null;
 }
 
 /// Searches the [library] for an encode function of the given [type].
@@ -208,7 +208,7 @@ FunctionMetadata findEncodeFunctionByType(LibraryMetadata library,
                                          {bool searchImports: true,
                                           bool searchExports: true})
 {
-return null;
+  return null;
 }
 
 /// Searches the [library] for all model decoders of the given [type].

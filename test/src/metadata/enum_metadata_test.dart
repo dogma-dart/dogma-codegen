@@ -39,11 +39,13 @@ void main() {
     var metadata = new EnumMetadata(_metadataName, _values);
 
     _checkValues(metadata, _values, _values);
+    expect(metadata.explicitSerialization, false);
   });
 
   test('Construction with explicit serialization', () {
     var metadata = new EnumMetadata('test', _values, encoded: _encoded);
 
     _checkValues(metadata, _values, _encoded);
+    expect(metadata.explicitSerialization, true);
   });
 }
