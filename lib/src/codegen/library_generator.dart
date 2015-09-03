@@ -53,7 +53,7 @@ void generateConvertersSource(LibraryMetadata library,
   for (var converter in library.converters) {
     var model = findModel(library, converter.type.name);
 
-    if (converter.decoder) {
+    if (converter.isDecoder) {
       generateModelDecoder(model, buffer);
     } else {
       generateModelEncoder(model, buffer);
