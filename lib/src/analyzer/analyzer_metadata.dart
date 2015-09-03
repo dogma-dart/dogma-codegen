@@ -260,20 +260,21 @@ FunctionMetadata functionMetadata(FunctionElement element) {
 
   // See if the function is valid as an encoder or decoder
   if (parameters.length == 1) {
+    // Get the types
+    var input = typeMetadata(parameters[0].type);
+    var output = typeMetadata(element.returnType);
+
+    // Look at the annotation
+    //
+    // If an annotation is present then it is either a default decoder or
+    // encoder. This can be checked by seeing if the input type is a builtin
+    // type.
     var metadata = findAnnotation(element);
     var decoder;
 
     if (metadata != null) {
-      // \TODO Error check for unknown Serialize instance?
-      if (metadata == Serialize.decodeThrough) {
-        decoder = true;
-      } else if (metadata == Serialize.encodeThrough) {
-        decoder = false;
-      }
+      decoder = input.isBuiltin;
     }
-
-    var input = typeMetadata(parameters[0].type);
-    var output = typeMetadata(element.returnType);
 
     return new FunctionMetadata(element.name, input, output, decoder: decoder);
   } else {
