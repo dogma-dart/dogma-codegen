@@ -53,9 +53,8 @@ String camelToPascalCase(String name)
 /// Converts a camel case [name] to snake case.
 ///
 /// Assumes that [name] is in camel case.
-String camelToSnakeCase(String name) {
-
-}
+String camelToSnakeCase(String name)
+    => snakeCaseFromWords(_pascalAndCamelToWords(name));
 
 /// Converts a [name] to pascal case.
 ///
@@ -88,9 +87,8 @@ String pascalToCamelCase(String name)
 /// Converts a pascal case [name] to snake case.
 ///
 /// Assumes that [name] is in pascal case.
-String pascalToSnakeCase(String name) {
-
-}
+String pascalToSnakeCase(String name)
+    => snakeCaseFromWords(_pascalAndCamelToWords(name));
 
 /// Converts a [name] to snake case.
 ///
@@ -128,3 +126,16 @@ String snakeToPascalCase(String name)
 /// Assumes that [name] is actually in snake case.
 String snakeToCamelCase(String name)
     => camelCaseFromWords(name.split('_'));
+
+/// Uses a regular expression to split a Pascal or Camel case [name] into words.
+///
+/// Used the example from http://weblogs.asp.net/jongalloway//426087 to
+/// accomplish this. Its a bit overkill but seems to do the job for both cases.
+List<String> _pascalAndCamelToWords(String name) {
+  var regExp = new RegExp('[A-Z]|[0-9]+');
+
+  return name.replaceAllMapped(
+      regExp,
+      (match) => ' ${match.group(0)}'
+  ).trim().split(' ');
+}
