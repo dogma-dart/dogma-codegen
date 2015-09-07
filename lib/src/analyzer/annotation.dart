@@ -63,13 +63,10 @@ Serialize annotation(ElementAnnotationImpl element) {
           var parameterField = evaluatedFields[parameterName];
           var parameterValue = parameterField.value;
 
-          // Check to see if the value could not be determined
-          //
-          // This will currently happen when attempting to evaluate a Map where
-          // the value is an enumeration. This is using information from the
-          // private fields of the state data so it can break if those details
-          // change.
-          if (parameterValue == null) {
+          // Check to see if the value is mapping which currently requires
+          // special treatment. This is using information from the private
+          // fields of the state data so it can break if those details change.
+          if (parameterName == 'mapping') {
             // Use mirrors to get at the actual state
             var fieldInstance = reflect(parameterField);
 
