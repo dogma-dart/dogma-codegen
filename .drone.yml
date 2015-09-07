@@ -1,5 +1,9 @@
 build:
-  image: google/dart
+  image: google/dart:$$DART_VERSION
   pull: true
   commands:
     - sh build.sh
+matrix:
+  DART_VERSION:
+    - latest
+    - "1.13.0-dev.1.0"
