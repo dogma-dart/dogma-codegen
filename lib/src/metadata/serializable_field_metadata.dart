@@ -60,12 +60,21 @@ class SerializableFieldMetadata extends FieldMetadata {
   //---------------------------------------------------------------------
 
   /// Whether the field should be decoded.
-  bool get decode => annotations[0].decode;
+  bool get decode => _annotation.decode;
   /// Whether the field should be encoded.
-  bool get encode => annotations[0].encode;
+  bool get encode => _annotation.encode;
   /// The name to use when serializing.
   ///
   /// If the serialization name was specified on the annotation that will be
   /// used; otherwise this will return the same value as [name].
-  String get serializationName => annotations[0].name;
+  String get serializationName => _annotation.name;
+  /// Whether the field is optional.
+  bool get optional => _annotation.optional;
+  /// The default value for the field.
+  ///
+  /// This is only valid if [optional] is set to true.
+  dynamic get defaultsTo => _annotation.optional;
+
+  /// Gets the [Serialize] annotation for the field.
+  Serialize get _annotation => annotations[0];
 }
