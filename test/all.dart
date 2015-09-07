@@ -16,6 +16,8 @@ import 'package:test/test.dart';
 
 import 'src/analyzer/analyzer_metadata_test.dart' as analyzer_metadata_test;
 
+import 'identifier_test.dart' as identifier_test;
+
 import 'src/metadata/converter_metadata_test.dart' as converter_metadata_test;
 import 'src/metadata/enum_metadata_test.dart' as enum_metadata_test;
 import 'src/metadata/field_metadata_test.dart' as field_metadata_test;
@@ -23,12 +25,14 @@ import 'src/metadata/function_metadata_test.dart' as function_metadata_test;
 import 'src/metadata/model_metadata_test.dart' as model_metadata_test;
 import 'src/metadata/type_metadata_test.dart' as type_metadata_test;
 
+
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
 void main() {
   group('Analyzer tests', analyzer_metadata_test.main);
+  group('Identifier tests', identifier_test.main);
   group('Metadata tests', () {
     group('ConverterMetadata', converter_metadata_test.main);
     group('EnumMetadata', enum_metadata_test.main);
