@@ -17,6 +17,17 @@ library dogma_codegen.identifier;
 // Library contents
 //---------------------------------------------------------------------
 
+/// Regular expression for camel case.
+final RegExp _camelCaseRegExp = new RegExp(r'^[a-z][A-Za-z\d]*$');
+/// Regular expression for pascal case.
+final RegExp _pascalCaseRegExp = new RegExp(r'^[A-Z][A-Za-z\d]*$');
+/// Regular expression for snake case.
+final RegExp _snakeCaseRegExp = new RegExp(r'^[a-z]+[a-z\d]*(?:_[a-z\d]+)*$');
+
+/// Determines whether a [name] is in pascal case.
+bool isCamelCase(String name)
+    => _camelCaseRegExp.hasMatch(name);
+
 /// Converts a [name] to camel case.
 ///
 /// Attempts to determine the [name]'s current case and then picks the correct
@@ -24,7 +35,13 @@ library dogma_codegen.identifier;
 /// already known then call the appropriate function as this won't attempt to
 /// determine the casing.
 String camelCase(String name) {
-
+  if (isCamelCase(name)) {
+    return name;
+  } else if (isPascalCase(name)) {
+    return pascalToCamelCase(name);
+  } else {
+    return snakeToCamelCase(name);
+  }
 }
 
 /// Converts a list of [words] to camel case.
@@ -56,6 +73,10 @@ String camelToPascalCase(String name)
 String camelToSnakeCase(String name)
     => snakeCaseFromWords(_pascalAndCamelToWords(name));
 
+/// Determines whether a [name] is in pascal case.
+bool isPascalCase(String name)
+    => _pascalCaseRegExp.hasMatch(name);
+
 /// Converts a [name] to pascal case.
 ///
 /// Attempts to determine the [name]'s current case and then picks the correct
@@ -63,7 +84,13 @@ String camelToSnakeCase(String name)
 /// already known then call the appropriate function as this won't attempt to
 /// determine the casing.
 String pascalCase(String name) {
-
+  if (isPascalCase(name)) {
+    return name;
+  } else if (isCamelCase(name)) {
+    return camelToPascalCase(name);
+  } else {
+    return snakeToPascalCase(name);
+  }
 }
 
 /// Converts a list of [words] to pascal case.
@@ -90,6 +117,10 @@ String pascalToCamelCase(String name)
 String pascalToSnakeCase(String name)
     => snakeCaseFromWords(_pascalAndCamelToWords(name));
 
+/// Determines whether a [name] is in snake case.
+bool isSnakeCase(String name)
+    => _snakeCaseRegExp.hasMatch(name);
+
 /// Converts a [name] to snake case.
 ///
 /// Attempts to determine the [name]'s current case and then picks the correct
@@ -97,7 +128,9 @@ String pascalToSnakeCase(String name)
 /// already known then call the appropriate function as this won't attempt to
 /// determine the casing.
 String snakeCase(String name) {
-
+  return isSnakeCase(name)
+    ? name
+    : snakeCaseFromWords(_pascalAndCamelToWords(name));
 }
 
 /// Converts a list of [words] to snake case.
