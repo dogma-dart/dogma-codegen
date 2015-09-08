@@ -48,18 +48,34 @@ Future<Null> buildConverters(LibraryMetadata models,
                              Uri sourcePath) async
 {
   // Search for any user defined libraries
+  var userDefined = new List<LibraryMetadata>();
+
   await for (var library in findUserDefinedLibraries(sourcePath)) {
+    var add = false;
+
     for (var converter in library.converters) {
       _logger.info('Found ${converter.name} in ${library.name}');
+      add = true;
     }
 
     for (var function in library.functions) {
       _logger.info('Found ${function.name} in ${library.name}');
+      add = true;
+    }
+
+    if (add) {
+      _logger.info('Adding ${library.name} to user defined');
+      userDefined.add(library);
     }
   }
 
   // Create the equivalent library
-  var convert = convertersLibrary(models, libraryPath, sourcePath);
+  var convert = convertersLibrary(
+      models,
+      libraryPath,
+      sourcePath,
+      userDefined: userDefined
+  );
 
   await writeConvert(convert);
 }
@@ -85,11 +101,11 @@ Future<Null> writeConvert(LibraryMetadata convert) async {
 LibraryMetadata convertersLibrary(LibraryMetadata modelLibrary,
                                   Uri libraryPath,
                                   Uri sourcePath,
-                                 {Map<String, LibraryMetadata> userDefined,
+                                 {List<LibraryMetadata> userDefined,
                                   bool decoders: true,
                                   bool encoders: true})
 {
-  userDefined ??= {};
+  userDefined ??= [];
 
   var packageName = modelLibrary.name.split('.')[0];
 
@@ -124,7 +140,7 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
                                    String packageName,
                                    Uri sourcePath,
                                    Map<String, LibraryMetadata> loaded,
-                                   Map<String, LibraryMetadata> userDefined,
+                                   List<LibraryMetadata> userDefined,
                                    bool decoders,
                                    bool encoders)
 {
@@ -149,6 +165,19 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
     // Create the decoder
     if (decoders) {
       converters.add(new ConverterMetadata('${name}Decoder', type, true));
+
+      // \TODO actually should go by field just in case there's any function used here
+      for (var dependency in modelDecoderDependencies(model)) {
+        _logger.fine('Found dependency ${dependency.name}');
+        for (var library in userDefined) {
+          var function = findDecodeFunctionByType(library, dependency);
+
+          if ((function != null) && (!imported.contains(library))) {
+            _logger.fine('Found function ${function.name} for ${dependency.name}');
+            imported.add(library);
+          }
+        }
+      }
     }
 
     // Create the encoder

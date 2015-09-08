@@ -14,6 +14,7 @@ import 'package:dogma_codegen/identifier.dart';
 import 'package:dogma_codegen/metadata.dart';
 
 import 'argument_buffer.dart';
+import 'class_generator.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -24,9 +25,39 @@ const String _namedConstructor = 'using';
 
 const String _decoderInput = 'input';
 
+String _generateFieldVariable(String modelName, FieldMetadata field) {
+  return '_$modelName${camelToPascalCase(field.name)}';
+}
+
+void generateModelFieldVariables(ModelMetadata metadata,
+                                 StringBuffer buffer,
+                                [bool decoder = true,
+                                 bool encoder = true])
+{
+  var fields;
+
+  if (decoder && encoder) {
+    fields = metadata.convertibleFields;
+  } else if (decoder) {
+    fields = metadata.decodableFields;
+  } else {
+    fields = metadata.encodableFields;
+  }
+
+  var name = pascalToCamelCase(metadata.name);
+
+  for (var field in fields) {
+    buffer.write('const String ');
+    buffer.write(_generateFieldVariable(name, field));
+    buffer.write(' = \'');
+    buffer.write(field.serializationName);
+    buffer.writeln('\';');
+  }
+}
 
 /// Writes out the class definition for a model decoder using the model's [metadata].
-void generateModelDecoder(ModelMetadata metadata,
+void generateModelDecoder(ConverterMetadata metadata,
+                          ModelMetadata model,
                           StringBuffer buffer,
                          {Map<String, FunctionMetadata> decodeThrough})
 {
@@ -34,12 +65,17 @@ void generateModelDecoder(ModelMetadata metadata,
 
   // Get the decodable fields
   var builtinDecodableFields = new List<FieldMetadata>();
+  var functionDecodableFields = new List<FieldMetadata>();
   var modelDecodableFields = new List<FieldMetadata>();
 
-  for (var field in metadata.fields) {
+  for (var field in model.fields) {
     if (field.decode) {
-      if (field.type.isBuiltin) {
+      var type = field.type;
+
+      if (type.isBuiltin) {
         builtinDecodableFields.add(field);
+      } else if (decodeThrough.containsKey(type.name)) {
+        functionDecodableFields.add(field);
       } else {
         modelDecodableFields.add(field);
       }
@@ -50,18 +86,15 @@ void generateModelDecoder(ModelMetadata metadata,
     return;
   }
 
-  // Get the names
-  var modelName = metadata.name;
-  var name = modelName + 'Decoder';
-
   // Write the class declaration
-  buffer.writeln('class $name extends Converter<Map, $modelName> implements ModelDecoder<$modelName> {');
+  generateClassDeclaration(metadata, buffer);
+  buffer.writeln('{');
 
   if (modelDecodableFields.isNotEmpty) {
     // Get the dependencies
     var decoderDependencies = new List<TypeMetadata>();
 
-    for (var dependency in modelDecoderDependencies(metadata)) {
+    for (var dependency in modelDecoderDependencies(model)) {
       // Check if a function will be used
       if (!decodeThrough.containsKey(dependency.name)) {
         decoderDependencies.add(dependency);
@@ -72,8 +105,10 @@ void generateModelDecoder(ModelMetadata metadata,
     _writeMemberVariables(decoderDependencies, 'Decoder', buffer);
 
     // Write the constructors
-    _writeConstructors(name, decoderDependencies, 'Decoder', buffer);
+    _writeConstructors(metadata.name, decoderDependencies, 'Decoder', buffer);
   }
+
+  var modelName = model.name;
 
   // Write the create function
   buffer.writeln('@override');
@@ -90,6 +125,12 @@ void generateModelDecoder(ModelMetadata metadata,
   }
 
   buffer.writeln();
+
+  for (var field in functionDecodableFields) {
+    var decoder = decodeThrough[field.type.name];
+
+    buffer.writeln('model.${field.name} = ${decoder.name}($_decoderInput[\'${field.serializationName}\']);');
+  }
 
   // Write the model fields
   for (var field in modelDecodableFields) {

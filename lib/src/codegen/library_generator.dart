@@ -51,10 +51,11 @@ void generateConvertersSource(LibraryMetadata library,
                               StringBuffer buffer)
 {
   for (var converter in library.converters) {
-    var model = findModel(library, converter.type.name);
+    var model = findModel(library, converter.modelType.name);
 
     if (converter.isDecoder) {
-      generateModelDecoder(model, buffer);
+      generateModelFieldVariables(model, buffer);
+      generateModelDecoder(converter, model, buffer, decodeThrough: _defaultDecoders());
     } else {
       generateModelEncoder(model, buffer);
     }
@@ -107,4 +108,11 @@ String _renderLibrary(LibraryMetadata library, _SourceGenerator generator) {
   generator(library, buffer);
 
   return renderLibrary(library, buffer.toString().trim());
+}
+
+Map<String, FunctionMetadata> _defaultDecoders() {
+  return {
+    'DateTime': new FunctionMetadata('DateTime.parse', new TypeMetadata('String'), new TypeMetadata('DateTime')),
+    'Uri': new FunctionMetadata('Uri.parse', new TypeMetadata('String'), new TypeMetadata('Uri'))
+  };
 }
