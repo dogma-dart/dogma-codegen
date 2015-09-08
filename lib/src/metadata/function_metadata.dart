@@ -55,4 +55,8 @@ class FunctionMetadata extends Metadata {
 
   /// Whether this function should used by default for construction.
   bool get defaultConverter => decoder != null;
+  /// Whether this function should be used by default for decoding.
+  bool get defaultDecoder => defaultConverter && decoder;
+  /// Whether this function should be used by default for encoding.
+  bool get defaultEncoder => defaultConverter && !decoder;
 }
