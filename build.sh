@@ -17,6 +17,8 @@ pub global run linter .
 # Run the tests
 dart --checked test/all.dart
 
+git show-ref master --heads
+
 # Run the tests and report back to coveralls
 if [ "$COVERALLS_TOKEN" ]; then
   pub global activate dart_coveralls 0.2.0
