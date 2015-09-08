@@ -199,6 +199,13 @@ FunctionMetadata findDecodeFunctionByType(LibraryMetadata library,
                                          {bool searchImports: true,
                                           bool searchExports: true})
 {
+  for (var function in library.functions) {
+     if ((function.defaultDecoder) && (function.output == type)){
+      return function;
+    }
+  }
+
+  // Not found
   return null;
 }
 
