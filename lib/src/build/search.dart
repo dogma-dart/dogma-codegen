@@ -34,7 +34,7 @@ Stream<LibraryMetadata> findUserDefinedLibraries(Uri path) async* {
 
   // Search through the directory for converters
   if (directoryExists) {
-    var context = analysisContext(currentPath, getSdkDir().path);
+    var context = analysisContext();
     var directory = new Directory(path.toFilePath());
 
     await for (var value in directory.list(recursive: false, followLinks: false)) {

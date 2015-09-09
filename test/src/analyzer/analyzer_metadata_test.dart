@@ -9,10 +9,8 @@ library dogma_codegen.test.src.analyzer.analyzer_metadata_test;
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:cli_util/cli_util.dart';
 import 'package:dogma_codegen/src/analyzer/analyzer_metadata.dart';
 import 'package:dogma_codegen/src/analyzer/context.dart';
-import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 
 //---------------------------------------------------------------------
@@ -21,7 +19,7 @@ import 'package:test/test.dart';
 
 /// Test entry point.
 void main() {
-  var context = analysisContext(path.current, getSdkDir().path);
+  var context = analysisContext();
 
   test('Empty library', () {
     var metadata = libraryMetadata('test/libs/empty.dart', context);

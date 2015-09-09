@@ -107,7 +107,7 @@ Future<Null> build(List<String> args,
   }
 
   // Load the model library
-  var context = analysisContext(currentPath, getSdkDir().path);
+  var context = analysisContext();
   var rootLibrary = libraryMetadata(modelLibrary, context);
 
   // Verify that the library was loaded

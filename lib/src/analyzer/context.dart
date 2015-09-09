@@ -17,7 +17,8 @@ import 'package:analyzer/src/generated/java_io.dart';
 import 'package:analyzer/src/generated/sdk_io.dart' show DirectoryBasedDartSdk;
 import 'package:analyzer/src/generated/source.dart';
 import 'package:analyzer/src/generated/source_io.dart';
-import 'package:path/path.dart' as path;
+import 'package:cli_util/cli_util.dart';
+import 'package:dogma_codegen/path.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -27,13 +28,16 @@ import 'package:path/path.dart' as path;
 ///
 /// The [projectPath] refers to the root of the repository. The [sdkPath]
 /// points to the installed location of the Dart SDK.
-AnalysisContext analysisContext(String projectPath, String sdkPath) {
+AnalysisContext analysisContext({Uri projectPath, Uri sdkPath}) {
+  projectPath ??= currentPathUri;
+  sdkPath ??= getSdkDir().uri;
+
   // Setup the core dart libraries
-  JavaSystemIO.setProperty('com.google.dart.sdk', sdkPath);
+  JavaSystemIO.setProperty('com.google.dart.sdk', sdkPath.toFilePath());
   var sdk = DirectoryBasedDartSdk.defaultSdk;
 
   // Get the packages directory
-  var packages = new JavaFile(path.join(projectPath, 'packages'));
+  var packages = new JavaFile(join('packages', base: projectPath).toFilePath());
 
   // Create the resolvers
   var resolvers = [
