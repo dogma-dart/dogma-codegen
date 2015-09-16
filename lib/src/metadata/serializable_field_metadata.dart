@@ -32,6 +32,8 @@ class SerializableFieldMetadata extends FieldMetadata {
                             bool decode,
                             bool encode,
                            {String serializationName: '',
+                            bool optional: false,
+                            dynamic defaultsTo,
                             String comments: ''})
       : super(name,
               type,
@@ -39,7 +41,12 @@ class SerializableFieldMetadata extends FieldMetadata {
               true,  // Field has a getter
               true,  // Field has a setter
               comments: comments,
-              annotations: [new Serialize.field(serializationName.isEmpty ? name : serializationName, encode: encode, decode: decode)]);
+              annotations: [new Serialize.field(
+                  serializationName.isEmpty ? name : serializationName,
+                  encode: encode,
+                  decode: decode,
+                  optional: optional,
+                  defaultsTo: defaultsTo)]);
 
   /// Creates an instance of the [SerializableFieldMetadata] with the given
   /// [name] whose serialization is specified through an annotation.
