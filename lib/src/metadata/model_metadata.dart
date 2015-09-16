@@ -84,12 +84,19 @@ class ModelMetadata extends ClassMetadata {
       => fields.where((field) => field.encode);
 
   /// Get the fields that are list types.
-  Iterable<FieldMetadata> get listFields
+  Iterable<SerializableFieldMetadata> get listFields
       => fields.where((field) => field.type.isList);
 
   /// Get the fields that are map types.
-  Iterable<FieldMetadata> get mapFields
+  Iterable<SerializableFieldMetadata> get mapFields
       => fields.where((field) => field.type.isMap);
+}
+
+/// Retrieves the field from the [metadata] with the given [name].
+///
+/// If the field is not found then null is returned.
+SerializableFieldMetadata findFieldByName(ModelMetadata metadata, String name) {
+  return metadata.fields.firstWhere((field) => field.name == name, orElse: () => null);
 }
 
 /// Retrieves all the dependent types from the [metadata].
