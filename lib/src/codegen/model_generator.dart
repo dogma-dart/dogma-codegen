@@ -11,7 +11,7 @@ library dogma_codegen.src.codegen.model_generator;
 
 import 'package:dogma_codegen/metadata.dart';
 
-import 'utils.dart';
+import 'type_generator.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -53,7 +53,7 @@ void generateModel(ModelMetadata metadata, StringBuffer buffer) {
     }
 
     // Write out the field definition
-    buffer.writeln('${typeName(field.type)} ${field.name};');
+    buffer.writeln('${generateType(field.type)} ${field.name};');
   }
 
   // Close the class declaration
@@ -98,7 +98,7 @@ void generateUnmodifiableModelView(ModelMetadata metadata, StringBuffer buffer) 
       unmodifiableFieldTypes.add(unmodifiableType);
 
       // Write out a final variable using the unmodifiable view
-      buffer.writeln('final ${typeName(unmodifiableType)} _${field.name};');
+      buffer.writeln('final ${generateType(unmodifiableType)} _${field.name};');
     } else {
       fields.add(field);
     }
@@ -145,7 +145,7 @@ void generateUnmodifiableModelView(ModelMetadata metadata, StringBuffer buffer) 
 
   // Write the properties
   for (var field in fields) {
-    var type = typeName(field.type);
+    var type = generateType(field.type);
     var fieldName = field.name;
 
     buffer.writeln();
@@ -155,7 +155,7 @@ void generateUnmodifiableModelView(ModelMetadata metadata, StringBuffer buffer) 
   }
 
   for (var field in unmodifiableFields) {
-    var type = typeName(field.type);
+    var type = generateType(field.type);
     var fieldName = field.name;
 
     buffer.writeln();
@@ -174,7 +174,7 @@ void generateUnmodifiableModelView(ModelMetadata metadata, StringBuffer buffer) 
 String _unmodifiableInstance(FieldMetadata field, TypeMetadata type) {
   var fieldName = field.name;
 
-  return 'var $fieldName = new ${typeName(type)}($_factoryVariableName.$fieldName);';
+  return 'var $fieldName = new ${generateType(type)}($_factoryVariableName.$fieldName);';
 }
 
 /// Creates the unmodifiable equivalent of the given [metadata].
