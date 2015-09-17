@@ -7,6 +7,12 @@
 library dogma_codegen.template;
 
 //---------------------------------------------------------------------
+// Standard libraries
+//---------------------------------------------------------------------
+
+import 'dart:async';
+
+//---------------------------------------------------------------------
 // Imports
 //---------------------------------------------------------------------
 
@@ -14,6 +20,8 @@ import 'package:dart_style/dart_style.dart';
 import 'package:dogma_codegen/metadata.dart';
 import 'package:dogma_codegen/path.dart';
 import 'package:mustache/mustache.dart';
+
+import 'src/template/class_declaration.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -119,7 +127,7 @@ Map _libraryTemplateValues(LibraryMetadata metadata) {
   };
 
   // Get the directory containing the library
-  var libraryDirectory = dirname(metadata.uri);// posix.dirname(metadata.uri.toFilePath(windows: false));
+  var libraryDirectory = dirname(metadata.uri);
 
   // Get information on the imports
   var standardLibraries = [];
@@ -240,3 +248,17 @@ export '{{{.}}}';
 
 
 {{{code}}}''';
+
+Future<Null> initializeTemplates({String codeHeader,
+                                 String classTemplate: defaultClassTemplate}) async
+{
+  header = codeHeader;
+  await setClassTemplate(classTemplate);
+}
+
+Future<Null> setClassTemplate(String classTemplate) async {
+  var resource = new Resource(classTemplate);
+  var contents = await resource.readAsString();
+
+  classTemplateSource(contents);
+}
