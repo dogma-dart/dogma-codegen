@@ -16,6 +16,8 @@ import 'package:test/test.dart';
 
 import 'src/analyzer/analyzer_metadata_test.dart' as analyzer_metadata_test;
 
+import 'src/codegen/comment_generator_test.dart' as comment_generator_test;
+
 import 'identifier_test.dart' as identifier_test;
 
 import 'src/metadata/converter_metadata_test.dart' as converter_metadata_test;
@@ -32,6 +34,9 @@ import 'src/metadata/type_metadata_test.dart' as type_metadata_test;
 
 void main() {
   group('Analyzer tests', analyzer_metadata_test.main);
+  group('Codegen tests', () {
+    group('Comments', comment_generator_test.main);
+  });
   group('Identifier tests', identifier_test.main);
   group('Metadata tests', () {
     group('ConverterMetadata', converter_metadata_test.main);
