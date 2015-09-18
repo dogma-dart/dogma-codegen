@@ -52,6 +52,13 @@ class ArgumentBuffer {
     _buffer.write(value);
   }
 
+  /// Writes a list of [values] to the buffer.
+  void writeAll(List<String> values) {
+    for (var value in values) {
+      write(value);
+    }
+  }
+
   /// Returns the contents of the buffer.
   @override
   String toString() => _buffer.toString();

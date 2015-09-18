@@ -19,15 +19,6 @@ import 'package:test/test.dart';
 /// The number of values to write.
 const int _length = 100;
 
-/// Writes the [values] to the [buffer].
-String _writeToBuffer(ArgumentBuffer buffer, List<String> values) {
-  for (var value in values) {
-    buffer.write(value);
-  }
-
-  return buffer.toString();
-}
-
 /// Tests the writing of values to [buffer].
 void _testWrite(ArgumentBuffer buffer) {
   var values = [];
@@ -36,7 +27,9 @@ void _testWrite(ArgumentBuffer buffer) {
     values.add(i.toString());
   }
 
-  var result = _writeToBuffer(buffer, values);
+  buffer.writeAll(values);
+
+  var result = buffer.toString();
 
   expect(result, values.join(buffer.separator));
 }
