@@ -11,7 +11,10 @@ library dogma_codegen.src.codegen.model_generator;
 
 import 'package:dogma_codegen/metadata.dart';
 
+import 'class_generator.dart';
+import 'field_generator.dart';
 import 'type_generator.dart';
+import 'serialize_annotation_generator.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -30,31 +33,23 @@ const String _factoryVariableName = 'model';
 
 /// Writes out the class definition of a model using its [metadata] to the [buffer].
 void generateModel(ModelMetadata metadata, StringBuffer buffer) {
-  // Get the names
-  var name = metadata.name;
-
   // Write the class declaration
-  buffer.writeln('class $name {');
+  generateClassDeclaration(metadata, buffer);
+  buffer.writeln('{');
 
-  // Write the member variables
-  var explicit = metadata.explicitSerialization;
+  // See if an annotation generator is required
+  var annotationGenerators = new List<AnnotationGenerator>();
 
-  for (var field in metadata.fields) {
-    // Write out the field comment
-    var comments = field.comments;
-
-    if (comments.isNotEmpty) {
-      buffer.writeln('/// $comments');
-    }
-
-    // Write out the explicit serialization metadata
-    if (explicit) {
-      buffer.writeln('@Serialize.field(\'${field.serializationName}\')');
-    }
-
-    // Write out the field definition
-    buffer.writeln('${generateType(field.type)} ${field.name};');
+  if (metadata.explicitSerialization) {
+    annotationGenerators.add(generateFieldAnnotation);
   }
+
+  // Generate the fields
+  generateFields(
+      metadata.fields,
+      buffer,
+      annotationGenerators: annotationGenerators
+  );
 
   // Close the class declaration
   buffer.writeln('}');
