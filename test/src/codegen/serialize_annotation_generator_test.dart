@@ -17,7 +17,7 @@ import 'package:test/test.dart';
 // Library contents
 //---------------------------------------------------------------------
 
-const String _serializeField = 'Serialize.field';
+const String _serializeField = '@Serialize.field';
 const String _name = 'foo';
 
 String _annotation(String name,
@@ -34,7 +34,10 @@ String _annotation(String name,
       defaultsTo: defaultsTo
   );
 
-  return generateFieldAnnotation(annotation);
+  var buffer = new StringBuffer();
+  generateFieldAnnotation(annotation, buffer);
+
+  return buffer.toString().trimRight();
 }
 
 /// Test entry point.

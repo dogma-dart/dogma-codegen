@@ -22,7 +22,11 @@ import 'builtin_generator.dart';
 ///
 /// The generated string will only have values that differ from the default
 /// named parameters of [Serialize.field].
-String generateFieldAnnotation(Serialize annotation) {
+void generateFieldAnnotation(dynamic annotation, StringBuffer buffer) {
+  if (annotation is! Serialize) {
+    return;
+  }
+
   var name = annotation.name;
   var argumentBuffer = new ArgumentBuffer();
 
@@ -73,5 +77,7 @@ String generateFieldAnnotation(Serialize annotation) {
   }
 
   // Write out the declaration
-  return 'Serialize.field(${argumentBuffer.toString()})';
+  buffer.writeln('@Serialize.field(${argumentBuffer.toString()})');
 }
+
+String generateDefaultConvertFunction() => '@Serialize.using';
