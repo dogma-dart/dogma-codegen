@@ -80,4 +80,12 @@ void generateFieldAnnotation(dynamic annotation, StringBuffer buffer) {
   buffer.writeln('@Serialize.field(${argumentBuffer.toString()})');
 }
 
-String generateDefaultConvertFunction() => '@Serialize.using';
+void generateFieldMapping(dynamic annotation, StringBuffer buffer) {
+  if (annotation is! Serialize) {
+    return;
+  }
+
+  buffer.write('@Serialize.values(const ');
+  buffer.write(generateMap(annotation.mapping, true));
+  buffer.writeln(')');
+}

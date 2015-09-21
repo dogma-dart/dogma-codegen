@@ -49,7 +49,7 @@ class SerializableFieldMetadata extends FieldMetadata {
                   defaultsTo: defaultsTo)]);
 
   /// Creates an instance of the [SerializableFieldMetadata] with the given
-  /// [name] whose serialization is specified through an annotation.
+  /// [name] whose serialization is specified through an [annotation].
   SerializableFieldMetadata.annotated(String name,
                                       TypeMetadata type,
                                       Serialize annotation,

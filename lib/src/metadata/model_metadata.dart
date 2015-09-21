@@ -27,8 +27,10 @@ class ModelMetadata extends ClassMetadata {
 
   /// Creates an instance of the [ModelMetadata] class with the given [name]
   /// and the given [fields].
-  ModelMetadata(String name, List<SerializableFieldMetadata> fields)
-      : super(name, fields: fields);
+  ModelMetadata(String name,
+                List<SerializableFieldMetadata> fields,
+               {String comments: ''})
+      : super(name, fields: fields, comments: comments);
 
   //---------------------------------------------------------------------
   // Properties

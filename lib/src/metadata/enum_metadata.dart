@@ -10,26 +10,18 @@ library dogma_codegen.src.metadata.enum_metadata;
 // Imports
 //---------------------------------------------------------------------
 
-import 'metadata.dart';
+import 'package:dogma_data/serialize.dart';
+
+import 'enum_field_metadata.dart';
+import 'class_metadata.dart';
+import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
 /// Contains metadata for an enumeration.
-///
-/// The enumeration metadata contains the names of the [values] as well as an
-/// [encoded] variant for serialization.
-class EnumMetadata extends Metadata {
-  //---------------------------------------------------------------------
-  // Member variables
-  //---------------------------------------------------------------------
-
-  /// The name of the individual enumerations.
-  final List<String> values;
-  /// The encoded values.
-  final List<String> encoded;
-
+class EnumMetadata extends ClassMetadata {
   //---------------------------------------------------------------------
   // Construction
   //---------------------------------------------------------------------
@@ -39,15 +31,52 @@ class EnumMetadata extends Metadata {
   /// If there is a specific encoding for the values then [encoded] should be
   /// provided, otherwise the individual [values] will be used as the
   /// serialized names.
-  factory EnumMetadata(String name, List<String> values, {List<String> encoded}) {
-    encoded ??= new List<String>.from(values);
+  factory EnumMetadata(String name,
+                       List<String> values,
+                      {List<String> encoded,
+                       String comments: '',
+                       List<String> valueComments})
+  {
+    var count = values.length;
 
-    return new EnumMetadata._internal(name, values, encoded);
+    encoded ??= new List<String>.from(values);
+    valueComments ??= new List<String>.filled(count, '');
+
+    var mapping = {};
+    var fields = new List<EnumFieldMetadata>();
+    var enumType = new TypeMetadata(name);
+
+    for (var i = 0; i < count; ++i) {
+      var field = new EnumFieldMetadata(
+          values[i],
+          enumType,
+          comments: valueComments[i]
+      );
+
+      mapping[encoded[i]] = field;
+      fields.add(field);
+    }
+
+    var annotation = new Serialize.values(mapping);
+
+    return new EnumMetadata.annotated(
+        name,
+        fields,
+        annotation,
+        comments: comments
+    );
   }
 
-  /// Creates an instance of [EnumMetadata].
-  EnumMetadata._internal(String name, this.values, this.encoded)
-      : super(name);
+  /// Creates an instance of the [EnumMetadata] with the given [name] whose
+  /// serialization is specified through an [annotation].
+  EnumMetadata.annotated(String name,
+                         List<EnumFieldMetadata> fields,
+                         Serialize annotation,
+                        {String comments: ''})
+      : super(name,
+              fields: fields,
+              annotations: [annotation],
+              comments: comments);
 
   //---------------------------------------------------------------------
   // Properties
@@ -55,17 +84,22 @@ class EnumMetadata extends Metadata {
 
   /// Whether the enum uses explicit serialization.
   ///
-  /// Compares [values] and [encoded] to see if there are any differences. If
-  /// so returns true; false otherwise.
+  /// Compares the values in the annotation to determine if any there are any
+  /// differences.
   bool get explicitSerialization {
-    var count = values.length;
+    var values = serializeAnnotation.mapping;
+    var explicit = false;
 
-    for (var i = 0; i < count; ++i) {
-      if (values[i] != encoded[i]) {
-        return true;
+    values.forEach((encoded, value) {
+      if (encoded != value.name) {
+        explicit = true;
+        return;
       }
-    }
+    });
 
-    return false;
+    return explicit;
   }
+
+  /// Gets the [Serialize] annotation for the field.
+  Serialize get serializeAnnotation => annotations[0];
 }

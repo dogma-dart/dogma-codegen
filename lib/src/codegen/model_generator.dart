@@ -11,6 +11,7 @@ library dogma_codegen.src.codegen.model_generator;
 
 import 'package:dogma_codegen/metadata.dart';
 
+import 'annotation_generator.dart';
 import 'class_generator.dart';
 import 'field_generator.dart';
 import 'type_generator.dart';
@@ -33,10 +34,10 @@ const String _factoryVariableName = 'model';
 
 /// Writes out the class definition of a model using its [metadata] to the [buffer].
 void generateModel(ModelMetadata metadata, StringBuffer buffer) {
-  // Write the class declaration
-  generateClassDeclaration(metadata, buffer);
-  buffer.writeln('{');
+  generateClassDefinition(metadata, buffer, _generateModelDefinition);
+}
 
+void _generateModelDefinition(ModelMetadata metadata, StringBuffer buffer) {
   // See if an annotation generator is required
   var annotationGenerators = new List<AnnotationGenerator>();
 
@@ -50,9 +51,6 @@ void generateModel(ModelMetadata metadata, StringBuffer buffer) {
       buffer,
       annotationGenerators: annotationGenerators
   );
-
-  // Close the class declaration
-  buffer.writeln('}');
 }
 
 /// Writes out the class definition for an unmodifiable view over the model using its [metadata] to the [buffer].

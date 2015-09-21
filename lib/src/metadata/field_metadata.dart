@@ -40,6 +40,12 @@ class FieldMetadata extends Metadata implements Annotated, Commented {
   final bool getter;
   /// Whether the field has a setter.
   final bool setter;
+  /// Whether the field is constant.
+  final bool isConst;
+  /// Whether the field is final.
+  final bool isFinal;
+  /// Whether the field is a class field.
+  final bool isStatic;
 
   //---------------------------------------------------------------------
   // Annotated
@@ -65,7 +71,10 @@ class FieldMetadata extends Metadata implements Annotated, Commented {
                  this.isProperty,
                  this.getter,
                  this.setter,
-                {this.annotations: const [],
+                {this.isConst: false,
+                 this.isFinal: false,
+                 this.isStatic: false,
+                 this.annotations: const [],
                  this.comments: ''})
       : super(name);
 }

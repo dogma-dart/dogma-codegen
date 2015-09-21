@@ -12,51 +12,33 @@ library dogma_codegen.src.codegen.enum_generator;
 
 import 'package:dogma_codegen/metadata.dart';
 
-import 'argument_buffer.dart';
+import 'annotation_generator.dart';
+import 'class_generator.dart';
+import 'field_generator.dart';
+import 'serialize_annotation_generator.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
 void generateEnum(EnumMetadata enumeration, StringBuffer buffer) {
-  // Get the names
-  var name = enumeration.name;
+  var annotationGenerators = new List<AnnotationGenerator>();
 
   // Write out the encoding if necessary
   if (enumeration.explicitSerialization) {
-    var encoded = enumeration.encoded;
-    var values = enumeration.values;
-    var count = values.length;
-    var isString = encoded[0] is String;
-    var argumentBuffer = new ArgumentBuffer.lineBreak();
-
-    for (var i = 0; i < count; ++i) {
-      var encode = encoded[i];
-
-      if (isString) {
-        encode = '\'$encode\'';
-      }
-
-      argumentBuffer.write('$encode: $name.${values[i]}');
-    }
-
-    buffer.writeln('@Serialize.values(const {');
-    buffer.writeln(argumentBuffer.toString());
-    buffer.writeln('})');
+    annotationGenerators.add(generateFieldMapping);
   }
 
-  // Write the enum declaration
-  buffer.writeln('enum $name {');
+  generateClassDefinition(
+      enumeration,
+      buffer,
+      _generateEnumDefinition,
+      annotationGenerators: annotationGenerators
+  );
+}
 
-  // Write the enumeration values out.
-  var valueBuffer = new ArgumentBuffer.lineBreak();
-
-  for (var value in enumeration.values) {
-    valueBuffer.write(value);
-  }
-
-  buffer.writeln(valueBuffer.toString());
-
-  // Close the class declaration
-  buffer.writeln('}');
+void _generateEnumDefinition(EnumMetadata enumeration, StringBuffer buffer) {
+  generateFields(enumeration.fields, buffer, generator: (field, buf) {
+    buffer.write('${field.name},');
+  });
 }

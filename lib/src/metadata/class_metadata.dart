@@ -67,8 +67,8 @@ class ClassMetadata extends Metadata implements Annotated, Commented {
                 this.implements: const [],
                 this.typeParameters: const [],
                 this.fields: const [],
-                this.annotations,
-                this.comments})
+                this.annotations: const [],
+                this.comments: ''})
       : type = new TypeMetadata(name)
       , super(name);
 }

@@ -11,6 +11,7 @@ library dogma_codegen.src.codegen.field_generator;
 
 import 'package:dogma_codegen/metadata.dart';
 
+import 'annotation_generator.dart';
 import 'comment_generator.dart';
 import 'type_generator.dart';
 
@@ -22,12 +23,6 @@ import 'type_generator.dart';
 ///
 /// The source code generated is written into the [buffer].
 typedef void FieldGenerator(FieldMetadata field, StringBuffer buffer);
-
-/// Definition of a function that generates annotations.
-///
-/// The generator should test the type of [value] to determine if the annoation
-/// declaration should be written to the [buffer].
-typedef void AnnotationGenerator(dynamic value, StringBuffer buffer);
 
 /// Generates the source code for the [field] into the [buffer] using the
 /// [generator].
@@ -66,7 +61,7 @@ void generateFields(List<FieldMetadata> fields,
                    {FieldGenerator generator,
                     List<AnnotationGenerator> annotationGenerators})
 {
-  generator = generateMemberVariables;
+  generator ??= generateMemberVariables;
   annotationGenerators ??= new List<AnnotationGenerator>();
 
   for (var field in fields) {
@@ -88,10 +83,3 @@ void generateMemberVariables(FieldMetadata field, StringBuffer buffer) {
   buffer.writeln('${generateType(field.type)} ${field.name};');
 }
 
-/// Generates the @override annotation into the [buffer] if the [value] is
-/// equal to [override].
-void generateOverrideAnnotation(dynamic value, StringBuffer buffer) {
-  if (value == override) {
-    buffer.writeln('@override');
-  }
-}

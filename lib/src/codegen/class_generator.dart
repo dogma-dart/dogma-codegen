@@ -12,15 +12,24 @@ library dogma_codegen.src.codegen.class_generator;
 
 import 'package:dogma_codegen/metadata.dart';
 
+import 'annotation_generator.dart';
 import 'argument_buffer.dart';
+import 'comment_generator.dart';
 import 'type_generator.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
-void generateClassDeclaration(ClassMetadata metadata, StringBuffer buffer) {
-  buffer.write('class ');
+/// Definition of a function that generates the source code for a class.
+///
+/// The source code generated is written into the [buffer].
+typedef void ClassGenerator(ClassMetadata field, StringBuffer buffer);
+
+void generateClassDeclaration(ClassMetadata metadata,
+                              StringBuffer buffer,
+                             [String keyword = 'class']) {
+  buffer.write('$keyword ');
   buffer.write(generateType(metadata.type));
 
   // Write the extends clause if necessary
@@ -45,4 +54,36 @@ void generateClassDeclaration(ClassMetadata metadata, StringBuffer buffer) {
 
     buffer.write(argumentBuffer.toString());
   }
+}
+
+void generateClassDefinition(ClassMetadata metadata,
+                             StringBuffer buffer,
+                             ClassGenerator generator,
+                            {List<AnnotationGenerator> annotationGenerators})
+{
+  annotationGenerators ??= new List<AnnotationGenerator>();
+
+  // Write the code comment
+  generateCodeComment(metadata.comments, buffer);
+
+  // Write out any annotations
+  for (var annotation in metadata.annotations) {
+    for (var annotationGenerator in annotationGenerators) {
+      annotationGenerator(annotation, buffer);
+    }
+  }
+
+  // Write the class declaration
+  generateClassDeclaration(
+      metadata,
+      buffer,
+      metadata is EnumMetadata ? 'enum' : 'class'
+  );
+  buffer.writeln('{');
+
+  // Write the class definition
+  generator(metadata, buffer);
+
+  // Close the class declaration
+  buffer.writeln('}');
 }
