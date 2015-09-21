@@ -52,8 +52,8 @@ class ArgumentBuffer {
     _buffer.write(value);
   }
 
-  /// Writes a list of [values] to the buffer.
-  void writeAll(List<String> values) {
+  /// Writes the [values] to the buffer.
+  void writeAll(Iterable<String> values) {
     for (var value in values) {
       write(value);
     }
@@ -63,3 +63,21 @@ class ArgumentBuffer {
   @override
   String toString() => _buffer.toString();
 }
+
+void writeArgumentsToBuffer(Iterable<String> values,
+                            StringBuffer buffer,
+                           {lineBreak: false})
+{
+  buffer.write(writeArgumentsToString(values, lineBreak: lineBreak));
+}
+
+String writeArgumentsToString(Iterable<String> values, {bool lineBreak: false}) {
+  var argumentBuffer = createArgumentBuffer(lineBreak);
+
+  argumentBuffer.writeAll(values);
+
+  return argumentBuffer.toString();
+}
+
+ArgumentBuffer createArgumentBuffer([bool lineBreak = false])
+    => lineBreak ? new ArgumentBuffer.lineBreak() : new ArgumentBuffer();
