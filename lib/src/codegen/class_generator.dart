@@ -14,7 +14,7 @@ import 'package:dogma_codegen/metadata.dart';
 
 import 'annotation_generator.dart';
 import 'argument_buffer.dart';
-import 'comment_generator.dart';
+import 'metadata_generator.dart';
 import 'type_generator.dart';
 
 //---------------------------------------------------------------------
@@ -26,6 +26,10 @@ import 'type_generator.dart';
 /// The source code generated is written into the [buffer].
 typedef void ClassGenerator(ClassMetadata field, StringBuffer buffer);
 
+/// Generates the declaration for the [metadata] into the [buffer].
+///
+/// The [keyword] can be specified for cases where 'class' is not the required
+/// keyword for the declaration.
 void generateClassDeclaration(ClassMetadata metadata,
                               StringBuffer buffer,
                              [String keyword = 'class']) {
@@ -56,6 +60,13 @@ void generateClassDeclaration(ClassMetadata metadata,
   }
 }
 
+/// Generates the source code for the class [metadata] into the [buffer].
+///
+/// The [generator] specifies the function to write the source code for the
+/// class definition.
+///
+/// Any annotations that are present on the [metadata] are passed to the
+/// [annotationGenerators].
 void generateClassDefinition(ClassMetadata metadata,
                              StringBuffer buffer,
                              ClassGenerator generator,
@@ -63,15 +74,8 @@ void generateClassDefinition(ClassMetadata metadata,
 {
   annotationGenerators ??= new List<AnnotationGenerator>();
 
-  // Write the code comment
-  generateCodeComment(metadata.comments, buffer);
-
-  // Write out any annotations
-  for (var annotation in metadata.annotations) {
-    for (var annotationGenerator in annotationGenerators) {
-      annotationGenerator(annotation, buffer);
-    }
-  }
+  // Write out metadata
+  generateMetadata(metadata, buffer, annotationGenerators);
 
   // Write the class declaration
   generateClassDeclaration(

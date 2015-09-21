@@ -12,7 +12,7 @@ library dogma_codegen.src.codegen.field_generator;
 import 'package:dogma_codegen/metadata.dart';
 
 import 'annotation_generator.dart';
-import 'comment_generator.dart';
+import 'metadata_generator.dart';
 import 'type_generator.dart';
 
 //---------------------------------------------------------------------
@@ -34,15 +34,8 @@ void generateField(FieldMetadata field,
                    FieldGenerator generator,
                    List<AnnotationGenerator> annotationGenerators)
 {
-  // Write the comments out
-  generateCodeComment(field.comments, buffer);
-
-  // Write out any annotations
-  for (var annotation in field.annotations) {
-    for (var annotationGenerator in annotationGenerators) {
-      annotationGenerator(annotation, buffer);
-    }
-  }
+  // Write out metadata
+  generateMetadata(field, buffer, annotationGenerators);
 
   // Write the declaration
   generator(field, buffer);
@@ -82,4 +75,3 @@ void generateFields(List<FieldMetadata> fields,
 void generateMemberVariables(FieldMetadata field, StringBuffer buffer) {
   buffer.writeln('${generateType(field.type)} ${field.name};');
 }
-
