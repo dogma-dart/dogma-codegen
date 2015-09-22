@@ -15,13 +15,14 @@ import 'package:dogma_data/serialize.dart';
 import 'enum_field_metadata.dart';
 import 'class_metadata.dart';
 import 'type_metadata.dart';
+import 'serialize_annotated.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
 /// Contains metadata for an enumeration.
-class EnumMetadata extends ClassMetadata {
+class EnumMetadata extends ClassMetadata implements SerializeAnnotated {
   //---------------------------------------------------------------------
   // Construction
   //---------------------------------------------------------------------
@@ -79,6 +80,13 @@ class EnumMetadata extends ClassMetadata {
               comments: comments);
 
   //---------------------------------------------------------------------
+  // SerializeAnnotated
+  //---------------------------------------------------------------------
+
+  @override
+  Serialize get serializeAnnotation => findSerializeAnnotation(annotations);
+
+  //---------------------------------------------------------------------
   // Properties
   //---------------------------------------------------------------------
 
@@ -99,7 +107,4 @@ class EnumMetadata extends ClassMetadata {
 
     return explicit;
   }
-
-  /// Gets the [Serialize] annotation for the field.
-  Serialize get serializeAnnotation => annotations[0];
 }

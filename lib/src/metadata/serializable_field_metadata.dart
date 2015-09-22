@@ -14,13 +14,14 @@ import 'package:dogma_data/serialize.dart';
 
 import 'field_metadata.dart';
 import 'type_metadata.dart';
+import 'serialize_annotated.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
 /// Contains metadata for a field within a class that can be serialized.
-class SerializableFieldMetadata extends FieldMetadata {
+class SerializableFieldMetadata extends FieldMetadata implements SerializeAnnotated {
   //---------------------------------------------------------------------
   // Construction
   //---------------------------------------------------------------------
@@ -63,25 +64,29 @@ class SerializableFieldMetadata extends FieldMetadata {
              annotations: [annotation]);
 
   //---------------------------------------------------------------------
+  // SerializeAnnotated
+  //---------------------------------------------------------------------
+
+  @override
+  Serialize get serializeAnnotation => findSerializeAnnotation(annotations);
+
+  //---------------------------------------------------------------------
   // Properties
   //---------------------------------------------------------------------
 
   /// Whether the field should be decoded.
-  bool get decode => _annotation.decode;
+  bool get decode => serializeAnnotation.decode;
   /// Whether the field should be encoded.
-  bool get encode => _annotation.encode;
+  bool get encode => serializeAnnotation.encode;
   /// The name to use when serializing.
   ///
   /// If the serialization name was specified on the annotation that will be
   /// used; otherwise this will return the same value as [name].
-  String get serializationName => _annotation.name;
+  String get serializationName => serializeAnnotation.name;
   /// Whether the field is optional.
-  bool get optional => _annotation.optional;
+  bool get optional => serializeAnnotation.optional;
   /// The default value for the field.
   ///
   /// This is only valid if [optional] is set to true.
-  dynamic get defaultsTo => _annotation.optional;
-
-  /// Gets the [Serialize] annotation for the field.
-  Serialize get _annotation => annotations[0];
+  dynamic get defaultsTo => serializeAnnotation.optional;
 }
