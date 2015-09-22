@@ -17,7 +17,6 @@ import 'dart:async';
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:cli_util/cli_util.dart';
 import 'package:dogma_codegen/analyzer.dart';
 import 'package:dogma_codegen/path.dart';
 import 'package:dogma_codegen/template.dart' as template;

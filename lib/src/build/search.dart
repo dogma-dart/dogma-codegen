@@ -16,10 +16,8 @@ import 'dart:io';
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:cli_util/cli_util.dart';
 import 'package:dogma_codegen/analyzer.dart';
 import 'package:dogma_codegen/metadata.dart';
-import 'package:dogma_codegen/path.dart';
 import 'package:dogma_codegen/template.dart';
 
 import 'io.dart';

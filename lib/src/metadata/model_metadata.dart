@@ -11,7 +11,6 @@ library dogma_codegen.src.metadata.model_metadata;
 //---------------------------------------------------------------------
 
 import 'class_metadata.dart';
-import 'field_metadata.dart';
 import 'serializable_field_metadata.dart';
 import 'type_metadata.dart';
 
