@@ -10,9 +10,7 @@ library dogma_codegen.src.metadata.field_metadata;
 // Imports
 //---------------------------------------------------------------------
 
-import 'annotated.dart';
-import 'commented.dart';
-import 'metadata.dart';
+import 'annotated_metadata.dart';
 import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
@@ -27,7 +25,7 @@ import 'type_metadata.dart';
 ///
 /// This behavior is different from a how dart:mirrors behaves as properties
 /// are considered methods and member variables are considered variables.
-class FieldMetadata extends Metadata implements Annotated, Commented {
+class FieldMetadata extends AnnotatedMetadata {
   //---------------------------------------------------------------------
   // Library contents
   //---------------------------------------------------------------------
@@ -48,20 +46,6 @@ class FieldMetadata extends Metadata implements Annotated, Commented {
   final bool isStatic;
 
   //---------------------------------------------------------------------
-  // Annotated
-  //---------------------------------------------------------------------
-
-  @override
-  final List annotations;
-
-  //---------------------------------------------------------------------
-  // Commented
-  //---------------------------------------------------------------------
-
-  @override
-  final String comments;
-
-  //---------------------------------------------------------------------
   // Construction
   //---------------------------------------------------------------------
 
@@ -74,7 +58,7 @@ class FieldMetadata extends Metadata implements Annotated, Commented {
                 {this.isConst: false,
                  this.isFinal: false,
                  this.isStatic: false,
-                 this.annotations: const [],
-                 this.comments: ''})
-      : super(name);
+                 List annotations: const [],
+                 String comments: ''})
+      : super(name, annotations, comments);
 }

@@ -14,7 +14,7 @@ import 'package:dogma_codegen/metadata.dart';
 
 import 'annotation_generator.dart';
 import 'argument_buffer.dart';
-import 'metadata_generator.dart';
+import 'annotated_metadata_generator.dart';
 import 'type_generator.dart';
 
 //---------------------------------------------------------------------
@@ -75,7 +75,7 @@ void generateClassDefinition(ClassMetadata metadata,
   annotationGenerators ??= new List<AnnotationGenerator>();
 
   // Write out metadata
-  generateMetadata(metadata, buffer, annotationGenerators);
+  generateAnnotatedMetadata(metadata, buffer, annotationGenerators);
 
   // Write the class declaration
   generateClassDeclaration(

@@ -10,9 +10,11 @@ library dogma_codegen.metadata;
 //---------------------------------------------------------------------
 
 export 'src/metadata/annotated.dart';
+export 'src/metadata/annotated_metadata.dart';
 export 'src/metadata/class_metadata.dart';
 export 'src/metadata/commented.dart';
 export 'src/metadata/converter_metadata.dart';
+export 'src/metadata/enum_field_metadata.dart';
 export 'src/metadata/enum_metadata.dart';
 export 'src/metadata/field_metadata.dart';
 export 'src/metadata/function_metadata.dart';

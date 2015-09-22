@@ -10,10 +10,8 @@ library dogma_codegen.src.metadata.class_metadata;
 // Imports
 //---------------------------------------------------------------------
 
-import 'annotated.dart';
-import 'commented.dart';
+import 'annotated_metadata.dart';
 import 'field_metadata.dart';
-import 'metadata.dart';
 import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
@@ -21,7 +19,7 @@ import 'type_metadata.dart';
 //---------------------------------------------------------------------
 
 /// Contains metadata for a class.
-class ClassMetadata extends Metadata implements Annotated, Commented {
+class ClassMetadata extends AnnotatedMetadata {
   //---------------------------------------------------------------------
   // Member variables
   //---------------------------------------------------------------------
@@ -36,20 +34,6 @@ class ClassMetadata extends Metadata implements Annotated, Commented {
   final List<TypeMetadata> typeParameters;
   /// The fields for the class.
   final List<FieldMetadata> fields;
-
-  //---------------------------------------------------------------------
-  // Annotated
-  //---------------------------------------------------------------------
-
-  @override
-  final List annotations;
-
-  //---------------------------------------------------------------------
-  // Commented
-  //---------------------------------------------------------------------
-
-  @override
-  final String comments;
 
   //---------------------------------------------------------------------
   // Construction
@@ -67,8 +51,8 @@ class ClassMetadata extends Metadata implements Annotated, Commented {
                 this.implements: const [],
                 this.typeParameters: const [],
                 this.fields: const [],
-                this.annotations: const [],
-                this.comments: ''})
+                List annotations: const [],
+                String comments: ''})
       : type = new TypeMetadata(name)
-      , super(name);
+      , super(name, annotations, comments);
 }
