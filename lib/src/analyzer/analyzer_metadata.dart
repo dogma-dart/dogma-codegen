@@ -172,7 +172,7 @@ ModelMetadata modelMetadata(ClassElement element) {
       // Add the field if serializable
       if ((decode) || (encode)) {
         var type = typeMetadata(field.type);
-        var serializationName = serialize?.name;
+        var serializationName = serialize?.name ?? '';
         fields.add(new SerializableFieldMetadata(field.name, type, decode, encode, serializationName: serializationName));
       }
     }
@@ -261,23 +261,40 @@ FunctionMetadata functionMetadata(FunctionElement element) {
   // See if the function is valid as an encoder or decoder
   if (parameters.length == 1) {
     // Get the types
-    var input = typeMetadata(parameters[0].type);
-    var output = typeMetadata(element.returnType);
+    var input = parameterMetadata(parameters[0]);
+    var returnType = typeMetadata(element.returnType);
 
     // Look at the annotation
     //
     // If an annotation is present then it is either a default decoder or
     // encoder. This can be checked by seeing if the input type is a builtin
     // type.
-    var metadata = findAnnotation(element);
-    var decoder;
+    var isDefaultConverter = findAnnotation(element) != null;
 
-    if (metadata != null) {
-      decoder = input.isBuiltin;
-    }
-
-    return new FunctionMetadata(element.name, input, output, decoder: decoder);
+    return new ConverterFunctionMetadata(
+        element.name,
+        returnType,
+        input,
+        isDefaultConverter: isDefaultConverter
+    );
   } else {
     return null;
+  }
+}
+
+ParameterMetadata parameterMetadata(ParameterElement element)
+    => new ParameterMetadata(
+        element.name,
+        typeMetadata(element.type),
+        parameterKind: parameterKind(element.parameterKind.name)
+    );
+
+ParameterKind parameterKind(String value) {
+  if (value == 'NAMED') {
+    return ParameterKind.named;
+  } else if (value == 'OPTIONAL') {
+    return ParameterKind.optional;
+  } else {
+    return ParameterKind.required;
   }
 }

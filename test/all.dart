@@ -23,13 +23,12 @@ import 'src/codegen/serialize_annotation_generator_test.dart' as serialize_annot
 
 import 'identifier_test.dart' as identifier_test;
 
+import 'src/metadata/converter_function_metadata_test.dart' as converter_function_metadata_test;
 import 'src/metadata/converter_metadata_test.dart' as converter_metadata_test;
 import 'src/metadata/enum_metadata_test.dart' as enum_metadata_test;
 import 'src/metadata/field_metadata_test.dart' as field_metadata_test;
-import 'src/metadata/function_metadata_test.dart' as function_metadata_test;
 import 'src/metadata/model_metadata_test.dart' as model_metadata_test;
 import 'src/metadata/type_metadata_test.dart' as type_metadata_test;
-
 
 //---------------------------------------------------------------------
 // Library contents
@@ -48,7 +47,7 @@ void main() {
     group('ConverterMetadata', converter_metadata_test.main);
     group('EnumMetadata', enum_metadata_test.main);
     group('FieldMetadata', field_metadata_test.main);
-    group('FunctionMetadata', function_metadata_test.main);
+    group('ConverterFunctionMetadata', converter_function_metadata_test.main);
     group('ModelMetadata', model_metadata_test.main);
     group('TypeMetadata', type_metadata_test.main);
   });

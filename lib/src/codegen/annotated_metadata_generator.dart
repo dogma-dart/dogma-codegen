@@ -30,14 +30,10 @@ void generateAnnotatedMetadata(AnnotatedMetadata metadata,
                                List<AnnotationGenerator> annotationGenerators)
 {
   // Write the comments out
-  var commented = metadata as Commented;
-
-  generateCodeComment(commented.comments, buffer);
+  generateCodeComment(metadata.comments, buffer);
 
   // Write out any annotations
-  var annotated = metadata as Annotated;
-
-  for (var annotation in annotated.annotations) {
+  for (var annotation in metadata.annotations) {
     for (var annotationGenerator in annotationGenerators) {
       annotationGenerator(annotation, buffer);
     }

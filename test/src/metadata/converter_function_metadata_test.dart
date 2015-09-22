@@ -27,13 +27,13 @@ void main() {
   test('Properties', () {
     var type = new TypeMetadata(_typeName);
 
-    var function = new FunctionMetadata(_metadataName, type, type);
-    expect(function.defaultConverter, false);
+    var function = new ConverterFunctionMetadata(_metadataName, type, type);
+    expect(function.isDefaultConverter, false);
 
-    var encoder = new FunctionMetadata(_metadataName, type, type, decoder: true);
-    expect(encoder.defaultConverter, true);
+    var encoder = new ConverterFunctionMetadata(_metadataName, type, type, decoder: true);
+    expect(encoder.isDefaultConverter, true);
 
-    var decoder = new FunctionMetadata(_metadataName, type, type, decoder: false);
-    expect(decoder.defaultConverter, true);
+    var decoder = new ConverterFunctionMetadata(_metadataName, type, type, decoder: false);
+    expect(decoder.isDefaultConverter, true);
 });
 }

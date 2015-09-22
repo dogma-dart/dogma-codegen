@@ -9,6 +9,7 @@ library dogma_codegen.test.src.analyzer.analyzer_metadata_test;
 // Imports
 //---------------------------------------------------------------------
 
+import 'package:dogma_codegen/metadata.dart';
 import 'package:dogma_codegen/src/analyzer/analyzer_metadata.dart';
 import 'package:dogma_codegen/src/analyzer/context.dart';
 import 'package:test/test.dart';
@@ -16,6 +17,18 @@ import 'package:test/test.dart';
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
+
+/// Finds a converter function.
+ConverterFunctionMetadata _findConverterFunction(LibraryMetadata metadata, String name)
+    => metadata.functions.firstWhere(
+        (function) => function.name == name,
+        orElse: () => null) as ConverterFunctionMetadata;
+
+/// Finds an enumeration.
+EnumMetadata _findEnum(LibraryMetadata metadata, String name)
+    => metadata.enumerations.firstWhere(
+        (enumeration) => enumeration.name == name,
+        orElse: () => null);
 
 /// Test entry point.
 void main() {
@@ -37,13 +50,13 @@ void main() {
     expect(metadata.enumerations.isEmpty, true);
     expect(metadata.functions.length, 2);
 
-    var decoder = metadata.functions.firstWhere((function) => function.name == 'decodeDuration');
-    expect(decoder.decoder, true);
-    expect(decoder.defaultConverter, true);
+    var decoder = _findConverterFunction(metadata, 'decodeDuration');
+    expect(decoder.isDecoder, true);
+    expect(decoder.isDefaultConverter, true);
 
-    var encoder = metadata.functions.firstWhere((function) => function.name == 'encodeDuration');
-    expect(encoder.decoder, false);
-    expect(encoder.defaultConverter, true);
+    var encoder = _findConverterFunction(metadata, 'encodeDuration');
+    expect(encoder.isDecoder, false);
+    expect(encoder.isDefaultConverter, true);
   });
 
   test('FunctionMetadata implicit', () {
@@ -56,13 +69,13 @@ void main() {
     expect(metadata.enumerations.isEmpty, true);
     expect(metadata.functions.length, 2);
 
-    var decoder = metadata.functions.firstWhere((function) => function.name == 'decodeDuration');
-    expect(decoder.decoder, null);
-    expect(decoder.defaultConverter, false);
+    var decoder = _findConverterFunction(metadata, 'decodeDuration');
+    expect(decoder.isDecoder, true);
+    expect(decoder.isDefaultConverter, false);
 
-    var encoder = metadata.functions.firstWhere((function) => function.name == 'encodeDuration');
-    expect(encoder.decoder, null);
-    expect(encoder.defaultConverter, false);
+    var encoder = _findConverterFunction(metadata, 'encodeDuration');
+    expect(encoder.isDecoder, false);
+    expect(encoder.isDefaultConverter, false);
   });
 
   test('EnumMetadata explicit', () {
@@ -75,9 +88,10 @@ void main() {
     expect(metadata.enumerations.length, 1);
     expect(metadata.functions.isEmpty, true);
 
-    var enumeration = metadata.enumerations.firstWhere((value) => value.name == 'ColorExplicit');
-    expect(enumeration.values, ['red', 'green', 'blue']);
-    expect(enumeration.encoded, [0xff0000, 0xff00, 0xff]);
+    var enumeration =_findEnum(metadata, 'ColorExplicit');
+    var mapping = enumeration.serializeAnnotation.mapping;
+    expect(mapping.values, ['red', 'green', 'blue']);
+    expect(mapping.keys, [0xff0000, 0xff00, 0xff]);
   });
 
   test('EnumMetadata implicit', () {
@@ -90,7 +104,7 @@ void main() {
     expect(metadata.enumerations.length, 1);
     expect(metadata.functions.isEmpty, true);
 
-    var enumeration = metadata.enumerations.firstWhere((value) => value.name == 'ColorImplicit');
+    var enumeration = _findEnum(metadata, 'ColorImplicit');
     expect(enumeration.values, ['red', 'green', 'blue']);
     expect(enumeration.encoded, enumeration.values);
   });

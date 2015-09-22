@@ -220,20 +220,20 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
     var encodeType = new TypeMetadata('String');
 
     if (decoders) {
-      functions.add(new FunctionMetadata(
+      functions.add(new ConverterFunctionMetadata(
           decodeEnumFunction(name),
-          encodeType, // Input
-          type,       // Output
-          decoder: true
+          type,
+          new ParameterMetadata('value', encodeType),
+          isDefaultConverter: true
       ));
     }
 
     if (encoders) {
-      functions.add(new FunctionMetadata(
+      functions.add(new ConverterFunctionMetadata(
           encodeEnumFunction(name),
-          type,       // Input
-          encodeType, // Output
-          decoder: false
+          encodeType,
+          new ParameterMetadata('value', type),
+          isDefaultConverter: true
       ));
     }
   }

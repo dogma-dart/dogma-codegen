@@ -63,17 +63,11 @@ void generateConvertersSource(LibraryMetadata library,
 
   // Look for enumerations
   for (var function in library.functions) {
-    if (function.defaultConverter) {
-      var isDecoder = function.decoder;
-
-      var name = isDecoder
-          ? function.output.name
-          : function.input.name;
-
-      var enumeration = findEnumeration(library, name);
+    if ((function is ConverterFunctionMetadata) && (function.isDefaultConverter)) {
+      var enumeration = findEnumeration(library, function.modelType.name);
 
       if (enumeration != null) {
-        if (isDecoder) {
+        if (function.isDecoder) {
           generateEnumDecoder(enumeration, buffer);
         } else {
           generateEnumEncoder(enumeration, buffer);
@@ -112,7 +106,15 @@ String _renderLibrary(LibraryMetadata library, _SourceGenerator generator) {
 
 Map<String, FunctionMetadata> _defaultDecoders() {
   return {
-    'DateTime': new FunctionMetadata('DateTime.parse', new TypeMetadata('String'), new TypeMetadata('DateTime')),
-    'Uri': new FunctionMetadata('Uri.parse', new TypeMetadata('String'), new TypeMetadata('Uri'))
+    'DateTime': new ConverterFunctionMetadata(
+        'DateTime.parse',
+        new TypeMetadata('String'),
+        new ParameterMetadata('value', new TypeMetadata('DateTime'))
+    ),
+    'Uri': new ConverterFunctionMetadata(
+        'Uri.parse',
+        new TypeMetadata('String'),
+        new ParameterMetadata('value', new TypeMetadata('Uri'))
+    )
   };
 }

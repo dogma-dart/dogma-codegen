@@ -10,6 +10,7 @@ library dogma_codegen.src.metadata.library_metadata;
 // Imports
 //---------------------------------------------------------------------
 
+import 'converter_function_metadata.dart';
 import 'converter_metadata.dart';
 import 'enum_metadata.dart';
 import 'function_metadata.dart';
@@ -200,7 +201,9 @@ FunctionMetadata findDecodeFunctionByType(LibraryMetadata library,
                                           bool searchExports: true})
 {
   for (var function in library.functions) {
-     if ((function.defaultDecoder) && (function.output == type)){
+     if ((function is ConverterFunctionMetadata) &&
+         (function.isDefaultDecoder) &&
+         (function.modelType == type)) {
       return function;
     }
   }

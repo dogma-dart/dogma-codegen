@@ -55,6 +55,92 @@ void generateModelFieldVariables(ModelMetadata metadata,
   }
 }
 
+void generateModelEncoder2(ConverterMetadata metadata,
+                          ModelMetadata model,
+                          StringBuffer buffer,
+                         {Map<String, FunctionMetadata> encodeThrough})
+{
+  encodeThrough ??= new Map<String, FunctionMetadata>();
+
+  // Write the class declaration
+  generateClassDeclaration(metadata, buffer);
+  buffer.writeln('{');
+
+  // Split the fields into groups
+  var splitFields = _splitFields(model, false, encodeThrough);
+  var builtinFields = splitFields[_builtin];
+  var functionFields = splitFields[_function];
+  var modelFields = splitFields[_model];
+
+
+}
+
+void _generateConverter(ConverterMetadata metadata,
+                        ModelMetadata model,
+                        StringBuffer buffer,
+                        bool decode,
+                        List<ConverterMetadata> converters,
+                        Map<String, FunctionMetadata> through)
+{
+  //var sections = [];
+
+  // Write the class declaration
+  generateClassDeclaration(metadata, buffer);
+  buffer.writeln('{');
+
+  // Write out the member variables and constructors
+  var fields = metadata.fields;
+
+  if (fields.isNotEmpty) {
+
+    print('FIELDS NOT EMPTY');
+  }
+
+  if (decode) {
+
+  }
+
+  // Split the fields into groups
+  var splitFields = _splitFields(model, false, through);
+  var builtinFields = splitFields[_builtin];
+  var functionFields = splitFields[_function];
+  var modelFields = splitFields[_model];
+
+}
+
+const String _builtin = 'builtin';
+const String _function = 'function';
+const String _model = 'model';
+
+Map<String, List<FieldMetadata>> _splitFields(ModelMetadata model,
+                                              bool decode,
+                                              Map<String, FunctionMetadata> through)
+{
+  var builtinFields = new List<FieldMetadata>();
+  var functionFields = new List<FieldMetadata>();
+  var modelFields = new List<FieldMetadata>();
+
+  for (var field in model.fields) {
+    if (field.decode == decode) {
+      var type = field.type;
+
+      if (type.isBuiltin) {
+        builtinFields.add(field);
+      } else if (through.containsKey(type.name)) {
+        functionFields.add(field);
+      } else {
+        modelFields.add(field);
+      }
+    }
+  }
+
+  return {
+    _builtin: builtinFields,
+    _function: functionFields,
+    _model: modelFields
+  };
+}
+
 /// Writes out the class definition for a model decoder using the model's [metadata].
 void generateModelDecoder(ConverterMetadata metadata,
                           ModelMetadata model,
