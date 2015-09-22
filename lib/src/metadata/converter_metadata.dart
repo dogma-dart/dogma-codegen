@@ -11,6 +11,7 @@ library dogma_codegen.src.metadata.converter_metadata;
 //---------------------------------------------------------------------
 
 import 'class_metadata.dart';
+import 'converter.dart';
 import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
@@ -18,7 +19,7 @@ import 'type_metadata.dart';
 //---------------------------------------------------------------------
 
 /// Contains metadata for a converter.
-class ConverterMetadata extends ClassMetadata {
+class ConverterMetadata extends ClassMetadata implements Converter {
   //---------------------------------------------------------------------
   // Construction
   //---------------------------------------------------------------------
@@ -51,14 +52,14 @@ class ConverterMetadata extends ClassMetadata {
               implements: [modelDecoder(modelType)]);
 
   //---------------------------------------------------------------------
-  // Properties
+  // Converter
   //---------------------------------------------------------------------
 
-  /// Whether the converter handles encoding.
+  @override
   bool get isEncoder => !isDecoder;
-  /// Whether the converter handles decoding.
+  @override
   bool get isDecoder => implements[0].name == 'ModelDecoder';
-  /// The type of model the converter accepts.
+  @override
   TypeMetadata get modelType => implements[0].arguments[0];
 
   //---------------------------------------------------------------------
