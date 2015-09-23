@@ -18,7 +18,7 @@ import 'package:dogma_data/serialize.dart';
 
 // \TODO Change to a mixin if https://github.com/dart-lang/sdk/issues/15101 is resolved
 
-/// Retrives a [Serialize] annotation attached to metadata.
+/// Retrieves a [Serialize] annotation attached to metadata.
 abstract class SerializeAnnotated {
   /// Gets the [Serialize] annotation attached to the metadata if present.
   Serialize get serializeAnnotation;

@@ -44,6 +44,10 @@ class FieldMetadata extends AnnotatedMetadata {
   final bool isFinal;
   /// Whether the field is a class field.
   final bool isStatic;
+  /// The default value of the field.
+  ///
+  /// This is used to write out any initialization of the field.
+  final dynamic defaultValue;
 
   //---------------------------------------------------------------------
   // Construction
@@ -58,6 +62,7 @@ class FieldMetadata extends AnnotatedMetadata {
                 {this.isConst: false,
                  this.isFinal: false,
                  this.isStatic: false,
+                 this.defaultValue,
                  List annotations: const [],
                  String comments: ''})
       : super(name, annotations, comments);

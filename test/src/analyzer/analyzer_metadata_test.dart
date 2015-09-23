@@ -90,7 +90,7 @@ void main() {
 
     var enumeration =_findEnum(metadata, 'ColorExplicit');
     var mapping = enumeration.serializeAnnotation.mapping;
-    expect(mapping.values, ['red', 'green', 'blue']);
+    expect(mapping.values.map((value) => value.name), ['red', 'green', 'blue']);
     expect(mapping.keys, [0xff0000, 0xff00, 0xff]);
   });
 
@@ -105,8 +105,9 @@ void main() {
     expect(metadata.functions.isEmpty, true);
 
     var enumeration = _findEnum(metadata, 'ColorImplicit');
-    expect(enumeration.values, ['red', 'green', 'blue']);
-    expect(enumeration.encoded, enumeration.values);
+    var mapping = enumeration.serializeAnnotation.mapping;
+    expect(mapping.values.map((value) => value.name), ['red', 'green', 'blue']);
+    expect(mapping.keys, ['red', 'green', 'blue']);
   });
 
   test('ModelMetadata explicit', () {

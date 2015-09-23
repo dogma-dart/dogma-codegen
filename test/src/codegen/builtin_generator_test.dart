@@ -58,14 +58,14 @@ void main() {
   });
   test('Lists', () {
     expect(generateBuiltin(_intList), _expectedIntList);
-    expect(generateList(_intList, false), _expectedIntList);
+    expect(generateList(_intList, false, false), _expectedIntList);
 
     expect(generateBuiltin(_stringList), _expectedStringList);
-    expect(generateList(_stringList, false), _expectedStringList);
+    expect(generateList(_stringList, false, false), _expectedStringList);
   });
   test('Maps', () {
     expect(generateBuiltin(_map), _expectedMap);
-    expect(generateMap(_map, false), _expectedMap);
+    expect(generateMap(_map, false, false), _expectedMap);
   });
   test('Enum', () {
     expect(generateBuiltin(TestEnum.bar), TestEnum.bar.toString());
@@ -75,12 +75,12 @@ void main() {
     expected = '[\n${_intList.join(',\n')}\n]';
 
     expect(generateBuiltin(_intList, lineBreak: true), expected);
-    expect(generateList(_intList, true), expected);
+    expect(generateList(_intList, true, false), expected);
 
     var map = {'a':0,'b':1};
     expected = '{\n\'a\':0,\n\'b\':1\n}';
 
     expect(generateBuiltin(map, lineBreak: true), expected);
-    expect(generateMap(map, true), expected);
+    expect(generateMap(map, true, false), expected);
   });
 }

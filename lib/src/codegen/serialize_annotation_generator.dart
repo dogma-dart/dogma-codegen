@@ -85,7 +85,13 @@ void generateFieldMapping(dynamic annotation, StringBuffer buffer) {
     return;
   }
 
-  buffer.write('@Serialize.values(const ');
-  buffer.write(generateMap(annotation.mapping, true));
+  buffer.write('@Serialize.values(');
+  buffer.write(generateMap(annotation.mapping, true, true));
   buffer.writeln(')');
+}
+
+void generateUsing(dynamic annotation, StringBuffer buffer) {
+  if (annotation == Serialize.using) {
+    buffer.writeln('@Serialize.using');
+  }
 }

@@ -11,7 +11,9 @@ library dogma_codegen.src.codegen.enum_converter_generator;
 
 import 'package:dogma_codegen/metadata.dart';
 
-import 'argument_buffer.dart';
+import 'function_generator.dart';
+import 'field_generator.dart';
+import 'serialize_annotation_generator.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -24,78 +26,56 @@ const String _encoded = '_encoded';
 /// Name for the defaults to parameter.
 const String _defaultsTo = 'defaultsTo';
 
-void generateEnumDecoder(EnumMetadata metadata, StringBuffer buffer) {
-  // Get the name
-  var name = metadata.name;
+void generateEnumDecoder(ConverterFunctionMetadata metadata,
+                         EnumMetadata enumeration,
+                         StringBuffer buffer)
+{
+  // Create the value declaration
+  var field = new FieldMetadata(
+      _encoded,
+      new TypeMetadata('Map', arguments: [metadata.encodeType, metadata.modelType]),
+      false,
+      true,
+      true,
+      isFinal: true,
+      defaultValue: enumeration.serializeAnnotation.mapping
+  );
 
-  // Get the values
-  var values = metadata.values;
-  var valueCount = values.length;
+  generateField(field, buffer, generateFieldDeclaration, []);
 
-  // Determine the encoding
-  var encoded = metadata.encoded;
-  var encodeType = encoded[0].runtimeType.toString();
-  var isString = encoded[0] is String;
-
-  // Write out the decoding map
-  var argumentBuffer = new ArgumentBuffer();
-
-  for (var i = 0; i < valueCount; ++i) {
-    var encode = encoded[i];
-
-    if (isString) {
-      encode = '\'$encode\'';
-    }
-
-    argumentBuffer.write('$encode: $name.${values[i]}');
-  }
-
-  buffer.writeln('final Map<$encodeType, $name> $_decoded = {');
-  buffer.writeln(argumentBuffer.toString());
-  buffer.writeln('};\n');
-
-  // Write out the decode function
-  buffer.writeln('@Serialize.decodeThrough');
-  buffer.writeln('$name ${decodeEnumFunction(name)}($encodeType value, [$name $_defaultsTo = $name.${values[0]}]) {');
-  buffer.writeln('return $_decoded[value] ?? $_defaultsTo;');
-  buffer.writeln('}');
+  generateFunctionDefinition(
+      metadata,
+      buffer,
+      _decoderGenerator,
+      annotationGenerators: [generateUsing],
+      useArrow: true
+  );
 }
 
-void generateEnumEncoder(EnumMetadata metadata, StringBuffer buffer) {
-  // Get the name
-  var name = metadata.name;
+void generateEnumEncoder(ConverterFunctionMetadata metadata,
+                         EnumMetadata enumeration,
+                         StringBuffer buffer)
+{
+  // Create the value declaration
+  var field = new FieldMetadata(
+      _decoded,
+      new TypeMetadata('List', arguments: [metadata.encodeType]),
+      false,
+      true,
+      true,
+      isFinal: true,
+      defaultValue: enumeration.serializeAnnotation.mapping.keys.toList()
+  );
 
-  // Get the values
-  var values = metadata.values;
-  var valueCount = values.length;
+  generateField(field, buffer, generateFieldDeclaration, []);
 
-  // Determine the encoding
-  var encoded = metadata.encoded;
-  var encodeType = encoded[0].runtimeType.toString();
-  var isString = encoded[0] is String;
-
-  // Write out the encoding list
-  var argumentBuffer = new ArgumentBuffer.lineBreak();
-
-  for (var i = 0; i < valueCount; ++i) {
-    var encode = encoded[i];
-
-    if (isString) {
-      encode = '\'$encode\'';
-    }
-
-    argumentBuffer.write(encode);
-  }
-
-  buffer.writeln('final List<$encodeType> $_encoded = [');
-  buffer.writeln(argumentBuffer.toString());
-  buffer.writeln('];\n');
-
-  // Write out the encode function
-  buffer.writeln('@Serialize.encodeThrough');
-  buffer.writeln('$encodeType ${encodeEnumFunction(name)}($name value) {');
-  buffer.writeln('return $_encoded[value.index];');
-  buffer.writeln('}');
+  generateFunctionDefinition(
+      metadata,
+      buffer,
+      _encoderGenerator,
+      annotationGenerators: [generateUsing],
+      useArrow: true
+  );
 }
 
 /// Derives the encode function name for the given enumeration [name].
@@ -106,4 +86,12 @@ String encodeEnumFunction(String name) {
 /// Derives the decode function name for the given enumeration [name].
 String decodeEnumFunction(String name) {
   return 'decode$name';
+}
+
+void _decoderGenerator(FunctionMetadata metadata, StringBuffer buffer) {
+  buffer.writeln('_encoded[value] ?? null;');
+}
+
+void _encoderGenerator(FunctionMetadata metadata, StringBuffer buffer) {
+  buffer.writeln('_decoded[value.index];');
 }

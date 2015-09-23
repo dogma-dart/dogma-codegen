@@ -26,10 +26,13 @@ final _encoded = ['a_value', 'b_value', 'c_value', 'd_value'];
 /// Checks the [metadata] values are equivalent to [values] and [encoded].
 void _checkValues(EnumMetadata metadata, List<String> values, List<String> encoded) {
   var count = values.length;
+  var mapping = metadata.serializeAnnotation.mapping;
+  var mappingValues = mapping.values.toList();
+  var mappingEncoded = mapping.keys.toList();
 
   for (var i = 0; i < count; ++i) {
-    expect(metadata.values[i], values[i]);
-    expect(metadata.encoded[i], encoded[i]);
+    expect(mappingValues[i].name, values[i]);
+    expect(mappingEncoded[i], encoded[i]);
   }
 }
 

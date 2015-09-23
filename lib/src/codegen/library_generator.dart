@@ -68,9 +68,9 @@ void generateConvertersSource(LibraryMetadata library,
 
       if (enumeration != null) {
         if (function.isDecoder) {
-          generateEnumDecoder(enumeration, buffer);
+          generateEnumDecoder(function, enumeration, buffer);
         } else {
-          generateEnumEncoder(enumeration, buffer);
+          generateEnumEncoder(function, enumeration, buffer);
         }
       }
     }

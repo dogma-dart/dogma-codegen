@@ -49,7 +49,7 @@ Future<Null> buildUnmodifiableViews(LibraryMetadata models,
 {
   // Search for any user defined libraries
   await for (var library in findUserDefinedLibraries(sourcePath)) {
-    print(library.uri);
+    _logger.info('Found user defined library at ${library.uri}');
   }
 
   // Create the equivalent library

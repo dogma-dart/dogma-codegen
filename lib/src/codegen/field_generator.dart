@@ -13,6 +13,7 @@ import 'package:dogma_codegen/metadata.dart';
 
 import 'annotation_generator.dart';
 import 'annotated_metadata_generator.dart';
+import 'builtin_generator.dart';
 import 'type_generator.dart';
 
 //---------------------------------------------------------------------
@@ -45,7 +46,7 @@ void generateField(FieldMetadata field,
 ///
 /// The [generator] specifies the function to write the source code for the
 /// field. By default it is assumed that this is just a member variable and the
-/// [generateMemeberVariable] function is used.
+/// [generateMemberVariable] function is used.
 ///
 /// Any annotations that are present on the [fields] are passed to the
 /// [annotationGenerators].
@@ -54,7 +55,7 @@ void generateFields(List<FieldMetadata> fields,
                    {FieldGenerator generator,
                     List<AnnotationGenerator> annotationGenerators})
 {
-  generator ??= generateMemberVariables;
+  generator ??= generateMemberVariable;
   annotationGenerators ??= new List<AnnotationGenerator>();
 
   for (var field in fields) {
@@ -72,6 +73,35 @@ void generateFields(List<FieldMetadata> fields,
 ///
 /// This function does not initialize the member variable in the generated
 /// code.
-void generateMemberVariables(FieldMetadata field, StringBuffer buffer) {
+void generateMemberVariable(FieldMetadata field, StringBuffer buffer) {
   buffer.writeln('${generateType(field.type)} ${field.name};');
+}
+
+void generateFieldDeclaration(FieldMetadata field, StringBuffer buffer) {
+  // Write out a static declaration
+  if (field.isStatic) {
+    buffer.write('static ');
+  }
+
+  var isConst = field.isConst;
+
+  // Write out const and final declaration
+  if (isConst) {
+    buffer.write('const ');
+  } else if (field.isFinal) {
+    buffer.write('final ');
+  }
+
+  buffer.write('${generateType(field.type)} ${field.name}');
+
+  // Write out the default value if necessary
+  var defaultValue = field.defaultValue;
+
+  if (defaultValue != null) {
+    buffer.write('=');
+    buffer.write(generateBuiltin(defaultValue, isConst: isConst));
+  }
+
+  // Terminate the declaration
+  buffer.writeln(';');
 }

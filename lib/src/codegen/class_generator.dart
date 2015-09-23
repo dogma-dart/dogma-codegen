@@ -50,13 +50,7 @@ void generateClassDeclaration(ClassMetadata metadata,
   if (implements.isNotEmpty) {
     buffer.write(' implements ');
 
-    var argumentBuffer = new ArgumentBuffer();
-
-    for (var implementation in implements) {
-      argumentBuffer.write(generateType(implementation));
-    }
-
-    buffer.write(argumentBuffer.toString());
+    writeArgumentsToBuffer(implements.map((type) => type.name), buffer);
   }
 }
 
@@ -88,6 +82,6 @@ void generateClassDefinition(ClassMetadata metadata,
   // Write the class definition
   generator(metadata, buffer);
 
-  // Close the class declaration
+  // Close the class definition
   buffer.writeln('}');
 }
