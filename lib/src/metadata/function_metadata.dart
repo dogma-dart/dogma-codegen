@@ -11,7 +11,6 @@ library dogma_codegen.src.metadata.function_metadata;
 //---------------------------------------------------------------------
 
 import 'annotated_metadata.dart';
-import 'parameter_kind.dart';
 import 'parameter_metadata.dart';
 import 'type_metadata.dart';
 
@@ -49,16 +48,13 @@ class FunctionMetadata extends AnnotatedMetadata {
 
   /// The required parameters for the function.
   Iterable<ParameterMetadata> get requiredParameters
-      => parameters.where((parameter)
-          => parameter.parameterKind == ParameterKind.required);
+      => findRequiredParameters(parameters);
 
   /// The optional parameters for the function.
   Iterable<ParameterMetadata> get optionalParameters
-      => parameters.where((parameter)
-          => parameter.parameterKind == ParameterKind.optional);
+      => findOptionalParameters(parameters);
 
   /// The named parameters for the function.
   Iterable<ParameterMetadata> get namedParameters
-      => parameters.where((parameter)
-          => parameter.parameterKind == ParameterKind.named);
+      => findNamedParameters(parameters);
 }

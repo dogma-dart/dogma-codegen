@@ -56,3 +56,18 @@ class ParameterMetadata extends Metadata {
   /// Whether the parameter is optional for calling code.
   bool get isOptional => !isRequired;
 }
+
+/// Finds required values within the [parameters].
+Iterable<ParameterMetadata> findRequiredParameters(List<ParameterMetadata> parameters)
+    => parameters.where((parameter)
+        => parameter.parameterKind == ParameterKind.required);
+
+/// Finds optional values within the [parameters].
+Iterable<ParameterMetadata> findOptionalParameters(List<ParameterMetadata> parameters)
+    => parameters.where((parameter)
+        => parameter.parameterKind == ParameterKind.optional);
+
+/// Finds named values within the [parameters].
+Iterable<ParameterMetadata> findNamedParameters(List<ParameterMetadata> parameters)
+    => parameters.where((parameter)
+        => parameter.parameterKind == ParameterKind.named);

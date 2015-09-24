@@ -12,9 +12,9 @@ library dogma_codegen.src.codegen.function_generator;
 
 import 'package:dogma_codegen/metadata.dart';
 
-import 'annotation_generator.dart';
-import 'argument_buffer.dart';
 import 'annotated_metadata_generator.dart';
+import 'annotation_generator.dart';
+import 'parameter_generator.dart';
 import 'type_generator.dart';
 
 //---------------------------------------------------------------------
@@ -31,18 +31,7 @@ void generateFunctionDeclaration(FunctionMetadata metadata, StringBuffer buffer)
   buffer.write(' ');
   buffer.write(metadata.name);
 
-  buffer.write('(');
-
-  var argumentBuffer = new ArgumentBuffer();
-
-  for (var parameter in metadata.parameters) {
-    if (parameter.isRequired) {
-      argumentBuffer.write('${generateType(parameter.type)} ${parameter.name}');
-    }
-  }
-
-  buffer.write(argumentBuffer.toString());
-  buffer.write(')');
+  generateParameters(metadata.parameters, buffer);
 }
 
 void generateFunctionDefinition(FunctionMetadata metadata,
