@@ -224,6 +224,12 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
           decodeEnumFunction(name),
           type,
           new ParameterMetadata('value', encodeType),
+          modelParameter: new ParameterMetadata(
+              'defaultsTo',
+              type,
+              parameterKind: ParameterKind.named,
+              defaultValue: enumeration.fields[0]
+          ),
           isDefaultConverter: true
       ));
     }
