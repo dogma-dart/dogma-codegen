@@ -72,10 +72,10 @@ void main() {
 
     defaultsTo = [];
     annotation = _annotation(_name, defaultsTo: defaultsTo);
-    expect(annotation, '$_serializeField(\'$_name\',defaultsTo: const [])');
+    expect(annotation, '$_serializeField(\'$_name\',defaultsTo: const[])');
 
     defaultsTo = {};
     annotation = _annotation(_name, defaultsTo: defaultsTo);
-    expect(annotation, '$_serializeField(\'$_name\',defaultsTo: const {})');
+    expect(annotation, '$_serializeField(\'$_name\',defaultsTo: const{})');
   });
 }
