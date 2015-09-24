@@ -79,9 +79,9 @@ void generateEnumEncoder(ConverterFunctionMetadata metadata,
 }
 
 void _decoderGenerator(FunctionMetadata metadata, StringBuffer buffer) {
-  buffer.writeln('_encoded[value] ?? null;');
+  buffer.writeln('$_encoded[value] ?? $_defaultsTo;');
 }
 
 void _encoderGenerator(FunctionMetadata metadata, StringBuffer buffer) {
-  buffer.writeln('_decoded[value.index];');
+  buffer.writeln('$_decoded[value.index];');
 }
