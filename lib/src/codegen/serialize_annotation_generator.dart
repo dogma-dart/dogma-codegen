@@ -18,7 +18,7 @@ import 'builtin_generator.dart';
 // Library contents
 //---------------------------------------------------------------------
 
-/// Generates a serialize [annotation] for a field.
+/// Generates a serialize [annotation] for a field into the [buffer].
 ///
 /// The generated string will only have values that differ from the default
 /// named parameters of [Serialize.field].
@@ -61,17 +61,7 @@ void generateFieldAnnotation(dynamic annotation, StringBuffer buffer) {
   var defaultsTo = annotation.defaultsTo;
 
   if (defaultsTo != defaults.defaultsTo) {
-    var value;
-
-    if (defaultsTo is String) {
-      value = generateString(defaultsTo);
-    } else if (defaultsTo is List) {
-      value = 'const []';
-    } else if (defaultsTo is Map) {
-      value = 'const {}';
-    } else {
-      value = defaultsTo;
-    }
+    var value = generateBuiltin(defaultsTo, isConst: true);
 
     argumentBuffer.write('defaultsTo: $value');
   }
@@ -80,17 +70,19 @@ void generateFieldAnnotation(dynamic annotation, StringBuffer buffer) {
   buffer.writeln('@Serialize.field(${argumentBuffer.toString()})');
 }
 
-void generateFieldMapping(dynamic annotation, StringBuffer buffer) {
+/// Generates a serialize [annotation] for an enumeration into the [buffer].
+void generateValuesAnnotation(dynamic annotation, StringBuffer buffer) {
   if (annotation is! Serialize) {
     return;
   }
 
   buffer.write('@Serialize.values(');
-  buffer.write(generateMap(annotation.mapping, true, true));
+  buffer.write(generateMap(annotation.mapping, false, true));
   buffer.writeln(')');
 }
 
-void generateUsing(dynamic annotation, StringBuffer buffer) {
+/// Generates a serialize [annotation] for a default function into the [buffer].
+void generateUsingAnnotation(dynamic annotation, StringBuffer buffer) {
   if (annotation == Serialize.using) {
     buffer.writeln('@Serialize.using');
   }

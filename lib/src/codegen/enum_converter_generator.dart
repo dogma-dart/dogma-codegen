@@ -47,7 +47,7 @@ void generateEnumDecoder(ConverterFunctionMetadata metadata,
       metadata,
       buffer,
       _decoderGenerator,
-      annotationGenerators: [generateUsing],
+      annotationGenerators: [generateUsingAnnotation],
       useArrow: true
   );
 }
@@ -73,7 +73,7 @@ void generateEnumEncoder(ConverterFunctionMetadata metadata,
       metadata,
       buffer,
       _encoderGenerator,
-      annotationGenerators: [generateUsing],
+      annotationGenerators: [generateUsingAnnotation],
       useArrow: true
   );
 }

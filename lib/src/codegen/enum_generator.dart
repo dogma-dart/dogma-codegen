@@ -26,7 +26,7 @@ void generateEnum(EnumMetadata enumeration, StringBuffer buffer) {
 
   // Write out the encoding if necessary
   if (enumeration.explicitSerialization) {
-    annotationGenerators.add(generateFieldMapping);
+    annotationGenerators.add(generateValuesAnnotation);
   }
 
   generateClassDefinition(
