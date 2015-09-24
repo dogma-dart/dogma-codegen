@@ -262,3 +262,13 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
 
   return generatedLibrary;
 }
+
+/// Derives the encode function name for the given enumeration [name].
+String encodeEnumFunction(String name) {
+  return 'encode$name';
+}
+
+/// Derives the decode function name for the given enumeration [name].
+String decodeEnumFunction(String name) {
+  return 'decode$name';
+}

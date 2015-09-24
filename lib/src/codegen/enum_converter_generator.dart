@@ -78,16 +78,6 @@ void generateEnumEncoder(ConverterFunctionMetadata metadata,
   );
 }
 
-/// Derives the encode function name for the given enumeration [name].
-String encodeEnumFunction(String name) {
-  return 'encode$name';
-}
-
-/// Derives the decode function name for the given enumeration [name].
-String decodeEnumFunction(String name) {
-  return 'decode$name';
-}
-
 void _decoderGenerator(FunctionMetadata metadata, StringBuffer buffer) {
   buffer.writeln('_encoded[value] ?? null;');
 }
