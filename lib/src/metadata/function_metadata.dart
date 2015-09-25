@@ -18,7 +18,7 @@ import 'type_metadata.dart';
 // Library contents
 //---------------------------------------------------------------------
 
-/// Contains metadata for a function or method.
+/// Contains metadata for a function.
 class FunctionMetadata extends AnnotatedMetadata {
   //---------------------------------------------------------------------
   // Member variables
