@@ -10,15 +10,102 @@ library dogma_codegen.src.codegen.model_converter_generator;
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_codegen/identifier.dart';
 import 'package:dogma_codegen/metadata.dart';
 
-import 'argument_buffer.dart';
+import 'annotation_generator.dart';
 import 'class_generator.dart';
+import 'field_generator.dart';
+import 'function_generator.dart';
+import 'type_generator.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
+
+void generateConverter(ConverterMetadata metadata,
+                       ModelMetadata model,
+                       StringBuffer buffer) {
+  generateClassDefinition(metadata, buffer, _generateConverterDefinition(model));
+}
+
+
+ClassGenerator _generateConverterDefinition(ModelMetadata model) {
+  return (ConverterMetadata metadata, StringBuffer buffer) {
+    // Generate the fields
+    generateFields(metadata.fields, buffer);
+
+    // Generate the create function
+    var createMethod = metadata.methods.firstWhere(
+        (method) => method.name == 'create', orElse: () => null);
+
+    if (createMethod != null) {
+      generateFunctionDefinition(
+          createMethod,
+          buffer,
+          _generateCreateMethod,
+          annotationGenerators: [generateOverrideAnnotation],
+          useArrow: true
+      );
+    }
+
+    // Generate the convert function
+    var convertMethod = metadata.methods.firstWhere(
+        (method) => method.name == 'convert');
+
+    generateFunctionDefinition(
+        convertMethod,
+        buffer,
+        _generateConvertMethod(metadata, model),
+        annotationGenerators: [generateOverrideAnnotation]
+    );
+  };
+}
+
+void _generateCreateMethod(FunctionMetadata metadata, StringBuffer buffer) {
+  buffer.write(generateConstructorCall(metadata.returnType));
+  buffer.write(';');
+}
+
+FunctionGenerator _generateConvertMethod(ConverterMetadata converter,
+                                         ModelMetadata model) {
+  return (FunctionMetadata metadata, StringBuffer buffer) {
+    var decoder = converter.isDecoder;
+
+    // Initialize the model variable
+    if (decoder) {
+      buffer.writeln('model ??= create();');
+    } else {
+      buffer.writeln('var model = {};');
+    }
+
+    // Write the builtin values
+    buffer.writeln();
+
+    
+
+    // Return the value
+    buffer.writeln('return model;');
+  };
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 
 /// The named constructor to use when specifying all arguments.
 const String _namedConstructor = 'using';
@@ -78,7 +165,7 @@ void generateModelEncoder2(ConverterMetadata metadata,
 void _generateConverter(ConverterMetadata metadata,
                         ModelMetadata model,
                         StringBuffer buffer,
-                        bool decode,
+                        bool decoder,
                         List<ConverterMetadata> converters,
                         Map<String, FunctionMetadata> through)
 {
@@ -96,7 +183,7 @@ void _generateConverter(ConverterMetadata metadata,
     print('FIELDS NOT EMPTY');
   }
 
-  if (decode) {
+  if (decoder) {
 
   }
 
@@ -105,6 +192,7 @@ void _generateConverter(ConverterMetadata metadata,
   var builtinFields = splitFields[_builtin];
   var functionFields = splitFields[_function];
   var modelFields = splitFields[_model];
+
 
 }
 
@@ -317,3 +405,4 @@ String _converterName(String type, String append) {
 String _privateConverterName(String type, String append) {
   return '_' + _converterName(type, append);
 }
+*/

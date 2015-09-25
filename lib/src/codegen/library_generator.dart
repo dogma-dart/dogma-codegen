@@ -53,12 +53,16 @@ void generateConvertersSource(LibraryMetadata library,
   for (var converter in library.converters) {
     var model = findModel(library, converter.modelType.name);
 
+    generateConverter(converter, model, buffer);
+    /*
+    var model = findModel(library, converter.modelType.name);
+
     if (converter.isDecoder) {
       generateModelFieldVariables(model, buffer);
       generateModelDecoder(converter, model, buffer, decodeThrough: _defaultDecoders());
     } else {
       generateModelEncoder(model, buffer);
-    }
+    }*/
   }
 
   // Look for enumerations
