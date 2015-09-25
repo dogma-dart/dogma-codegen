@@ -16,6 +16,14 @@ import 'metadata.dart';
 // Library contents
 //---------------------------------------------------------------------
 
+const String _bool = 'bool';
+const String _int = 'int';
+const String _num = 'num';
+const String _double = 'double';
+const String _string = 'String';
+const String _list = 'List';
+const String _map = 'Map';
+
 /// Contains metadata for a type.
 ///
 /// Information such as interfaces, base class, and mixin is not present in the
@@ -35,10 +43,47 @@ class TypeMetadata extends Metadata {
   ///
   /// If the type is generic then [arguments] should be used to fully type the
   /// metadata.
-  factory TypeMetadata(String name, {List<TypeMetadata> arguments}) {
-    arguments ??= [];
+  TypeMetadata(String name, {List<TypeMetadata> arguments})
+      : arguments = arguments ?? []
+      , super(name);
 
-    return new TypeMetadata._internal(name, arguments);
+  TypeMetadata.bool()
+      : arguments = []
+      , super(_bool);
+
+  TypeMetadata.int()
+      : arguments = []
+      , super(_int);
+
+  TypeMetadata.double()
+      : arguments = []
+      , super(_double);
+
+  TypeMetadata.num()
+      : arguments = []
+      , super(_num);
+
+  TypeMetadata.string()
+      : arguments = []
+      , super(_string);
+
+  TypeMetadata.list([TypeMetadata argument])
+      : arguments = (argument != null) ? [argument] : []
+      , super(_list);
+
+  factory TypeMetadata.map([TypeMetadata key, TypeMetadata value]) {
+    var arguments = new List<TypeMetadata>();
+
+    // Add type arguments only if key is not null
+    if (key != null) {
+      arguments.add(key);
+
+      if (value != null) {
+        arguments.add(value);
+      }
+    }
+
+    return new TypeMetadata._internal(_map, arguments);
   }
 
   /// Creates an instance of [TypeMetadata].
@@ -50,19 +95,19 @@ class TypeMetadata extends Metadata {
   //---------------------------------------------------------------------
 
   /// Whether the type is an integer.
-  bool get isInt => name == 'int';
+  bool get isInt => name == _int;
   /// Whether the type is a double.
-  bool get isDouble => name == 'double';
+  bool get isDouble => name == _double;
   /// Whether the type is a number.
-  bool get isNum => isInt || isDouble || name == 'num';
+  bool get isNum => isInt || isDouble || name == _num;
   /// Whether the type is a boolean.
-  bool get isBool => name == 'bool';
+  bool get isBool => name == _bool;
   /// Whether the type is a string.
-  bool get isString => name == 'String';
+  bool get isString => name == _string;
   /// Whether the type is a list.
-  bool get isList => name == 'List';
+  bool get isList => name == _list;
   /// Whether the type is a map.
-  bool get isMap => name == 'Map';
+  bool get isMap => name == _map;
 
   /// Whether the type is built in.
   ///
