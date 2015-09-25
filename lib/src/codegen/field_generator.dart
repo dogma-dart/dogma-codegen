@@ -55,7 +55,7 @@ void generateFields(List<FieldMetadata> fields,
                    {FieldGenerator generator,
                     List<AnnotationGenerator> annotationGenerators})
 {
-  generator ??= generateMemberVariable;
+  generator ??= generateFieldDeclaration;
   annotationGenerators ??= new List<AnnotationGenerator>();
 
   for (var field in fields) {
@@ -70,13 +70,6 @@ void generateFields(List<FieldMetadata> fields,
 
 /// Generates the source code of the [field] into the [buffer] for a member
 /// variable declaration.
-///
-/// This function does not initialize the member variable in the generated
-/// code.
-void generateMemberVariable(FieldMetadata field, StringBuffer buffer) {
-  buffer.writeln('${generateType(field.type)} ${field.name};');
-}
-
 void generateFieldDeclaration(FieldMetadata field, StringBuffer buffer) {
   // Write out a static declaration
   if (field.isStatic) {

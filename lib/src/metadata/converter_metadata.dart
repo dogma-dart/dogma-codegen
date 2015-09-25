@@ -63,8 +63,8 @@ class ConverterMetadata extends ClassMetadata implements Converter {
                             List<ConstructorMetadata> constructors: const[],
                             String comments: ''})
       : super('${modelType.name}Encoder',
-              supertype: converter(modelType, true),
-              implements: [modelDecoder(modelType)],
+              supertype: converter(modelType, false),
+              implements: [modelEncoder(modelType)],
               fields: fields,
               methods: methods,
               constructors: constructors,
