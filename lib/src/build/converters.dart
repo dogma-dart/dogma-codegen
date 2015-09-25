@@ -15,7 +15,6 @@ import 'dart:async';
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_codegen/codegen.dart';
 import 'package:dogma_codegen/metadata.dart';
 import 'package:dogma_codegen/path.dart';
 import 'package:logging/logging.dart';
@@ -27,6 +26,9 @@ import 'search.dart';
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
+
+/// The input parameter into the convert method.
+const String _input = 'input';
 
 /// The logger for the library.
 final Logger _logger = new Logger('dogma_codegen.src.build.converters');
@@ -91,6 +93,16 @@ Future<Null> writeConvert(LibraryMetadata convert) async {
 
   _logger.info('Writing ${convert.name} to disk at ${convert.uri}');
   await writeRootLibrary(convert);
+}
+
+/// Derives the encode function name for the given enumeration [name].
+String encodeEnumFunction(String name) {
+  return 'encode$name';
+}
+
+/// Derives the decode function name for the given enumeration [name].
+String decodeEnumFunction(String name) {
+  return 'decode$name';
 }
 
 /// Transforms the [models] library into the equivalent library containing
@@ -158,37 +170,31 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
   var converters = [];
 
   for (var model in library.models) {
-    // Create the type
-    var name = model.name;
-    var type = new TypeMetadata(name);
-
     // Create the decoder
     if (decoders) {
-      converters.add(new ConverterMetadata('${name}Decoder', type, true));
-
-      // \TODO actually should go by field just in case there's any function used here
-      for (var dependency in modelDecoderDependencies(model)) {
-        _logger.fine('Found dependency ${dependency.name}');
-        for (var library in userDefined) {
-          var function = findDecodeFunctionByType(library, dependency);
-
-          if ((function != null) && (!imported.contains(library))) {
-            _logger.fine('Found function ${function.name} for ${dependency.name}');
-            imported.add(library);
-          }
-        }
-      }
+      converters.add(_converterMetadata(
+          model,
+          modelLibrary,
+          imported,
+          userDefined,
+          true
+      ));
     }
 
     // Create the encoder
     if (encoders) {
-      converters.add(new ConverterMetadata('${name}Encoder', type, false));
+      converters.add(_converterMetadata(
+          model,
+          modelLibrary,
+          imported,
+          userDefined,
+          false
+      ));
     }
 
     // Add the dependencies
     //
-    // \TODO this currently assumes that everything is going to be used which
-    // might not be the case
+    // \TODO this currently assumes that everything is going to be used which might not be the case
     for (var import in library.imported) {
       if (import.uri.scheme == 'file') {
         imported.add(_convertersLibrary(
@@ -227,7 +233,7 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
           modelParameter: new ParameterMetadata(
               'defaultsTo',
               type,
-              parameterKind: ParameterKind.named,
+              parameterKind: ParameterKind.optional,
               defaultValue: enumeration.fields[0]
           ),
           isDefaultConverter: true
@@ -269,12 +275,155 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
   return generatedLibrary;
 }
 
-/// Derives the encode function name for the given enumeration [name].
-String encodeEnumFunction(String name) {
-  return 'encode$name';
+ConverterMetadata _converterMetadata(ModelMetadata model,
+                                     LibraryMetadata modelLibrary,
+                                     List<LibraryMetadata> imported,
+                                     List<LibraryMetadata> userDefined,
+                                     bool decoder) {
+  var findFunction = decoder
+      ? findDecodeFunctionByType
+      : findEncodeFunctionByType;
+
+  // Search for dependencies to determine the fields for the converter
+  var fields = new Map<String, FieldMetadata>();
+
+  for (var modelField in model.fields) {
+    // \TODO See if the model field has an explicit function to use
+
+    // Determine if the type requires conversion
+    var fieldName = modelField.name;
+    var fieldType = modelField.type;
+
+    if (fieldType.isBuiltin) {
+      _logger.finest('Field ${fieldName} uses a builtin ${fieldType.name}');
+      continue;
+    }
+
+    // Get the actual type
+    var type = _findUserDefinedType(fieldType);
+    var typeName = type.name;
+
+    // Determine if the type is an enumeration
+    var enumeration = findEnumeration(modelLibrary, typeName);
+
+    if (enumeration != null) {
+      _logger.finest('Field ${fieldName} uses an enum ${typeName}');
+      continue;
+    }
+
+    // Determine if the type is decoded with a function
+    var function;
+
+    for (var library in userDefined) {
+      function = findFunction(library, type);
+
+      if (function != null) {
+        if (!imported.contains(library)) {
+          imported.add(library);
+        }
+      }
+    }
+
+    if (function != null) {
+      _logger.finest('Field ${fieldName} will be converted using ${function.name}');
+      continue;
+    }
+
+    // See if the field was already created
+    if (fields.containsKey(typeName)) {
+      _logger.finest('Converter for $typeName already present');
+      continue;
+    }
+
+    fields[typeName] = new FieldMetadata(
+        'foo',
+        ConverterMetadata.converter(type, decoder),
+        false,
+        true,
+        true,
+        isFinal: true
+    );
+  }
+
+  // Create constructors if fields need to be initialized
+  var constructors = new List<ConstructorMetadata>();
+
+  if (fields.isNotEmpty) {
+    _logger.finest('Generating constructors for coverter');
+  } else {
+    _logger.finest('Can use default constructor for converter');
+  }
+
+  // Create the methods
+  var methods = new List<MethodMetadata>();
+
+  // Add the create method
+  if (decoder) {
+    methods.add(
+        new MethodMetadata(
+            'create',
+            model.type,
+            annotations: [override]
+        )
+    );
+  }
+
+  // Add the convert method
+  var parameters = new List<ParameterMetadata>();
+  var modelType = model.type;
+  var mapType = new TypeMetadata.map();
+  var returnType;
+
+  if (decoder) {
+    returnType = modelType;
+    parameters
+        ..add(new ParameterMetadata(_input, mapType))
+        ..add(new ParameterMetadata(
+            'model',
+            modelType,
+            parameterKind: ParameterKind.optional
+        ));
+  } else {
+    returnType = mapType;
+    parameters.add(new ParameterMetadata(_input, modelType));
+  }
+
+  methods.add(new MethodMetadata(
+      'convert',
+      returnType,
+      parameters: parameters,
+      annotations: [override]
+  ));
+
+  var comments = _converterComments(modelType.name, decoder);
+  var converterFields = fields.values.toList();
+
+  // \TODO Use generalized tear offs https://github.com/dart-lang/sdk/issues/23774
+  return decoder
+      ? new ConverterMetadata.decoder(modelType,
+                                      fields: converterFields,
+                                      methods: methods,
+                                      constructors: constructors,
+                                      comments: comments)
+      : new ConverterMetadata.encoder(modelType,
+                                      fields: converterFields,
+                                      methods: methods,
+                                      constructors: constructors,
+                                      comments: comments);
 }
 
-/// Derives the decode function name for the given enumeration [name].
-String decodeEnumFunction(String name) {
-  return 'decode$name';
+TypeMetadata _findUserDefinedType(TypeMetadata metadata) {
+  if (metadata.isList) {
+    return _findUserDefinedType(metadata.arguments[0]);
+  } else if (metadata.isMap) {
+    return _findUserDefinedType(metadata.arguments[1]);
+  } else {
+    return metadata;
+  }
+}
+
+String _converterComments(String type, bool decoder) {
+  var converter = decoder ? 'ModelDecoder' : 'ModelEncoder';
+
+  return 'A [$converter] for [$type]';
 }
