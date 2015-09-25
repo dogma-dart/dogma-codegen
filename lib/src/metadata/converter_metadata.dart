@@ -11,7 +11,10 @@ library dogma_codegen.src.metadata.converter_metadata;
 //---------------------------------------------------------------------
 
 import 'class_metadata.dart';
+import 'constructor_metadata.dart';
 import 'converter.dart';
+import 'field_metadata.dart';
+import 'method_metadata.dart';
 import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
@@ -37,19 +40,35 @@ class ConverterMetadata extends ClassMetadata implements Converter {
   /// [type].
   ///
   /// The name of the class is generated based on the [modelType].
-  ConverterMetadata.decoder(TypeMetadata modelType)
+  ConverterMetadata.decoder(TypeMetadata modelType,
+                           {List<FieldMetadata> fields: const[],
+                            List<MethodMetadata> methods: const [],
+                            List<ConstructorMetadata> constructors: const[],
+                            String comments: ''})
       : super('${modelType.name}Decoder',
               supertype: converter(modelType, true),
-              implements: [modelDecoder(modelType)]);
+              implements: [modelDecoder(modelType)],
+              fields: fields,
+              methods: methods,
+              constructors: constructors,
+              comments: comments);
 
   /// Creates a decodable instance of [ConverterMetadata] using the given
   /// [type].
   ///
   /// The name of the class is generated based on the [modelType].
-  ConverterMetadata.encoder(TypeMetadata modelType)
+  ConverterMetadata.encoder(TypeMetadata modelType,
+                           {List<FieldMetadata> fields: const[],
+                            List<MethodMetadata> methods: const [],
+                            List<ConstructorMetadata> constructors: const[],
+                            String comments: ''})
       : super('${modelType.name}Encoder',
               supertype: converter(modelType, true),
-              implements: [modelDecoder(modelType)]);
+              implements: [modelDecoder(modelType)],
+              fields: fields,
+              methods: methods,
+              constructors: constructors,
+              comments: comments);
 
   //---------------------------------------------------------------------
   // Converter

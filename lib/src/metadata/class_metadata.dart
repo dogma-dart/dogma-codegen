@@ -11,7 +11,9 @@ library dogma_codegen.src.metadata.class_metadata;
 //---------------------------------------------------------------------
 
 import 'annotated_metadata.dart';
+import 'constructor_metadata.dart';
 import 'field_metadata.dart';
+import 'method_metadata.dart';
 import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
@@ -34,6 +36,10 @@ class ClassMetadata extends AnnotatedMetadata {
   final List<TypeMetadata> typeParameters;
   /// The fields for the class.
   final List<FieldMetadata> fields;
+  /// The methods for the class.
+  final List<MethodMetadata> methods;
+  /// The constructors for the class.
+  final List<ConstructorMetadata> constructors;
 
   //---------------------------------------------------------------------
   // Construction
@@ -51,6 +57,8 @@ class ClassMetadata extends AnnotatedMetadata {
                 this.implements: const [],
                 this.typeParameters: const [],
                 this.fields: const [],
+                this.methods: const [],
+                this.constructors: const[],
                 List annotations: const [],
                 String comments: ''})
       : type = new TypeMetadata(name)
