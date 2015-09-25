@@ -48,7 +48,7 @@ class ParameterMetadata extends Metadata {
       : super(name);
 
   //---------------------------------------------------------------------
-  // Properites
+  // Properties
   //---------------------------------------------------------------------
 
   /// Whether the parameter is required by calling code.
