@@ -35,10 +35,10 @@ class MethodMetadata extends FunctionMetadata {
   /// [returnType].
   MethodMetadata(String name,
                  TypeMetadata returnType,
-                {List<ParameterMetadata> parameters: const [],
+                {List<ParameterMetadata> parameters,
                  this.isStatic: false,
-                 List annotations: const [],
-                 String comments: ''})
+                 List annotations,
+                 String comments})
       : super(name,
               returnType,
               parameters: parameters,

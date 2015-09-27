@@ -35,7 +35,7 @@ class SerializableFieldMetadata extends FieldMetadata implements SerializeAnnota
                            {String serializationName: '',
                             bool optional: false,
                             dynamic defaultsTo,
-                            String comments: ''})
+                            String comments})
       : super(name,
               type,
               false, // Allows a field
@@ -54,7 +54,7 @@ class SerializableFieldMetadata extends FieldMetadata implements SerializeAnnota
   SerializableFieldMetadata.annotated(String name,
                                       TypeMetadata type,
                                       Serialize annotation,
-                                     {String comments: ''})
+                                     {String comments})
       : super(name,
              type,
              false, // Allows a field

@@ -54,13 +54,18 @@ class ClassMetadata extends AnnotatedMetadata {
   /// is not available to query.
   ClassMetadata(String name,
                {this.supertype,
-                this.implements: const [],
-                this.typeParameters: const [],
-                this.fields: const [],
-                this.methods: const [],
-                this.constructors: const[],
-                List annotations: const [],
-                String comments: ''})
+                List<TypeMetadata> implements,
+                List<TypeMetadata> typeParameters,
+                List<FieldMetadata> fields,
+                List<MethodMetadata> methods,
+                List<ConstructorMetadata> constructors,
+                List annotations,
+                String comments})
       : type = new TypeMetadata(name)
+      , implements = implements ?? new List<TypeMetadata>()
+      , typeParameters = typeParameters ?? new List<TypeMetadata>()
+      , fields = fields ?? new List<FieldMetadata>()
+      , methods = methods ?? new List<MethodMetadata>()
+      , constructors = constructors ?? new List<ConstructorMetadata>()
       , super(name, annotations, comments);
 }

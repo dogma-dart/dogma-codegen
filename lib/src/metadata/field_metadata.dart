@@ -55,15 +55,28 @@ class FieldMetadata extends AnnotatedMetadata {
 
   /// Creates an instance of the [FieldMetadata] class with the given [name].
   FieldMetadata(String name,
-                 this.type,
-                 this.isProperty,
-                 this.getter,
-                 this.setter,
-                {this.isConst: false,
-                 this.isFinal: false,
-                 this.isStatic: false,
-                 this.defaultValue,
-                 List annotations: const [],
-                 String comments: ''})
+                this.type,
+                this.isProperty,
+                this.getter,
+                this.setter,
+               {this.isConst: false,
+                this.isFinal: false,
+                this.isStatic: false,
+                this.defaultValue,
+                List annotations,
+                String comments})
       : super(name, annotations, comments);
+
+  FieldMetadata.field(String name,
+                      this.type,
+                     {this.isConst: false,
+                      this.isFinal: false,
+                      this.isStatic: false,
+                      this.defaultValue,
+                      List annotations,
+                      String comments})
+      : isProperty = false
+      , getter = true
+      , setter = true
+      , super(name, annotations, comments);
 }

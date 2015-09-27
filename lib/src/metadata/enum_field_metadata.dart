@@ -23,7 +23,7 @@ class EnumFieldMetadata extends FieldMetadata {
   // Construction
   //---------------------------------------------------------------------
 
-  EnumFieldMetadata(String name, TypeMetadata type, {String comments: ''})
+  EnumFieldMetadata(String name, TypeMetadata type, {String comments})
       : super(name,
               type,
               true,  // is a property not a field

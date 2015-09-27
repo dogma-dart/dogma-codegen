@@ -41,10 +41,10 @@ class ConverterMetadata extends ClassMetadata implements Converter {
   ///
   /// The name of the class is generated based on the [modelType].
   ConverterMetadata.decoder(TypeMetadata modelType,
-                           {List<FieldMetadata> fields: const[],
-                            List<MethodMetadata> methods: const [],
-                            List<ConstructorMetadata> constructors: const[],
-                            String comments: ''})
+                           {List<FieldMetadata> fields,
+                            List<MethodMetadata> methods,
+                            List<ConstructorMetadata> constructors,
+                            String comments})
       : super('${modelType.name}Decoder',
               supertype: converter(modelType, true),
               implements: [modelDecoder(modelType)],
@@ -58,10 +58,10 @@ class ConverterMetadata extends ClassMetadata implements Converter {
   ///
   /// The name of the class is generated based on the [modelType].
   ConverterMetadata.encoder(TypeMetadata modelType,
-                           {List<FieldMetadata> fields: const[],
-                            List<MethodMetadata> methods: const [],
-                            List<ConstructorMetadata> constructors: const[],
-                            String comments: ''})
+                           {List<FieldMetadata> fields,
+                            List<MethodMetadata> methods,
+                            List<ConstructorMetadata> constructors,
+                            String comments})
       : super('${modelType.name}Encoder',
               supertype: converter(modelType, false),
               implements: [modelEncoder(modelType)],
@@ -86,7 +86,7 @@ class ConverterMetadata extends ClassMetadata implements Converter {
   //---------------------------------------------------------------------
 
   static TypeMetadata converter(TypeMetadata modelType, bool decoder) {
-    var mapType = new TypeMetadata('Map');
+    var mapType = new TypeMetadata.map();
     var arguments = decoder
         ? [mapType, modelType]
         : [modelType, mapType];

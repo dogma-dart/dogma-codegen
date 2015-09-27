@@ -35,7 +35,7 @@ class EnumMetadata extends ClassMetadata implements SerializeAnnotated {
   factory EnumMetadata(String name,
                        List<String> values,
                       {List<String> encoded,
-                       String comments: '',
+                       String comments,
                        List<String> valueComments})
   {
     var count = values.length;
@@ -73,7 +73,7 @@ class EnumMetadata extends ClassMetadata implements SerializeAnnotated {
   EnumMetadata.annotated(String name,
                          List<EnumFieldMetadata> fields,
                          Serialize annotation,
-                        {String comments: ''})
+                        {String comments})
       : super(name,
               fields: fields,
               annotations: [annotation],

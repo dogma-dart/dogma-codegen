@@ -44,6 +44,8 @@ class AnnotatedMetadata extends Metadata implements Annotated, Commented {
   /// annotations that have been constructed.
   ///
   /// Any code [comments] are present in that value.
-  AnnotatedMetadata(String name, this.annotations, this.comments)
-      : super(name);
+  AnnotatedMetadata(String name, List annotations, String comments)
+      : annotations = annotations ?? []
+      , comments = comments ?? ''
+      , super(name);
 }

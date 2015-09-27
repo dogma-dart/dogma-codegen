@@ -28,7 +28,7 @@ class ModelMetadata extends ClassMetadata {
   /// and the given [fields].
   ModelMetadata(String name,
                 List<SerializableFieldMetadata> fields,
-               {String comments: ''})
+               {String comments})
       : super(name, fields: fields, comments: comments);
 
   //---------------------------------------------------------------------

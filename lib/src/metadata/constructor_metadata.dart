@@ -35,10 +35,10 @@ class ConstructorMetadata extends FunctionMetadata {
   /// [returnType].
   ConstructorMetadata(String name,
                       TypeMetadata returnType,
-                      {List<ParameterMetadata> parameters: const [],
+                      {List<ParameterMetadata> parameters,
                       this.isFactory: false,
-                      List annotations: const [],
-                      String comments: ''})
+                      List annotations,
+                      String comments})
       : super(name,
               returnType,
               parameters: parameters,

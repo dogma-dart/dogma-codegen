@@ -37,10 +37,11 @@ class FunctionMetadata extends AnnotatedMetadata {
   /// [returnType].
   FunctionMetadata(String name,
                    this.returnType,
-                  {this.parameters: const [],
-                   List annotations: const [],
-                   String comments: ''})
-      : super(name, annotations, comments);
+                  {List<ParameterMetadata> parameters,
+                   List annotations,
+                   String comments})
+      : parameters = parameters ?? new List<ParameterMetadata>()
+      , super(name, annotations, comments);
 
   //---------------------------------------------------------------------
   // Properties
