@@ -16,13 +16,3 @@ pub global run linter .
 
 # Run the tests
 dart --checked test/all.dart
-
-# Run the tests and report back to coveralls
-if [ "$COVERALLS_TOKEN" ]; then
-  pub global activate dart_coveralls
-  pub global run dart_coveralls report \
-    --token $COVERALLS_TOKEN \
-    --exclude-test-files \
-    --throw-on-error \
-    test/all.dart
-fi
