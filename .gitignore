@@ -19,6 +19,6 @@ pubspec.lock
 .idea/
 
 # Ignore generated code in tests
-test/models.dart
-test/convert.dart
-test/src
+test/libs/models.dart
+test/libs/convert.dart
+test/libs/src
