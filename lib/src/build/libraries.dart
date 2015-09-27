@@ -10,6 +10,7 @@ library dogma_codegen.src.build.libraries;
 //---------------------------------------------------------------------
 
 import 'package:dogma_codegen/metadata.dart';
+import 'package:dogma_codegen/path.dart' as p;
 
 //---------------------------------------------------------------------
 // Library contents
@@ -55,6 +56,11 @@ final LibraryMetadata dogmaData = new LibraryMetadata(
 LibraryMetadata packageLibrary(LibraryMetadata library) {
   // Check if the library is already a package library
   if (library.uri.scheme != 'file') {
+    return library;
+  }
+
+  // Check if the library is in the lib directory
+  if (!p.isWithin(p.join('lib'), library.uri)) {
     return library;
   }
 
