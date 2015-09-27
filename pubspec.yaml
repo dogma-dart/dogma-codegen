@@ -14,6 +14,11 @@ dependencies:
   logging: '^0.11.1+1'
 dev_dependencies:
   coverage: ^0.7.1
+  dogma_codegen_test:
+    path: ../dogma-codegen-test
   test: ^0.12.3+9
 author: Don Olmstead <don.j.olmstead@gmail.com>
 homepage: http://dogma-dart.github.io/
+transformers:
+- test/pub_serve:
+    $exclude: test/src/generated/**_test{.*,}.dart
