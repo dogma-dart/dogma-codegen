@@ -7,18 +7,13 @@
 library dogma_codegen.test.src.build.built_libraries_test;
 
 //---------------------------------------------------------------------
-// Standard libraries
-//---------------------------------------------------------------------
-
-import 'dart:async';
-
-//---------------------------------------------------------------------
 // Imports
 //---------------------------------------------------------------------
 
 import 'package:test/test.dart';
 import 'package:dogma_codegen/metadata.dart';
 import 'package:dogma_codegen/path.dart';
+import 'package:dogma_codegen/src/build/converters.dart';
 import 'package:dogma_codegen/src/build/io.dart';
 import 'package:dogma_codegen/src/build/models.dart';
 import 'package:dogma_codegen_test/isolate_test.dart';
@@ -33,7 +28,7 @@ LibraryMetadata _modelsLibrary() {
   ];
 
   return new LibraryMetadata(
-    'dogma_codegen.test.libs.model',
+    'dogma_codegen.test.libs.models',
     join('test/libs/models.dart'),
     exported: exported
   );
@@ -59,10 +54,24 @@ LibraryMetadata _enumLibrary() {
 void main() {
   var modelsLibrary = _modelsLibrary();
 
-  setUp(() async {
+  group('Models', () {
+    setUp(() async {
     await createDirectory('test/libs/src/models');
     await writeModels(modelsLibrary);
+    });
+
+    testInIsolate('generated code', join('test/src/generated/model_test.dart'));
   });
 
-  testInIsolate('Models', join('test/src/generated/model_test.dart'));
+  group('Convert', () {
+    setUp(() async {
+      await buildConverters(
+          modelsLibrary,
+          join('test/libs/convert.dart'),
+          join('test/libs/src/convert')
+      );
+    });
+
+    testInIsolate('generated code', join('test/src/generated/convert_test.dart'));
+  });
 }
