@@ -30,6 +30,7 @@ void main() {
     expect(decodeColorImplicit(green), ColorImplicit.green);
     expect(decodeColorImplicit(blue), ColorImplicit.blue);
 
+    expect(decodeColorImplicit('x'), ColorImplicit.red);
     expect(decodeColorImplicit('x', ColorImplicit.red), ColorImplicit.red);
     expect(decodeColorImplicit('x', ColorImplicit.green), ColorImplicit.green);
     expect(decodeColorImplicit('x', ColorImplicit.blue), ColorImplicit.blue);
@@ -37,5 +38,23 @@ void main() {
     expect(encodeColorImplicit(ColorImplicit.red), red);
     expect(encodeColorImplicit(ColorImplicit.green), green);
     expect(encodeColorImplicit(ColorImplicit.blue), blue);
+  });
+  test('ColorExplicit convert', () {
+    var red = 0xff0000;
+    var green = 0x00ff00;
+    var blue = 0x0000ff;
+
+    expect(decodeColorExplicit(red), ColorExplicit.red);
+    expect(decodeColorExplicit(green), ColorExplicit.green);
+    expect(decodeColorExplicit(blue), ColorExplicit.blue);
+
+    expect(decodeColorExplicit(0), ColorExplicit.red);
+    expect(decodeColorExplicit(0, ColorExplicit.red), ColorExplicit.red);
+    expect(decodeColorExplicit(0, ColorExplicit.green), ColorExplicit.green);
+    expect(decodeColorExplicit(0, ColorExplicit.blue), ColorExplicit.blue);
+
+    expect(encodeColorExplicit(ColorExplicit.red), red);
+    expect(encodeColorExplicit(ColorExplicit.green), green);
+    expect(encodeColorExplicit(ColorExplicit.blue), blue);
   });
 }

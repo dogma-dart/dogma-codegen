@@ -15,6 +15,7 @@ import 'package:dogma_codegen/metadata.dart';
 import 'package:dogma_codegen/path.dart';
 import 'package:dogma_codegen/src/build/converters.dart';
 import 'package:dogma_codegen/src/build/io.dart';
+import 'package:dogma_codegen/src/build/libraries.dart';
 import 'package:dogma_codegen/src/build/models.dart';
 import 'package:dogma_codegen_test/isolate_test.dart';
 
@@ -24,7 +25,8 @@ import 'package:dogma_codegen_test/isolate_test.dart';
 
 LibraryMetadata _modelsLibrary() {
   var exported = [
-    _enumLibrary()
+    _enumImplicitLibrary(),
+    _enumExplicitLibrary()
   ];
 
   return new LibraryMetadata(
@@ -34,7 +36,7 @@ LibraryMetadata _modelsLibrary() {
   );
 }
 
-LibraryMetadata _enumLibrary() {
+LibraryMetadata _enumImplicitLibrary() {
   var values = [
     'red',
     'green',
@@ -46,6 +48,21 @@ LibraryMetadata _enumLibrary() {
   return new LibraryMetadata(
       'dogma_codegen.test.libs.src.models.color_implicit',
       join('test/libs/src/models/color_implicit.dart'),
+      enumerations: [enumeration]
+  );
+}
+
+LibraryMetadata _enumExplicitLibrary() {
+  var enumeration = new EnumMetadata(
+      'ColorExplicit',
+      ['red', 'green', 'blue'],
+      encoded: [0xff0000, 0x00ff00, 0x0000ff]
+  );
+
+  return new LibraryMetadata(
+      'dogma_codegen.test.libs.src.models.color_explicit',
+      join('test/libs/src/models/color_explicit.dart'),
+      imported: [dogmaSerialize],
       enumerations: [enumeration]
   );
 }
