@@ -26,7 +26,8 @@ import 'package:dogma_codegen_test/isolate_test.dart';
 LibraryMetadata _modelsLibrary() {
   var exported = [
     _enumImplicitLibrary(),
-    _enumExplicitLibrary()
+    _enumExplicitLibrary(),
+    _modelImplicitLibrary()
   ];
 
   return new LibraryMetadata(
@@ -64,6 +65,61 @@ LibraryMetadata _enumExplicitLibrary() {
       join('test/libs/src/models/color_explicit.dart'),
       imported: [dogmaSerialize],
       enumerations: [enumeration]
+  );
+}
+
+LibraryMetadata _modelImplicitLibrary() {
+  var fields = [
+    new SerializableFieldMetadata(
+        'n',
+        new TypeMetadata.num(),
+        true,
+        true
+    ),
+    new SerializableFieldMetadata(
+        'i',
+        new TypeMetadata.int(),
+        true,
+        true
+    ),
+    new SerializableFieldMetadata(
+        'd',
+        new TypeMetadata.double(),
+        true,
+        true
+    ),
+    new SerializableFieldMetadata(
+        'b',
+        new TypeMetadata.bool(),
+        true,
+        true
+    ),
+    new SerializableFieldMetadata(
+        's',
+        new TypeMetadata.string(),
+        true,
+        true
+    ),
+    new SerializableFieldMetadata(
+        'l',
+        new TypeMetadata.list(new TypeMetadata.num()),
+        true,
+        true
+    ),
+    new SerializableFieldMetadata(
+       'm',
+       new TypeMetadata.map(new TypeMetadata.string(), new TypeMetadata.num()),
+       true,
+       true
+    )
+  ];
+
+  var model = new ModelMetadata('ModelImplicit', fields);
+
+  return new LibraryMetadata(
+      'dogma_codegen.test.libs.src.models.model_implicit',
+      join('test/libs/src/models/model_implicit.dart'),
+      models: [model]
   );
 }
 

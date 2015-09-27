@@ -73,4 +73,37 @@ void main() {
     expect(mapping[0x00ff00], ColorExplicit.green);
     expect(mapping[0x0000ff], ColorExplicit.blue);
   });
+  test('ModelImplicit', () {
+    var clazz = _getClass(
+        #dogma_codegen.test.libs.src.models.model_implicit,
+        #ModelImplicit
+    );
+
+    var expectField = (Symbol name, Type type) {
+      var field = clazz.declarations[name] as VariableMirror;
+      expect(field.type.reflectedType, type);
+      expect(field.metadata.length, 0);
+    };
+
+    expectField(#n, num);
+    expectField(#i, int);
+    expectField(#d, double);
+    expectField(#b, bool);
+    expectField(#s, String);
+
+    var l = clazz.declarations[#l] as VariableMirror;
+    var lType = l.type;
+
+    expect(lType.reflectedType.toString(), 'List<num>');
+    expect(lType.typeArguments[0].reflectedType, num);
+    expect(l.metadata.length, 0);
+
+    var m = clazz.declarations[#m] as VariableMirror;
+    var mType = m.type;
+
+    expect(mType.reflectedType.toString(), 'Map<String, num>');
+    expect(mType.typeArguments[0].reflectedType, String);
+    expect(mType.typeArguments[1].reflectedType, num);
+    expect(m.metadata.length, 0);
+  });
 }
