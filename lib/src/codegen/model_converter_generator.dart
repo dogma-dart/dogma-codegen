@@ -70,27 +70,25 @@ FunctionGenerator _generateConvertMethod(ConverterMetadata converter,
                                          ModelMetadata model) {
   return (FunctionMetadata metadata, StringBuffer buffer) {
     var decoder = converter.isDecoder;
+    var modelVar;
 
     // Initialize the model variable
     if (decoder) {
-      buffer.writeln('model ??= create();');
+      modelVar = metadata.parameters[1].name;
+      buffer.writeln('$modelVar ??= create();');
     } else {
-      buffer.writeln('var model = {};');
+      modelVar = 'model';
+      buffer.writeln('var $modelVar = {};');
     }
 
-    // Write the builtin values
     buffer.writeln();
 
-    
+
 
     // Return the value
-    buffer.writeln('return model;');
+    buffer.writeln('return $modelVar;');
   };
 }
-
-
-
-
 
 
 
