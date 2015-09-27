@@ -222,8 +222,7 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
     // Create the type
     var name = enumeration.name;
     var type = new TypeMetadata(name);
-    // \TODO Get the actual type
-    var encodeType = new TypeMetadata('String');
+    var encodeType = enumeration.encodeType;
 
     if (decoders) {
       functions.add(new ConverterFunctionMetadata(
@@ -425,5 +424,5 @@ TypeMetadata _findUserDefinedType(TypeMetadata metadata) {
 String _converterComments(String type, bool decoder) {
   var converter = decoder ? 'ModelDecoder' : 'ModelEncoder';
 
-  return 'A [$converter] for [$type]';
+  return 'A [$converter] for [$type].';
 }
