@@ -86,6 +86,10 @@ class TypeMetadata extends Metadata {
     return new TypeMetadata._internal(_map, arguments);
   }
 
+  TypeMetadata.runtimeType(dynamic value)
+      : arguments = []
+      , super(value.runtimeType.toString());
+
   /// Creates an instance of [TypeMetadata].
   TypeMetadata._internal(String name, this.arguments)
       : super(name);
