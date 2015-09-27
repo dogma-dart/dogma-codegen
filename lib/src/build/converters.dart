@@ -295,7 +295,7 @@ ConverterMetadata _converterMetadata(ModelMetadata model,
     var fieldType = modelField.type;
 
     if (fieldType.isBuiltin) {
-      _logger.finest('Field ${fieldName} uses a builtin ${fieldType.name}');
+      _logger.finest('Field $fieldName uses a builtin ${fieldType.name}');
       continue;
     }
 
@@ -307,7 +307,7 @@ ConverterMetadata _converterMetadata(ModelMetadata model,
     var enumeration = findEnumeration(modelLibrary, typeName);
 
     if (enumeration != null) {
-      _logger.finest('Field ${fieldName} uses an enum ${typeName}');
+      _logger.finest('Field $fieldName uses an enum $typeName');
       continue;
     }
 
@@ -325,7 +325,7 @@ ConverterMetadata _converterMetadata(ModelMetadata model,
     }
 
     if (function != null) {
-      _logger.finest('Field ${fieldName} will be converted using ${function.name}');
+      _logger.finest('Field $fieldName will be converted using ${function.name}');
       continue;
     }
 
