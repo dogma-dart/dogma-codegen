@@ -51,6 +51,14 @@ String relative(dynamic value, {dynamic from}) {
   return p.posix.relative(value, from: from);
 }
 
+bool isWithin(dynamic parent, dynamic child) {
+  // Turn into a file path
+  parent = _filePath(parent);
+  child = _filePath(child);
+
+  return p.posix.isWithin(parent, child);
+}
+
 String dirname(dynamic value) {
   value = _filePath(value);
 
