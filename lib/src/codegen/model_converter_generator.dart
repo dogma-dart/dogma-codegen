@@ -13,6 +13,7 @@ library dogma_codegen.src.codegen.model_converter_generator;
 import 'package:dogma_codegen/metadata.dart';
 
 import 'annotation_generator.dart';
+import 'builtin_generator.dart';
 import 'class_generator.dart';
 import 'field_generator.dart';
 import 'function_generator.dart';
@@ -70,25 +71,72 @@ FunctionGenerator _generateConvertMethod(ConverterMetadata converter,
                                          ModelMetadata model) {
   return (FunctionMetadata metadata, StringBuffer buffer) {
     var decoder = converter.isDecoder;
+    var inputVar = metadata.parameters[0].name;
+    var outputVar;
     var modelVar;
+    var mapVar;
 
     // Initialize the model variable
     if (decoder) {
-      modelVar = metadata.parameters[1].name;
-      buffer.writeln('$modelVar ??= create();');
+      outputVar = metadata.parameters[1].name;
+      modelVar = outputVar;
+      mapVar = inputVar;
+
+      buffer.writeln('$outputVar ??= create();');
     } else {
-      modelVar = 'model';
-      buffer.writeln('var $modelVar = {};');
+      outputVar = 'model';
+      modelVar = inputVar;
+      mapVar = outputVar;
+
+      buffer.writeln('var $outputVar = {};');
     }
 
     buffer.writeln();
 
+    for (SerializableFieldMetadata field in model.fields) {
+      var fieldType = field.type;
+      var fieldName = field.name;
+      var isOptional = field.optional;
+
+      if (fieldType.isBuiltin) {
+        var modelAccess = '$modelVar.${field.name}';
+        var mapAccess = '$mapVar[\'${field.serializationName}\']';
+
+        if (decoder) {
+          buffer.write('$modelAccess = $mapAccess');
+
+          // See if a default value should be set
+          var defaultValue = field.defaultValue;
+
+          if ((isOptional) && (defaultValue != null)) {
+            buffer.write('?? ${generateBuiltin(defaultValue)}');
+          }
+
+          buffer.writeln(';');
+        } else {
+          if (isOptional) {
+            buffer.writeln('var $fieldName = $modelAccess;');
+            buffer.writeln('if ($fieldName != null) {');
+            modelAccess = fieldName;
+          }
+
+          buffer.writeln('$mapAccess = $modelAccess;');
+
+          if (isOptional) {
+            buffer.writeln('}');
+          }
+        }
+      } else {
+
+      }
+    }
 
 
     // Return the value
-    buffer.writeln('return $modelVar;');
+    buffer.writeln('\nreturn $outputVar;');
   };
 }
+
 
 
 
