@@ -57,4 +57,34 @@ void main() {
     expect(encodeColorExplicit(ColorExplicit.green), green);
     expect(encodeColorExplicit(ColorExplicit.blue), blue);
   });
+  test('ModelImplicit convert', () {
+    var values = {
+      'n': 1.0,
+      'i': 2,
+      'd': 3.0,
+      'b': true,
+      's': 'foo',
+      'l': [0, 1, 2, 3, 4],
+      'm': {
+        'a': 0.0,
+        'b': 1.0
+      }
+    };
+
+    var decoder = new ModelImplicitDecoder();
+    var decoded = decoder.convert(values);
+
+    expect(decoded.n, values['n']);
+    expect(decoded.i, values['i']);
+    expect(decoded.d, values['d']);
+    expect(decoded.b, values['b']);
+    expect(decoded.s, values['s']);
+    expect(decoded.l, values['l']);
+    expect(decoded.m, values['m']);
+
+    var encoder = new ModelImplicitEncoder();
+    var encoded = encoder.convert(decoded);
+
+    expect(encoded, values);
+  });
 }
