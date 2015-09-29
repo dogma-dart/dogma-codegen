@@ -31,6 +31,20 @@ ClassMirror _getClass(Symbol library, Symbol clazz) {
   return libraryMirror.declarations[clazz];
 }
 
+/// Helper for comparing types.
+///
+/// There doesn't seem to be a way to instantiate generic Type's in a simple
+/// way so [expected] can be [Type] or [String]. If the former then the Type is
+/// compared directly. If its a string then the actual type is converted to
+/// a string and compared against that.
+void _expectType(Type actual, dynamic expected) {
+  if (expected is Type) {
+    expect(actual, expected);
+  } else {
+    expect(actual.toString(), expected);
+  }
+}
+
 /// Test entry point.
 void main() {
   test('ColorImplicit', () {
@@ -79,9 +93,9 @@ void main() {
         #ModelImplicit
     );
 
-    var expectField = (Symbol name, Type type) {
+    var expectField = (Symbol name, dynamic type) {
       var field = clazz.declarations[name] as VariableMirror;
-      expect(field.type.reflectedType, type);
+      _expectType(field.type.reflectedType, type);
       expect(field.metadata.length, 0);
     };
 
@@ -90,20 +104,56 @@ void main() {
     expectField(#d, double);
     expectField(#b, bool);
     expectField(#s, String);
+    expectField(#l, 'List<num>');
+    expectField(#m, 'Map<String, num>');
+  });
+  test('ModelExplicit', () {
+    var clazz = _getClass(
+        #dogma_codegen.test.libs.src.models.model_explicit,
+        #ModelExplicit
+    );
 
-    var l = clazz.declarations[#l] as VariableMirror;
-    var lType = l.type;
+    var expectField = (Symbol name, dynamic type, String serialized) {
+      var field = clazz.declarations[name] as VariableMirror;
+      _expectType(field.type.reflectedType, type);
+      expect(field.metadata.length, 1);
 
-    expect(lType.reflectedType.toString(), 'List<num>');
-    expect(lType.typeArguments[0].reflectedType, num);
-    expect(l.metadata.length, 0);
+      var annotation = field.metadata[0].reflectee as Serialize;
+      expect(annotation.name, serialized);
+      expect(annotation.encode, true);
+      expect(annotation.decode, true);
+    };
 
-    var m = clazz.declarations[#m] as VariableMirror;
-    var mType = m.type;
+    expectField(#n, num, 'num');
+    expectField(#i, int, 'int');
+    expectField(#d, double, 'double');
+    expectField(#b, bool, 'bool');
+    expectField(#s, String, 'string');
+    expectField(#l, 'List<num>', 'numList');
+    expectField(#m, 'Map<String, num>', 'stringNumMap');
+  });
+  test('ModelExplicitConvert', () {
+    var clazz = _getClass(
+        #dogma_codegen.test.libs.src.models.model_explicit_convert,
+        #ModelExplicitConvert
+    );
 
-    expect(mType.reflectedType.toString(), 'Map<String, num>');
-    expect(mType.typeArguments[0].reflectedType, String);
-    expect(mType.typeArguments[1].reflectedType, num);
-    expect(m.metadata.length, 0);
+    var expectField = (Symbol name, dynamic type, String serialize, bool decode) {
+      var field = clazz.declarations[name] as VariableMirror;
+      _expectType(field.type.reflectedType, type);
+      expect(field.metadata.length, 1);
+
+      var annotation = field.metadata[0].reflectee as Serialize;
+      expect(annotation.name, serialize);
+      expect(annotation.encode, !decode);
+      expect(annotation.decode, decode);
+    };
+
+    expectField(#dI, int, 'dI', true);
+    expectField(#dS, String, 'dS', true);
+    expectField(#dL, 'List<num>', 'dL', true);
+    expectField(#eI, int, 'eI', false);
+    expectField(#eS, String, 'eS', false);
+    expectField(#eL, 'List<num>', 'eL', false);
   });
 }
