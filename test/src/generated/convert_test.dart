@@ -58,14 +58,22 @@ void main() {
     expect(encodeColorExplicit(ColorExplicit.blue), blue);
   });
   test('ModelImplicit convert', () {
+    var nKey = 'n';
+    var iKey = 'i';
+    var dKey = 'd';
+    var bKey = 'b';
+    var sKey = 's';
+    var lKey = 'l';
+    var mKey = 'm';
+
     var values = {
-      'n': 1.0,
-      'i': 2,
-      'd': 3.0,
-      'b': true,
-      's': 'foo',
-      'l': [0, 1, 2, 3, 4],
-      'm': {
+      nKey: 1.0,
+      iKey: 2,
+      dKey: 3.0,
+      bKey: true,
+      sKey: 'foo',
+      lKey: [0, 1, 2, 3, 4],
+      mKey: {
         'a': 0.0,
         'b': 1.0
       }
@@ -74,15 +82,91 @@ void main() {
     var decoder = new ModelImplicitDecoder();
     var decoded = decoder.convert(values);
 
-    expect(decoded.n, values['n']);
-    expect(decoded.i, values['i']);
-    expect(decoded.d, values['d']);
-    expect(decoded.b, values['b']);
-    expect(decoded.s, values['s']);
-    expect(decoded.l, values['l']);
-    expect(decoded.m, values['m']);
+    expect(decoded.n, values[nKey]);
+    expect(decoded.i, values[iKey]);
+    expect(decoded.d, values[dKey]);
+    expect(decoded.b, values[bKey]);
+    expect(decoded.s, values[sKey]);
+    expect(decoded.l, values[lKey]);
+    expect(decoded.m, values[mKey]);
 
     var encoder = new ModelImplicitEncoder();
+    var encoded = encoder.convert(decoded);
+
+    expect(encoded, values);
+  });
+  test('ModelExplicit convert', () {
+    var nKey = 'n';
+    var iKey = 'i';
+    var dKey = 'd';
+    var bKey = 'b';
+    var sKey = 's';
+    var lKey = 'l';
+    var mKey = 'm';
+
+    var values = {
+      nKey: 1.0,
+      iKey: 2,
+      dKey: 3.0,
+      bKey: true,
+      sKey: 'foo',
+      lKey: [0, 1, 2, 3, 4],
+      mKey: {
+        'a': 0.0,
+        'b': 1.0
+      }
+    };
+
+    var decoder = new ModelImplicitDecoder();
+    var decoded = decoder.convert(values);
+
+    expect(decoded.n, values[nKey]);
+    expect(decoded.i, values[iKey]);
+    expect(decoded.d, values[dKey]);
+    expect(decoded.b, values[bKey]);
+    expect(decoded.s, values[sKey]);
+    expect(decoded.l, values[lKey]);
+    expect(decoded.m, values[mKey]);
+
+    var encoder = new ModelImplicitEncoder();
+    var encoded = encoder.convert(decoded);
+
+    expect(encoded, values);
+  });
+  test('ModelExplicit convert', () {
+    var nKey = 'num';
+    var iKey = 'int';
+    var dKey = 'double';
+    var bKey = 'bool';
+    var sKey = 'string';
+    var lKey = 'numList';
+    var mKey = 'stringNumMap';
+
+    var values = {
+      nKey: 1.0,
+      iKey: 2,
+      dKey: 3.0,
+      bKey: true,
+      sKey: 'foo',
+      lKey: [0, 1, 2, 3, 4],
+      mKey: {
+        'a': 0.0,
+        'b': 1.0
+      }
+    };
+
+    var decoder = new ModelExplicitDecoder();
+    var decoded = decoder.convert(values);
+
+    expect(decoded.n, values[nKey]);
+    expect(decoded.i, values[iKey]);
+    expect(decoded.d, values[dKey]);
+    expect(decoded.b, values[bKey]);
+    expect(decoded.s, values[sKey]);
+    expect(decoded.l, values[lKey]);
+    expect(decoded.m, values[mKey]);
+
+    var encoder = new ModelExplicitEncoder();
     var encoded = encoder.convert(decoded);
 
     expect(encoded, values);
