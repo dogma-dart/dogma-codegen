@@ -156,4 +156,31 @@ void main() {
     expectField(#eS, String, 'eS', false);
     expectField(#eL, 'List<num>', 'eL', false);
   });
+  test('ModelOptional', () {
+    var clazz = _getClass(
+        #dogma_codegen.test.libs.src.models.model_optional,
+        #ModelOptional
+    );
+
+    var expectField = (Symbol name, dynamic type, String serialized, dynamic defaultsTo) {
+      var field = clazz.declarations[name] as VariableMirror;
+      _expectType(field.type.reflectedType, type);
+      expect(field.metadata.length, 1);
+
+      var annotation = field.metadata[0].reflectee as Serialize;
+      expect(annotation.name, serialized);
+      expect(annotation.encode, true);
+      expect(annotation.decode, true);
+      expect(annotation.optional, true);
+      expect(annotation.defaultsTo, defaultsTo);
+    };
+
+    expectField(#n, num, 'n', 1.0);
+    expectField(#i, int, 'i', 2);
+    expectField(#d, double, 'd', 3.0);
+    expectField(#b, bool, 'b', true);
+    expectField(#s, String, 's', 'foo');
+    expectField(#l, 'List<num>', 'l', [0, 1, 2, 3, 4]);
+    expectField(#m, 'Map<String, num>', 'm', {'a': 0.0, 'b': 1.0});
+  });
 }

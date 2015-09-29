@@ -23,6 +23,7 @@ import 'enum_implicit_library.dart';
 import 'model_explicit_library.dart';
 import 'model_explicit_convert_library.dart';
 import 'model_implicit_library.dart';
+import 'model_optional_library.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -34,7 +35,8 @@ LibraryMetadata _modelsLibrary() {
     enumExplicitLibrary(),
     modelImplicitLibrary(),
     modelExplicitLibrary(),
-    modelExplicitConvertLibrary()
+    modelExplicitConvertLibrary(),
+    modelOptionalLibrary()
   ];
 
   return new LibraryMetadata(

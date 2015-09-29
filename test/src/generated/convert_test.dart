@@ -96,44 +96,6 @@ void main() {
     expect(encoded, values);
   });
   test('ModelExplicit convert', () {
-    var nKey = 'n';
-    var iKey = 'i';
-    var dKey = 'd';
-    var bKey = 'b';
-    var sKey = 's';
-    var lKey = 'l';
-    var mKey = 'm';
-
-    var values = {
-      nKey: 1.0,
-      iKey: 2,
-      dKey: 3.0,
-      bKey: true,
-      sKey: 'foo',
-      lKey: [0, 1, 2, 3, 4],
-      mKey: {
-        'a': 0.0,
-        'b': 1.0
-      }
-    };
-
-    var decoder = new ModelImplicitDecoder();
-    var decoded = decoder.convert(values);
-
-    expect(decoded.n, values[nKey]);
-    expect(decoded.i, values[iKey]);
-    expect(decoded.d, values[dKey]);
-    expect(decoded.b, values[bKey]);
-    expect(decoded.s, values[sKey]);
-    expect(decoded.l, values[lKey]);
-    expect(decoded.m, values[mKey]);
-
-    var encoder = new ModelImplicitEncoder();
-    var encoded = encoder.convert(decoded);
-
-    expect(encoded, values);
-  });
-  test('ModelExplicit convert', () {
     var nKey = 'num';
     var iKey = 'int';
     var dKey = 'double';
@@ -211,5 +173,22 @@ void main() {
 
     expect(encoded.length, 3);
     expect(encoded, encodeValues);
+  });
+  test('ModelOptional convert', () {
+    var decoder = new ModelOptionalDecoder();
+    var decoded = decoder.convert({});
+
+    expect(decoded.n, 1.0);
+    expect(decoded.i, 2);
+    expect(decoded.d, 3.0);
+    expect(decoded.b, true);
+    expect(decoded.s, 'foo');
+    expect(decoded.l, [0, 1, 2, 3, 4]);
+    expect(decoded.m, {'a': 0.0, 'b': 1.0});
+
+    var encoder = new ModelOptionalEncoder();
+    var encoded = encoder.convert(new ModelOptional());
+
+    expect(encoded.isEmpty, true);
   });
 }
