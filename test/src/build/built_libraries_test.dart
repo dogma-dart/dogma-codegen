@@ -24,6 +24,7 @@ import 'model_explicit_library.dart';
 import 'model_explicit_convert_library.dart';
 import 'model_implicit_library.dart';
 import 'model_optional_library.dart';
+import 'model_recursive_library.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -36,7 +37,8 @@ LibraryMetadata _modelsLibrary() {
     modelImplicitLibrary(),
     modelExplicitLibrary(),
     modelExplicitConvertLibrary(),
-    modelOptionalLibrary()
+    modelOptionalLibrary(),
+    modelRecursiveLibrary()
   ];
 
   return new LibraryMetadata(
