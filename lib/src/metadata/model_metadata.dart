@@ -42,7 +42,7 @@ class ModelMetadata extends ClassMetadata {
   /// serialization.
   bool get explicitSerialization {
     for (var field in fields) {
-      if ((field.decode || field.encode) && (field.name != field.serializationName)) {
+      if (!field.decode || !field.encode || (field.name != field.serializationName)) {
         return true;
       }
     }
