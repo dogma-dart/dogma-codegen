@@ -98,6 +98,13 @@ FunctionGenerator _generateConvertMethod(ConverterMetadata converter,
       var fieldName = field.name;
       var isOptional = field.optional;
 
+      // See if the field should be outputted
+      var shouldOutput = decoder ? field.decode : field.encode;
+
+      if (!shouldOutput) {
+        continue;
+      }
+
       if (fieldType.isBuiltin) {
         var modelAccess = '$modelVar.${field.name}';
         var mapAccess = '$mapVar[\'${field.serializationName}\']';
