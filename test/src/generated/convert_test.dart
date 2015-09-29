@@ -171,4 +171,45 @@ void main() {
 
     expect(encoded, values);
   });
+  test('ModelExplicitConvert convert', () {
+    var dIName = 'dI';
+    var dSName = 'dS';
+    var dLName = 'dL';
+    var eIName = 'eI';
+    var eSName = 'eS';
+    var eLName = 'eL';
+
+    var decodeValues = {
+      dIName: 0,
+      dSName: 'foo',
+      dLName: [0, 1, 2, 3, 4]
+    };
+    var encodeValues = {
+      eIName: 1,
+      eSName: 'bar',
+      eLName: [5, 6, 7, 8, 9]
+    };
+
+    var combined = new Map.from(decodeValues)..addAll(encodeValues);
+
+    var decoder = new ModelExplicitConvertDecoder();
+    var decoded = decoder.convert(combined);
+
+    expect(decoded.dI, decodeValues[dIName]);
+    expect(decoded.dS, decodeValues[dSName]);
+    expect(decoded.dL, decodeValues[dLName]);
+    expect(decoded.eI, null);
+    expect(decoded.eS, null);
+    expect(decoded.eL, null);
+
+    decoded.eI = encodeValues[eIName];
+    decoded.eS = encodeValues[eSName];
+    decoded.eL = encodeValues[eLName];
+
+    var encoder = new ModelExplicitConvertEncoder();
+    var encoded = encoder.convert(decoded);
+
+    expect(encoded.length, 3);
+    expect(encoded, encodeValues);
+  });
 }
