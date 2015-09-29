@@ -113,7 +113,7 @@ FunctionGenerator _generateConvertMethod(ConverterMetadata converter,
           buffer.write('$modelAccess = $mapAccess');
 
           // See if a default value should be set
-          var defaultValue = field.defaultValue;
+          var defaultValue = field.defaultsTo;
 
           if ((isOptional) && (defaultValue != null)) {
             buffer.write('?? ${generateBuiltin(defaultValue)}');
