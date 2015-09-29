@@ -3,8 +3,10 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-/// Contains metadata for the ModelImplicit class and library.
-library dogma_codegen.test.src.build.model_implicit_library;
+/// Contains metadata for the ModelOptional class and library.
+///
+/// This tests models where values are optionally serialized.
+library dogma_codegen.test.src.build.model_optional_library;
 
 //---------------------------------------------------------------------
 // Imports

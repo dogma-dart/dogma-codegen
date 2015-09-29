@@ -4,6 +4,9 @@
 // the LICENSE file.
 
 /// Contains metadata for the ModelExplicit class and library.
+///
+/// This tests models with explicit serialization where the serialization names
+/// are specified.
 library dogma_codegen.test.src.build.model_explicit_library;
 
 //---------------------------------------------------------------------

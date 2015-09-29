@@ -4,6 +4,8 @@
 // the LICENSE file.
 
 /// Contains metadata for the ModelImplicit class and library.
+///
+/// This tests models with implicit serialization.
 library dogma_codegen.test.src.build.model_implicit_library;
 
 //---------------------------------------------------------------------

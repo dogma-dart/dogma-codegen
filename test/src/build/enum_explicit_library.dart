@@ -4,6 +4,8 @@
 // the LICENSE file.
 
 /// Contains metadata for the ColorExplicit enumeration and library.
+///
+/// This tests enumerations with explicit serialization.
 library dogma_codegen.test.src.build.enum_explicit_library;
 
 //---------------------------------------------------------------------
