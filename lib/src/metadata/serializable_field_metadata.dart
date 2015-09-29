@@ -151,5 +151,5 @@ class SerializableFieldMetadata extends FieldMetadata implements SerializeAnnota
   /// The default value for the field.
   ///
   /// This is only valid if [optional] is set to true.
-  dynamic get defaultsTo => serializeAnnotation.optional;
+  dynamic get defaultsTo => serializeAnnotation.defaultsTo;
 }
