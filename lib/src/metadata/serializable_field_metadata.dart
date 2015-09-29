@@ -26,8 +26,7 @@ class SerializableFieldMetadata extends FieldMetadata implements SerializeAnnota
   // Construction
   //---------------------------------------------------------------------
 
-  /// Creates an instance of the [SerializableFieldMetadata] with the given
-  /// [name].
+  /// Creates an instance of [SerializableFieldMetadata] with the given [name].
   SerializableFieldMetadata(String name,
                             TypeMetadata type,
                             bool decode,
@@ -49,8 +48,72 @@ class SerializableFieldMetadata extends FieldMetadata implements SerializeAnnota
                   optional: optional,
                   defaultsTo: defaultsTo)]);
 
-  /// Creates an instance of the [SerializableFieldMetadata] with the given
-  /// [name] whose serialization is specified through an [annotation].
+  /// Creates an instance of [SerializableFieldMetadata] with the given [name]
+  /// where the field should be encoded and decoded.
+  SerializableFieldMetadata.convertValue(String name,
+                                         TypeMetadata type,
+                                        {String serializationName: '',
+                                         bool optional: false,
+                                         dynamic defaultsTo,
+                                         String comments})
+      : super(name,
+              type,
+              false, // Allows a field
+              true,  // Field has a getter
+              true,  // Field has a setter
+              comments: comments,
+              annotations: [new Serialize.field(
+                  serializationName.isEmpty ? name : serializationName,
+                  encode: true,
+                  decode: true,
+                  optional: optional,
+                  defaultsTo: defaultsTo)]);
+
+  /// Creates an instance of [SerializableFieldMetadata] with the given [name]
+  /// where the field should be decoded but not decoded.
+  SerializableFieldMetadata.decodeValue(String name,
+                                        TypeMetadata type,
+                                       {String serializationName: '',
+                                        bool optional: false,
+                                        dynamic defaultsTo,
+                                        String comments})
+      : super(name,
+              type,
+              false, // Allows a field
+              true,  // Field has a getter
+              true,  // Field has a setter
+              comments: comments,
+              annotations: [new Serialize.field(
+                  serializationName.isEmpty ? name : serializationName,
+                  encode: false,
+                  decode: true,
+                  optional: optional,
+                  defaultsTo: defaultsTo)]);
+
+  /// Creates an instance of [SerializableFieldMetadata] with the given [name]
+  /// where the field should be encoded but not decoded.
+  SerializableFieldMetadata.encodeValue(String name,
+                                        TypeMetadata type,
+                                       {String serializationName: '',
+                                        bool optional: false,
+                                        dynamic defaultsTo,
+                                        String comments})
+      : super(name,
+              type,
+              false, // Allows a field
+              true,  // Field has a getter
+              true,  // Field has a setter
+              comments: comments,
+              annotations: [new Serialize.field(
+                  serializationName.isEmpty ? name : serializationName,
+                  encode: true,
+                  decode: false,
+                  optional: optional,
+                  defaultsTo: defaultsTo)]);				  
+				  
+				  
+  /// Creates an instance of [SerializableFieldMetadata] with the given [name]
+  /// whose serialization is specified through an [annotation].
   SerializableFieldMetadata.annotated(String name,
                                       TypeMetadata type,
                                       Serialize annotation,
