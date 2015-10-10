@@ -14,7 +14,7 @@ import 'dart:mirrors';
 
 import 'package:analyzer/src/generated/constant.dart';
 import 'package:analyzer/src/generated/element.dart';
-import 'package:dogma_data/serialize.dart';
+import 'package:dogma_convert/serialize.dart';
 
 import 'utils.dart';
 
@@ -31,7 +31,7 @@ const String _serializeClassName = 'Serialize';
 /// The symbol for the [Serialize] annotation.
 const Symbol _serializeSymbol = #Serialize;
 /// The symbol for the library containing the [Serialize] annotation;
-const Symbol _serializeLibrarySymbol = #dogma_data.serialize;
+const Symbol _serializeLibrarySymbol = #dogma_convert.serialize;
 
 /// Retrieves the corresponding [Serialize] annotation if the [element] references one.
 Serialize annotation(ElementAnnotationImpl element) {

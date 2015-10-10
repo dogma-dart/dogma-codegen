@@ -16,6 +16,7 @@ import 'dart:async';
 //---------------------------------------------------------------------
 
 import 'package:dogma_codegen/metadata.dart';
+import 'package:dogma_codegen/identifier.dart';
 import 'package:dogma_codegen/path.dart';
 import 'package:logging/logging.dart';
 
@@ -32,6 +33,14 @@ const String _input = 'input';
 
 /// The logger for the library.
 final Logger _logger = new Logger('dogma_codegen.src.build.converters');
+/// Type metadata for a DateTime.
+///
+/// DateTime can be automatically converted.
+final TypeMetadata _dateTimeType = new TypeMetadata('DateTime');
+/// Type metadata for a URI.
+///
+/// Uri can be automatically converted.
+final TypeMetadata _uriType = new TypeMetadata('Uri');
 
 /// Builds the convert library from the given [models] library.
 ///
@@ -212,7 +221,7 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
   }
 
   if (converters.isNotEmpty) {
-    imported.addAll([dartConvert, dogmaData]);
+    imported.addAll([dartConvert, dogmaConvert]);
   }
 
   // Create the enum converters
@@ -302,6 +311,12 @@ ConverterMetadata _converterMetadata(ModelMetadata model,
     var type = _findUserDefinedType(fieldType);
     var typeName = type.name;
 
+    // Determine if the type is the same as the converter
+    if (type == model.type) {
+      _logger.finest('Field $fieldName is the same type, ${fieldType.name}, as the model');
+      continue;
+    }
+
     // Determine if the type is an enumeration
     var enumeration = findEnumeration(modelLibrary, typeName);
 
@@ -328,14 +343,23 @@ ConverterMetadata _converterMetadata(ModelMetadata model,
       continue;
     }
 
+    // Determine if the type has converters
+    if ((type == _dateTimeType) || (type == _uriType)) {
+      _logger.finest('Field $fieldName uses ${fieldType.name} which has automatic converters');
+      continue;
+    }
+
     // See if the field was already created
     if (fields.containsKey(typeName)) {
       _logger.finest('Converter for $typeName already present');
       continue;
     }
 
+    var converterFieldName = '_' + pascalToCamelCase(typeName) +
+        (decoder ? 'Decoder' : 'Encoder');
+
     fields[typeName] = new FieldMetadata(
-        'foo',
+        converterFieldName,
         ConverterMetadata.converter(type, decoder),
         false,
         true,

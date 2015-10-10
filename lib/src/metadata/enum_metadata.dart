@@ -10,7 +10,7 @@ library dogma_codegen.src.metadata.enum_metadata;
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_data/serialize.dart';
+import 'package:dogma_convert/serialize.dart';
 
 import 'enum_field_metadata.dart';
 import 'class_metadata.dart';

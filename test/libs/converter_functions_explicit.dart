@@ -5,7 +5,7 @@
 
 library dogma_codegen.test.libs.converter_functions_explicit;
 
-import 'package:dogma_data/serialize.dart';
+import 'package:dogma_convert/serialize.dart';
 
 @Serialize.using
 int encodeDuration(Duration value) => value.inMilliseconds;

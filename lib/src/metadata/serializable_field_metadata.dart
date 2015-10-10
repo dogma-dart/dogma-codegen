@@ -10,7 +10,7 @@ library dogma_codegen.src.metadata.serializable_field_metadata;
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_data/serialize.dart';
+import 'package:dogma_convert/serialize.dart';
 
 import 'field_metadata.dart';
 import 'type_metadata.dart';

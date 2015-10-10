@@ -16,7 +16,7 @@ import 'dart:mirrors';
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_data/serialize.dart';
+import 'package:dogma_convert/serialize.dart';
 import 'package:test/test.dart';
 
 import '../../libs/models.dart';

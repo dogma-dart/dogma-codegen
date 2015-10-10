@@ -33,20 +33,20 @@ final LibraryMetadata dartCollection = new LibraryMetadata(
     Uri.parse('dart:collection')
 );
 
-/// The dogma_data.serialize library.
+/// The dogma_convert.serialize library.
 ///
 /// This is required when generating code that uses the Serialize annotation.
 final LibraryMetadata dogmaSerialize = new LibraryMetadata(
-    'dogma_data.serialize',
-    Uri.parse('package:dogma_data/serialize.dart')
+    'dogma_convert.serialize',
+    Uri.parse('package:dogma_convert/serialize.dart')
 );
 
-/// The dogma_data.data library.
+/// The dogma_convert.convert library.
 ///
 /// This is required for generated Converters.
-final LibraryMetadata dogmaData = new LibraryMetadata(
-    'dogma_data.data',
-    Uri.parse('package:dogma_data/data.dart')
+final LibraryMetadata dogmaConvert = new LibraryMetadata(
+    'dogma_convert.convert',
+    Uri.parse('package:dogma_convert/convert.dart')
 );
 
 /// Converts a library from a file URI into a package URI.

@@ -9,7 +9,7 @@ library dogma_codegen.src.codegen.serialize_annotation_generator;
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_data/serialize.dart';
+import 'package:dogma_convert/serialize.dart';
 
 import 'argument_buffer.dart';
 import 'builtin_generator.dart';

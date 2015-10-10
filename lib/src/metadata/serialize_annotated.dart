@@ -10,7 +10,7 @@ library dogma_codegen.src.metadata.serialize_annotated;
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_data/serialize.dart';
+import 'package:dogma_convert/serialize.dart';
 
 //---------------------------------------------------------------------
 // Library contents

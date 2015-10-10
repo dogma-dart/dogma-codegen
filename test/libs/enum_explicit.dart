@@ -5,7 +5,7 @@
 
 library dogma_codegen.test.libs.enum_explicit;
 
-import 'package:dogma_data/serialize.dart';
+import 'package:dogma_convert/serialize.dart';
 
 @Serialize.values(const {
   0x0000ff: ColorExplicit.blue,

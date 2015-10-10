@@ -10,7 +10,7 @@ library dogma_codegen.test.src.codegen.serialize_annotation_generator_test;
 //---------------------------------------------------------------------
 
 import 'package:dogma_codegen/src/codegen/serialize_annotation_generator.dart';
-import 'package:dogma_data/serialize.dart';
+import 'package:dogma_convert/serialize.dart';
 import 'package:test/test.dart';
 
 //---------------------------------------------------------------------

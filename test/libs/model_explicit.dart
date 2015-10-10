@@ -5,7 +5,7 @@
 
 library dogma_codegen.test.libs.model_explicit;
 
-import 'package:dogma_data/serialize.dart';
+import 'package:dogma_convert/serialize.dart';
 
 class Explicit {
   @Serialize.field('num')

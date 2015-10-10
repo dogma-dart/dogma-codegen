@@ -10,7 +10,7 @@ library dogma_codegen.src.metadata.converter_function_metadata;
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_data/serialize.dart';
+import 'package:dogma_convert/serialize.dart';
 
 import 'converter.dart';
 import 'function_metadata.dart';
