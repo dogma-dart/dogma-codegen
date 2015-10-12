@@ -191,4 +191,50 @@ void main() {
 
     expect(encoded.isEmpty, true);
   });
+  test('ModelRecursive convert', () {
+    var depth2 = {
+      's': 'd2-0',
+      'l': []
+    };
+    var depth1 = [
+      {
+        's': 'd1-0',
+        'l': []
+      },
+      {
+        's': 'd1-1',
+        'l': [depth2]
+      },
+      {
+        's': 'd1-2',
+        'l': []
+      }
+    ];
+    var depth0 = {
+      's': 'root',
+      'l': depth1
+    };
+
+    var decoder = new ModelRecursiveDecoder();
+    var decoded = decoder.convert(depth0);
+
+    expect(decoded.s, depth0['s']);
+    expect(decoded.l.length, depth1.length);
+
+    var length = depth1.length;
+
+    for (var i = 0; i < length; ++i) {
+      expect(decoded.l[i].s, depth1[i]['s']);
+      expect(decoded.l[i].l.length, depth1[i]['l'].length);
+    }
+
+    expect(decoded.l[1].l[0].l.length, depth2['l'].length);
+    expect(decoded.l[1].l[0].s, depth2['s']);
+
+    var encoder = new ModelRecursiveEncoder();
+    var encoded = encoder.convert(decoded);
+
+    expect(encoded.length, 2);
+    expect(encoded, depth0);
+  });
 }
