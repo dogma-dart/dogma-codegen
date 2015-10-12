@@ -25,12 +25,20 @@ import 'type_generator.dart';
 
 void generateConverter(ConverterMetadata metadata,
                        ModelMetadata model,
-                       StringBuffer buffer) {
-  generateClassDefinition(metadata, buffer, _generateConverterDefinition(model));
+                       StringBuffer buffer,
+                      {Map<String, FunctionMetadata> functions}) {
+  functions ??= new Map<String, FunctionMetadata>();
+
+  generateClassDefinition(
+      metadata,
+      buffer,
+      _generateConverterDefinition(model, functions)
+  );
 }
 
 
-ClassGenerator _generateConverterDefinition(ModelMetadata model) {
+ClassGenerator _generateConverterDefinition(ModelMetadata model,
+                                            Map<String, FunctionMetadata> functions) {
   return (ConverterMetadata metadata, StringBuffer buffer) {
     // Generate the fields
     generateFields(metadata.fields, buffer);
@@ -105,10 +113,10 @@ FunctionGenerator _generateConvertMethod(ConverterMetadata converter,
         continue;
       }
 
-      if (fieldType.isBuiltin) {
-        var modelAccess = '$modelVar.${field.name}';
-        var mapAccess = '$mapVar[\'${field.serializationName}\']';
+      var modelAccess = '$modelVar.${field.name}';
+      var mapAccess = '$mapVar[\'${field.serializationName}\']';
 
+      if (fieldType.isBuiltin) {
         if (decoder) {
           buffer.write('$modelAccess = $mapAccess');
 
@@ -134,19 +142,70 @@ FunctionGenerator _generateConvertMethod(ConverterMetadata converter,
           }
         }
       } else {
+        var isList = fieldType.isList;
+        var isMap = fieldType.isMap;
+        /*
+        var isList = fieldType.isList;
 
+        if (isList) {
+          fieldType = fieldType.arguments[0];
+        }
+
+        var isMap = fieldType.isMap;
+
+        if (isMap) {
+          fieldType = fieldType.arguments[1];
+        }
+        */
+        if (decoder) {
+          var decodeValue;
+
+          if (isList) {
+            buffer.writeln('var $fieldName = ${generateConstructorCall(fieldType)};');
+
+            var tempName = 'value';
+
+            buffer.writeln('for (var $tempName in $mapAccess){');
+            buffer.writeln('$fieldName.add(convert($tempName));');
+            buffer.writeln('}');
+
+            decodeValue = fieldName;
+          } else if (isMap) {
+            buffer.writeln('var $fieldName = ${generateConstructorCall(fieldType)}');
+
+            decodeValue = fieldName;
+          } else {
+            decodeValue = 'convert($mapAccess)';
+          }
+
+          buffer.writeln('$modelAccess = $decodeValue;');
+        } else {
+          var encodeValue;
+
+          if (isList) {
+            buffer.writeln('var $fieldName = new List<Map>();');
+
+            var tempName = 'value';
+            buffer.writeln('for (var $tempName in $modelAccess){');
+            buffer.writeln('$fieldName.add(convert($tempName));');
+            buffer.writeln('}');
+
+            encodeValue = fieldName;
+          } else if (isMap) {
+
+          } else {
+            encodeValue = 'convert($modelAccess)';
+          }
+
+          buffer.writeln('$mapAccess = $encodeValue;');
+        }
       }
     }
-
 
     // Return the value
     buffer.writeln('\nreturn $outputVar;');
   };
 }
-
-
-
-
 
 
 

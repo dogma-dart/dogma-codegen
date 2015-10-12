@@ -50,19 +50,14 @@ void generateUnmodifiableModelViewsSource(LibraryMetadata library, StringBuffer 
 void generateConvertersSource(LibraryMetadata library,
                               StringBuffer buffer)
 {
+
+
   for (var converter in library.converters) {
     var model = findModel(library, converter.modelType.name);
 
-    generateConverter(converter, model, buffer);
-    /*
-    var model = findModel(library, converter.modelType.name);
+    var functions = converter.isDecoder ? _defaultDecoders() : {};
 
-    if (converter.isDecoder) {
-      generateModelFieldVariables(model, buffer);
-      generateModelDecoder(converter, model, buffer, decodeThrough: _defaultDecoders());
-    } else {
-      generateModelEncoder(model, buffer);
-    }*/
+    generateConverter(converter, model, buffer, functions: functions);
   }
 
   // Look for enumerations
