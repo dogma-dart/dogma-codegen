@@ -11,5 +11,5 @@ library dogma_codegen.codegen;
 
 export 'src/codegen/enum_converter_generator.dart';
 export 'src/codegen/library_generator.dart';
-export 'src/codegen/model_converter_generator.dart';
+export 'src/codegen/converter_generator.dart';
 export 'src/codegen/model_generator.dart';
