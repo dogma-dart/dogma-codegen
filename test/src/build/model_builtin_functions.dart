@@ -34,9 +34,14 @@ LibraryMetadata modelBuiltinFunctionsLibrary() =>
 
 /// Metadata for the ModelBuiltinFunctions class.
 ModelMetadata modelBuiltinFunctionsMetadata() {
+  var dateTime = new TypeMetadata('DateTime');
+  var uri = new TypeMetadata('Uri');
+
   var fields = [
-    new SerializableFieldMetadata.convertValue('d', new TypeMetadata('DateTime')),
-    new SerializableFieldMetadata.convertValue('u', new TypeMetadata('Uri'))
+    new SerializableFieldMetadata.convertValue('d', dateTime),
+    new SerializableFieldMetadata.convertValue('u', uri),
+    new SerializableFieldMetadata.convertValue('ld', new TypeMetadata.list(dateTime)),
+    new SerializableFieldMetadata.convertValue('lu', new TypeMetadata.list(uri))
   ];
 
   return new ModelMetadata('ModelBuiltinFunctions', fields);
