@@ -50,12 +50,37 @@ void generateUnmodifiableModelViewsSource(LibraryMetadata library, StringBuffer 
 void generateConvertersSource(LibraryMetadata library,
                               StringBuffer buffer)
 {
+  // Get the converter functions
+  var decoderFunctions = _defaultDecoders();
+  var encoderFunctions = _defaultEncoders();
 
+  for (var import in library.imported) {
+    for (var function in import.functions) {
+      // See if the function can be used as a converter
+      if (function is ConverterFunctionMetadata) {
+        // See if the function is a default function
+        if (function.isDefaultConverter) {
+          var functions = function.isDecoder
+              ? decoderFunctions
+              : encoderFunctions;
 
+          functions[function.modelType.name] = function;
+        } else {
+          // Could be used for encoding or decoding
+          var name = function.name;
+
+          decoderFunctions[name] = function;
+          encoderFunctions[name] = function;
+        }
+      }
+    }
+  }
+
+  // Look for converters
   for (var converter in library.converters) {
     var model = findModel(library, converter.modelType.name);
 
-    var functions = converter.isDecoder ? _defaultDecoders() : {};
+    var functions = converter.isDecoder ? decoderFunctions : encoderFunctions;
 
     generateConverter(converter, model, buffer, functions: functions);
   }
@@ -115,5 +140,12 @@ Map<String, FunctionMetadata> _defaultDecoders() {
         new TypeMetadata('String'),
         new ParameterMetadata('value', new TypeMetadata('Uri'))
     )
+  };
+}
+
+Map<String, MethodMetadata> _defaultEncoders() {
+  return {
+    'DateTime': new MethodMetadata('toString', new TypeMetadata.string()),
+    'Uri': new MethodMetadata('toString', new TypeMetadata.string())
   };
 }
