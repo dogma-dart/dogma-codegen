@@ -288,20 +288,41 @@ ConverterMetadata _converterMetadata(ModelMetadata model,
                                      List<LibraryMetadata> imported,
                                      List<LibraryMetadata> userDefined,
                                      bool decoder) {
-  var findFunction = decoder
+  var findConvertFunction = decoder
       ? findDecodeFunctionByType
       : findEncodeFunctionByType;
 
   // Search for dependencies to determine the fields for the converter
   var fields = new Map<String, FieldMetadata>();
 
-  for (var modelField in model.fields) {
-    // \TODO See if the model field has an explicit function to use
-
-    // Determine if the type requires conversion
+  for (SerializableFieldMetadata modelField in model.fields) {
+    // Get the field information
     var fieldName = modelField.name;
     var fieldType = modelField.type;
 
+    // See if the model field has an explicit function to use
+    var convertUsing = decoder ? modelField.decodeUsing : modelField.encodeUsing;
+
+    if (convertUsing != null) {
+      _logger.finest('Field $fieldName uses $convertUsing for conversion');
+      var function;
+
+      for (var library in userDefined) {
+        function = findFunction(library, convertUsing);
+
+        if (function != null) {
+          if (!imported.contains(library)) {
+            imported.add(library);
+          }
+
+          break;
+        }
+      }
+
+      continue;
+    }
+
+    // Determine if the type requires conversion
     if (fieldType.isBuiltin) {
       _logger.finest('Field $fieldName uses a builtin ${fieldType.name}');
       continue;
@@ -329,12 +350,14 @@ ConverterMetadata _converterMetadata(ModelMetadata model,
     var function;
 
     for (var library in userDefined) {
-      function = findFunction(library, type);
+      function = findConvertFunction(library, type);
 
       if (function != null) {
         if (!imported.contains(library)) {
           imported.add(library);
         }
+
+        break;
       }
     }
 

@@ -19,6 +19,8 @@ import 'package:test/test.dart';
 
 const String _serializeField = '@Serialize.field';
 const String _name = 'foo';
+const String _decodeFunction = 'decodeFoo';
+const String _encodeFunction = 'encodeFoo';
 
 String _annotation(String name,
                   {bool decode: true,
@@ -77,5 +79,18 @@ void main() {
     defaultsTo = {};
     annotation = _annotation(_name, defaultsTo: defaultsTo);
     expect(annotation, '$_serializeField(\'$_name\',defaultsTo: const{})');
+  });
+  test('Function', () {
+    var serialize = new Serialize.function(
+        _name,
+        decode: _decodeFunction,
+        encode: _encodeFunction
+    );
+
+    var buffer = new StringBuffer();
+    generateFieldAnnotation(serialize, buffer);
+
+    var annotation = buffer.toString().trimRight();
+    expect(annotation, '@Serialize.function(\'$_name\',decode: \'$_decodeFunction\',encode: \'$_encodeFunction\')');
   });
 }

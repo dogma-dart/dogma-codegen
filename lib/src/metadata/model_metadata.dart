@@ -41,9 +41,11 @@ class ModelMetadata extends ClassMetadata {
   /// name. If there are differences in any fields then the model uses explicit
   /// serialization.
   bool get explicitSerialization {
-    for (var field in fields) {
+    for (SerializableFieldMetadata field in fields) {
       if (!field.decode ||
           !field.encode ||
+          (field.decodeUsing != null) ||
+          (field.encodeUsing != null) ||
           (field.name != field.serializationName) ||
            field.optional) {
         return true;

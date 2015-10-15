@@ -117,6 +117,33 @@ FunctionGenerator _generateConvertMethod(ConverterMetadata converter,
       var modelAccess = '$modelVar.${field.name}';
       var mapAccess = '$mapVar[\'${field.serializationName}\']';
 
+      // See if explicit conversion was requested
+      var explicitConvert = decoder ? field.decodeUsing : field.encodeUsing;
+
+      if (explicitConvert != null) {
+        var function = functions[explicitConvert];
+
+        if (decoder) {
+          var decodeValue = _generateConvertCall(
+              function,
+              '',
+              mapAccess
+          );
+
+          buffer.writeln('$modelAccess = $decodeValue;');
+        } else {
+          var encodeValue = _generateConvertCall(
+              function,
+              '',
+              modelAccess
+          );
+
+          buffer.writeln('$mapAccess = $encodeValue;');
+        }
+
+        continue;
+      }
+
       if (fieldType.isBuiltin) {
         if (decoder) {
           buffer.write('$modelAccess = $mapAccess');

@@ -28,6 +28,7 @@ void generateFieldAnnotation(dynamic annotation, StringBuffer buffer) {
   }
 
   var name = annotation.name;
+  var constructor = 'field';
   var argumentBuffer = new ArgumentBuffer();
 
   // Write the name
@@ -36,18 +37,36 @@ void generateFieldAnnotation(dynamic annotation, StringBuffer buffer) {
   // Get the default values
   var defaults = new Serialize.field(name);
 
-  // See if decode is set to the default
-  var decode = annotation.decode;
+  // See if functions are being used
+  var decodeUsing = annotation.decodeUsing;
+  var decodeSet = decodeUsing != defaults.decodeUsing;
+  var encodeUsing = annotation.encodeUsing;
+  var encodeSet = encodeUsing != defaults.encodeUsing;
 
-  if (decode != defaults.decode) {
-    argumentBuffer.write('decode: $decode');
-  }
+  if (decodeSet || encodeSet) {
+    if (decodeSet) {
+      argumentBuffer.write('decode: \'$decodeUsing\'');
+    }
 
-  // See if encode is set to the default
-  var encode = annotation.encode;
+    if (encodeSet) {
+      argumentBuffer.write('encode: \'$encodeUsing\'');
+    }
 
-  if (encode != defaults.encode) {
-    argumentBuffer.write('encode: $encode');
+    constructor = 'function';
+  } else {
+    // See if decode is set to the default
+    var decode = annotation.decode;
+
+    if (decode != defaults.decode) {
+      argumentBuffer.write('decode: $decode');
+    }
+
+    // See if encode is set to the default
+    var encode = annotation.encode;
+
+    if (encode != defaults.encode) {
+      argumentBuffer.write('encode: $encode');
+    }
   }
 
   // See if optional is set to the default
@@ -67,7 +86,7 @@ void generateFieldAnnotation(dynamic annotation, StringBuffer buffer) {
   }
 
   // Write out the declaration
-  buffer.writeln('@Serialize.field(${argumentBuffer.toString()})');
+  buffer.writeln('@Serialize.$constructor(${argumentBuffer.toString()})');
 }
 
 /// Generates a serialize [annotation] for an enumeration into the [buffer].

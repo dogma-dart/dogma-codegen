@@ -218,6 +218,15 @@ FunctionMetadata findEncodeFunctionByType(LibraryMetadata library,
                                          {bool searchImports: true,
                                           bool searchExports: true})
 {
+  for (var function in library.functions) {
+    if ((function is ConverterFunctionMetadata) &&
+        (function.isDefaultEncoder) &&
+        (function.modelType == type)) {
+      return function;
+    }
+  }
+
+  // Not found
   return null;
 }
 
