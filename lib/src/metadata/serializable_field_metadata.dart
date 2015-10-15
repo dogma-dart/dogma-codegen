@@ -35,18 +35,15 @@ class SerializableFieldMetadata extends FieldMetadata implements SerializeAnnota
                             bool optional: false,
                             dynamic defaultsTo,
                             String comments})
-      : super(name,
-              type,
-              false, // Allows a field
-              true,  // Field has a getter
-              true,  // Field has a setter
-              comments: comments,
-              annotations: [new Serialize.field(
-                  serializationName.isEmpty ? name : serializationName,
-                  encode: encode,
-                  decode: decode,
-                  optional: optional,
-                  defaultsTo: defaultsTo)]);
+      : super.field(name,
+                    type,
+                    comments: comments,
+                    annotations: [new Serialize.field(
+                        serializationName.isEmpty ? name : serializationName,
+                        encode: encode,
+                        decode: decode,
+                        optional: optional,
+                        defaultsTo: defaultsTo)]);
 
   /// Creates an instance of [SerializableFieldMetadata] with the given [name]
   /// where the field should be encoded and decoded.
@@ -56,18 +53,15 @@ class SerializableFieldMetadata extends FieldMetadata implements SerializeAnnota
                                          bool optional: false,
                                          dynamic defaultsTo,
                                          String comments})
-      : super(name,
-              type,
-              false, // Allows a field
-              true,  // Field has a getter
-              true,  // Field has a setter
-              comments: comments,
-              annotations: [new Serialize.field(
-                  serializationName.isEmpty ? name : serializationName,
-                  encode: true,
-                  decode: true,
-                  optional: optional,
-                  defaultsTo: defaultsTo)]);
+      : super.field(name,
+                    type,
+                    comments: comments,
+                    annotations: [new Serialize.field(
+                        serializationName.isEmpty ? name : serializationName,
+                        decode: true,
+                        encode: true,
+                        optional: optional,
+                        defaultsTo: defaultsTo)]);
 
   /// Creates an instance of [SerializableFieldMetadata] with the given [name]
   /// where the field should be decoded but not decoded.
@@ -77,18 +71,15 @@ class SerializableFieldMetadata extends FieldMetadata implements SerializeAnnota
                                         bool optional: false,
                                         dynamic defaultsTo,
                                         String comments})
-      : super(name,
-              type,
-              false, // Allows a field
-              true,  // Field has a getter
-              true,  // Field has a setter
-              comments: comments,
-              annotations: [new Serialize.field(
-                  serializationName.isEmpty ? name : serializationName,
-                  encode: false,
-                  decode: true,
-                  optional: optional,
-                  defaultsTo: defaultsTo)]);
+      : super.field(name,
+                    type,
+                    comments: comments,
+                    annotations: [new Serialize.field(
+                        serializationName.isEmpty ? name : serializationName,
+                        decode: true,
+                        encode: false,
+                        optional: optional,
+                        defaultsTo: defaultsTo)]);
 
   /// Creates an instance of [SerializableFieldMetadata] with the given [name]
   /// where the field should be encoded but not decoded.
@@ -98,33 +89,46 @@ class SerializableFieldMetadata extends FieldMetadata implements SerializeAnnota
                                         bool optional: false,
                                         dynamic defaultsTo,
                                         String comments})
-      : super(name,
-              type,
-              false, // Allows a field
-              true,  // Field has a getter
-              true,  // Field has a setter
-              comments: comments,
-              annotations: [new Serialize.field(
-                  serializationName.isEmpty ? name : serializationName,
-                  encode: true,
-                  decode: false,
-                  optional: optional,
-                  defaultsTo: defaultsTo)]);				  
-				  
-				  
+      : super.field(name,
+                    type,
+                    comments: comments,
+                    annotations: [new Serialize.field(
+                        serializationName.isEmpty ? name : serializationName,
+                        decode: false,
+                        encode: true,
+                        optional: optional,
+                        defaultsTo: defaultsTo)]);
+
+  /// Creates an instance of [SerializableFieldMetadata] with the given [name]
+  /// whose serialization is specified through functions.
+  SerializableFieldMetadata.convertUsing(String name,
+                                         TypeMetadata type,
+                                         String decode,
+                                         String encode,
+                                        {String serializationName: '',
+                                         bool optional: false,
+                                         dynamic defaultsTo,
+                                         String comments})
+      : super.field(name,
+                    type,
+                    comments: comments,
+                    annotations: [new Serialize.function(
+                        serializationName.isEmpty ? name : serializationName,
+                        decode: decode,
+                        encode: encode,
+                        optional: optional,
+                        defaultsTo: defaultsTo)]);
+
   /// Creates an instance of [SerializableFieldMetadata] with the given [name]
   /// whose serialization is specified through an [annotation].
   SerializableFieldMetadata.annotated(String name,
                                       TypeMetadata type,
                                       Serialize annotation,
                                      {String comments})
-      : super(name,
-             type,
-             false, // Allows a field
-             true,  // Field has a getter
-             true,  // Field has a setter
-             comments: comments,
-             annotations: [annotation]);
+      : super.field(name,
+                    type,
+                    comments: comments,
+                    annotations: [annotation]);
 
   //---------------------------------------------------------------------
   // SerializeAnnotated
@@ -146,6 +150,10 @@ class SerializableFieldMetadata extends FieldMetadata implements SerializeAnnota
   /// If the serialization name was specified on the annotation that will be
   /// used; otherwise this will return the same value as [name].
   String get serializationName => serializeAnnotation.name;
+  /// The function to use when decoding.
+  String get decodeUsing => serializeAnnotation.decodeUsing;
+  /// The function to use when encoding.
+  String get encodeUsing => serializeAnnotation.encodeUsing;
   /// Whether the field is optional.
   bool get optional => serializeAnnotation.optional;
   /// The default value for the field.

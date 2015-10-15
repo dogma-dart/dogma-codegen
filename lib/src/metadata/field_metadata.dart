@@ -53,7 +53,8 @@ class FieldMetadata extends AnnotatedMetadata {
   // Construction
   //---------------------------------------------------------------------
 
-  /// Creates an instance of the [FieldMetadata] class with the given [name].
+  /// Creates an instance of the [FieldMetadata] class with the given [name] of
+  /// [type].
   FieldMetadata(String name,
                 this.type,
                 this.isProperty,
@@ -67,6 +68,15 @@ class FieldMetadata extends AnnotatedMetadata {
                 String comments})
       : super(name, annotations, comments);
 
+  /// Creates an instance of the [FieldMetadata] class with the given [name] of
+  /// [type] representing a field.
+  ///
+  /// In this instance a field corresponds to a member or class variable.
+  ///
+  ///     class Foo {
+  ///       int bar;
+  ///       static int baz;
+  ///     }
   FieldMetadata.field(String name,
                       this.type,
                      {this.isConst: false,
