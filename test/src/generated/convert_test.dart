@@ -191,6 +191,26 @@ void main() {
 
     expect(encoded.isEmpty, true);
   });
+  test('ModelFunction convert', () {
+    var dKey = 'd';
+    var odKey = 'od';
+
+    var values = {
+      dKey: 1024,
+      odKey: 2048
+    };
+
+    var decoder = new ModelFunctionDecoder();
+    var decoded = decoder.convert(values);
+
+    expect(decoded.d.inMilliseconds, values[dKey]);
+    expect(decoded.od.inMinutes, values[odKey]);
+
+    var encoder = new ModelFunctionEncoder();
+    var encoded = encoder.convert(decoded);
+
+    expect(encoded, values);
+  });
   test('ModelRecursive convert', () {
     var depth2 = {
       's': 'd2-0',
