@@ -183,4 +183,37 @@ void main() {
     expectField(#l, 'List<num>', 'l', [0, 1, 2, 3, 4]);
     expectField(#m, 'Map<String, num>', 'm', {'a': 0.0, 'b': 1.0});
   });
+  test('ModelFunction', () {
+    var clazz = _getClass(
+        #dogma_codegen.test.libs.src.models.model_function,
+        #ModelFunction
+    );
+
+    var field;
+    var annotation;
+
+    field = clazz.declarations[#d] as VariableMirror;
+    _expectType(field.type.reflectedType, Duration);
+
+    annotation = field.metadata[0].reflectee as Serialize;
+    expect(annotation.name, 'd');
+    expect(annotation.decode, true);
+    expect(annotation.decodeUsing, null);
+    expect(annotation.encode, true);
+    expect(annotation.encodeUsing, null);
+    expect(annotation.optional, false);
+    expect(annotation.defaultsTo, null);
+
+    field = clazz.declarations[#od] as VariableMirror;
+    _expectType(field.type.reflectedType, Duration);
+
+    annotation = field.metadata[0].reflectee as Serialize;
+    expect(annotation.name, 'od');
+    expect(annotation.decode, true);
+    expect(annotation.decodeUsing, 'decodeDurationInMinutes');
+    expect(annotation.encode, true);
+    expect(annotation.encodeUsing, 'encodeDurationInMinutes');
+    expect(annotation.optional, false);
+    expect(annotation.defaultsTo, null);
+  });
 }
