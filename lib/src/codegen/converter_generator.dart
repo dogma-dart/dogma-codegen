@@ -12,8 +12,10 @@ library dogma_codegen.src.codegen.converter_generator;
 
 import 'package:dogma_codegen/metadata.dart';
 
+import 'argument_buffer.dart';
 import 'annotation_generator.dart';
 import 'builtin_generator.dart';
+import 'constructor_generator.dart';
 import 'class_generator.dart';
 import 'field_generator.dart';
 import 'function_generator.dart';
@@ -43,6 +45,19 @@ ClassGenerator _generateConverterDefinition(ModelMetadata model,
     // Generate the fields
     generateFields(metadata.fields, buffer);
 
+    // Generate the constructors
+    for (var constructor in metadata.constructors) {
+      if (constructor.isDefault) {
+        generateConstructorDefinition(
+            constructor,
+            buffer,
+            initializerListGenerator: _generateInitializeList(metadata)
+        );
+      } else {
+        generateFinalContructor(constructor, buffer);
+      }
+    }
+
     // Generate the create function
     var createMethod = metadata.methods.firstWhere(
         (method) => method.name == 'create', orElse: () => null);
@@ -67,6 +82,21 @@ ClassGenerator _generateConverterDefinition(ModelMetadata model,
         _generateConvertMethod(metadata, model, functions),
         annotationGenerators: [generateOverrideAnnotation]
     );
+  };
+}
+
+ConstructorGenerator _generateInitializeList(ConverterMetadata converter) {
+  return (ConstructorMetadata metadata, StringBuffer buffer) {
+    var decoder = converter.isDecoder;
+    var argumentBuffer = new ArgumentBuffer();
+
+    for (var field in converter.fields) {
+      var modelType = field.type.arguments[decoder ? 1 : 0];
+      var name = ConverterMetadata.defaultConverterName(modelType, decoder);
+      argumentBuffer.write('${field.name} = new $name()');
+    }
+
+    buffer.write(argumentBuffer.toString());
   };
 }
 

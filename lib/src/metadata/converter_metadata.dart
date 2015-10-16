@@ -45,7 +45,7 @@ class ConverterMetadata extends ClassMetadata implements Converter {
                             List<MethodMetadata> methods,
                             List<ConstructorMetadata> constructors,
                             String comments})
-      : super('${modelType.name}Decoder',
+      : super(defaultDecoderName(modelType),
               supertype: converter(modelType, true),
               implements: [modelDecoder(modelType)],
               fields: fields,
@@ -62,7 +62,7 @@ class ConverterMetadata extends ClassMetadata implements Converter {
                             List<MethodMetadata> methods,
                             List<ConstructorMetadata> constructors,
                             String comments})
-      : super('${modelType.name}Encoder',
+      : super(defaultEncoderName(modelType),
               supertype: converter(modelType, false),
               implements: [modelEncoder(modelType)],
               fields: fields,
@@ -102,4 +102,13 @@ class ConverterMetadata extends ClassMetadata implements Converter {
 
   static TypeMetadata modelEncoder(TypeMetadata modelType)
       => new TypeMetadata('ModelEncoder', arguments: [modelType]);
+
+  static String defaultConverterName(TypeMetadata modelType, bool decoder)
+      => decoder ? defaultDecoderName(modelType) : defaultEncoderName(modelType);
+
+  static String defaultDecoderName(TypeMetadata modelType)
+      => '${modelType.name}Decoder';
+
+  static String defaultEncoderName(TypeMetadata modelType)
+      => '${modelType.name}Encoder';
 }

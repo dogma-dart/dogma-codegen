@@ -396,6 +396,27 @@ ConverterMetadata _converterMetadata(ModelMetadata model,
 
   if (fields.isNotEmpty) {
     _logger.finest('Generating constructors for coverter');
+
+    var constructorType = new TypeMetadata(
+       ConverterMetadata.defaultConverterName(model.type, decoder)
+    );
+
+    // Add a default constructor
+    constructors.add(new ConstructorMetadata(constructorType));
+
+    // Add a named constructor
+    var constructorParameters = new List<ParameterMetadata>();
+
+    for (var field in fields.values) {
+      constructorParameters.add(new ParameterMetadata(field.name, field.type));
+    }
+
+    constructors.add(
+        new ConstructorMetadata.named(
+            'using',
+            constructorType,
+            parameters: constructorParameters)
+    );
   } else {
     _logger.finest('Can use default constructor for converter');
   }
