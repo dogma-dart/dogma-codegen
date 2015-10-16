@@ -31,17 +31,38 @@ class ConstructorMetadata extends FunctionMetadata {
   // Constructor
   //---------------------------------------------------------------------
 
-  /// Creates an instance of [ConstructorMetadata] with the given [name] and
-  /// [returnType].
-  ConstructorMetadata(String name,
-                      TypeMetadata returnType,
-                      {List<ParameterMetadata> parameters,
+  /// Creates an instance of [ConstructorMetadata] referencing a default
+  /// constructor of the [returnType].
+  ConstructorMetadata(TypeMetadata returnType,
+                     {List<ParameterMetadata> parameters,
                       this.isFactory: false,
                       List annotations,
                       String comments})
+      : super('',
+              returnType,
+              parameters: parameters,
+              annotations: annotations,
+              comments: comments);
+
+
+  /// Creates an instance of [ConstructorMetadata] with the given [name] and
+  /// [returnType].
+  ConstructorMetadata.named(String name,
+                            TypeMetadata returnType,
+                           {List<ParameterMetadata> parameters,
+                            this.isFactory: false,
+                            List annotations,
+                            String comments})
       : super(name,
               returnType,
               parameters: parameters,
               annotations: annotations,
               comments: comments);
+
+  //---------------------------------------------------------------------
+  // Properties
+  //---------------------------------------------------------------------
+
+  /// Whether the constructor is the default constructor.
+  bool get isDefault => name.isEmpty;
 }
