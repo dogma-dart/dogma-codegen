@@ -21,26 +21,26 @@ import 'package:dogma_codegen/src/build/libraries.dart';
 //---------------------------------------------------------------------
 
 /// Gets a library containing the ModelBuiltinFunctions class.
-LibraryMetadata modelFunctionLibrary() =>
-    new LibraryMetadata(
-        'dogma_codegen.test.libs.src.models.model_function',
-        join('test/libs/src/models/model_function.dart'),
-        imported: [dogmaSerialize],
-        models: [modelFunctionMetadata()]);
+  LibraryMetadata modelFunctionLibrary() =>
+      new LibraryMetadata(
+          'dogma_codegen.test.libs.src.models.model_function',
+          join('test/libs/src/models/model_function.dart'),
+          imported: [dogmaSerialize],
+          models: [modelFunctionMetadata()]);
 
-/// Metadata for the ModelBuiltinFunctions class.
-ModelMetadata modelFunctionMetadata() {
-  var duration = new TypeMetadata('Duration');
+  /// Metadata for the ModelBuiltinFunctions class.
+  ModelMetadata modelFunctionMetadata() {
+    var duration = new TypeMetadata('Duration');
 
-  var fields = [
-    new SerializableFieldMetadata.convertValue('d', duration),
-    new SerializableFieldMetadata.convertUsing(
-        'od',
-        duration,
-        'decodeDurationInMinutes',
-        'encodeDurationInMinutes'
-    )
-  ];
+    var fields = [
+      new SerializableFieldMetadata.convertValue('d', duration),
+      new SerializableFieldMetadata.convertUsing(
+          'od',
+          duration,
+          'decodeDurationInMinutes',
+          'encodeDurationInMinutes'
+      )
+    ];
 
   return new ModelMetadata('ModelFunction', fields);
 }

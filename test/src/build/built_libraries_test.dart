@@ -21,6 +21,7 @@ import 'package:dogma_codegen_test/isolate_test.dart';
 import 'enum_explicit_library.dart';
 import 'enum_implicit_library.dart';
 import 'model_builtin_functions.dart';
+import 'model_compound_library.dart';
 import 'model_explicit_convert_library.dart';
 import 'model_explicit_library.dart';
 import 'model_function_library.dart';
@@ -42,7 +43,8 @@ LibraryMetadata _modelsLibrary() {
     modelFunctionLibrary(),
     modelImplicitLibrary(),
     modelOptionalLibrary(),
-    modelRecursiveLibrary()
+    modelRecursiveLibrary(),
+    modelCompoundLibrary()
   ];
 
   return new LibraryMetadata(
