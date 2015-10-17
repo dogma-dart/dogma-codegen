@@ -7,15 +7,13 @@ dependencies:
   args: ^0.13.2
   cli_util: ^0.0.1+2
   dart_style: ^0.2.0
-  dogma_convert:
-    path: ../dogma-convert
+  dogma_convert: ^0.0.1
   mustache: '^0.2.3'
   yaml: '^2.1.3'
   logging: '^0.11.1+1'
 dev_dependencies:
   coverage: ^0.7.1
-  dogma_codegen_test:
-    path: ../dogma-codegen-test
+  dogma_codegen_test: ^0.0.1
   test: ^0.12.3+9
 author: Don Olmstead <don.j.olmstead@gmail.com>
 homepage: http://dogma-dart.github.io/
