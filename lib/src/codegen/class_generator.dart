@@ -50,7 +50,7 @@ void generateClassDeclaration(ClassMetadata metadata,
   if (implements.isNotEmpty) {
     buffer.write(' implements ');
 
-    writeArgumentsToBuffer(implements.map((type) => type.name), buffer);
+    writeArgumentsToBuffer(implements.map((type) => generateType(type)), buffer);
   }
 }
 
