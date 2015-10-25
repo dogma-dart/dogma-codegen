@@ -13,7 +13,6 @@ import 'package:dogma_codegen/metadata.dart';
 
 import 'annotated_metadata_generator.dart';
 import 'annotation_generator.dart';
-import 'argument_buffer.dart';
 import 'parameter_generator.dart';
 
 //---------------------------------------------------------------------
