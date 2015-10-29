@@ -21,7 +21,7 @@ const int _length = 100;
 
 /// Tests the writing of values to [buffer].
 void _testWrite(ArgumentBuffer buffer) {
-  var values = [];
+  var values = <String>[];
 
   for (var i = 0; i < _length; ++i) {
     values.add(i.toString());

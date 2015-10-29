@@ -49,13 +49,13 @@ class ConverterFunctionMetadata extends FunctionMetadata
                                     bool isDefaultConverter: false,
                                     String comments: ''})
   {
-    var parameters = [inputParameter];
+    var parameters = <ParameterMetadata>[inputParameter];
 
     if (modelParameter != null) {
       parameters.add(modelParameter);
     }
 
-    var annotations = new List();
+    var annotations = [];
 
     if (isDefaultConverter) {
       annotations.add(Serialize.using);

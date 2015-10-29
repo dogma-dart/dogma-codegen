@@ -40,7 +40,7 @@ class FunctionMetadata extends AnnotatedMetadata {
                   {List<ParameterMetadata> parameters,
                    List annotations,
                    String comments})
-      : parameters = parameters ?? new List<ParameterMetadata>()
+      : parameters = parameters ?? <ParameterMetadata>[]
       , super(name, annotations, comments);
 
   //---------------------------------------------------------------------

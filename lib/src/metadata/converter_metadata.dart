@@ -88,8 +88,8 @@ class ConverterMetadata extends ClassMetadata implements Converter {
   static TypeMetadata converter(TypeMetadata modelType, bool decoder) {
     var mapType = new TypeMetadata.map();
     var arguments = decoder
-        ? [mapType, modelType]
-        : [modelType, mapType];
+        ? <TypeMetadata>[mapType, modelType]
+        : <TypeMetadata>[modelType, mapType];
 
     return new TypeMetadata('Converter', arguments: arguments);
   }

@@ -101,7 +101,7 @@ String libraryName(String package, dynamic path) {
   }
 
   // Append the package name at the front
-  split = [package]..addAll(split);
+  split = <String>[package]..addAll(split);
 
   return split.join('.');
 }

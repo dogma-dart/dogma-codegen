@@ -30,7 +30,7 @@ LibraryMetadata modelOptionalLibrary() =>
 
 /// Metadata for the ModelOptional class.
 ModelMetadata modelOptionalMetadata() {
-  var fields = [
+  var fields = <SerializableFieldMetadata>[
     new SerializableFieldMetadata.convertValue(
         'n',
         new TypeMetadata.num(),

@@ -87,7 +87,7 @@ LibraryMetadata unmodifiableModelViewsLibrary(LibraryMetadata models,
   // Convert the modelLibrary into the equivalent using package notation.
   models = packageLibrary(models);
 
-  var exported = new List<LibraryMetadata>();
+  var exported = <LibraryMetadata>[];
 
   for (var export in models.exported) {
     exported.add(_unmodifiableModelViewsLibrary(export, models, packageName, sourcePath));

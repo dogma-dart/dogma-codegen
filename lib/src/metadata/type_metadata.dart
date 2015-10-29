@@ -44,7 +44,7 @@ class TypeMetadata extends Metadata {
   /// If the type is generic then [arguments] should be used to fully type the
   /// metadata.
   TypeMetadata(String name, {List<TypeMetadata> arguments})
-      : arguments = arguments ?? []
+      : arguments = arguments ?? <TypeMetadata>[]
       , super(name);
 
   TypeMetadata.bool()
@@ -72,7 +72,7 @@ class TypeMetadata extends Metadata {
       , super(_list);
 
   factory TypeMetadata.map([TypeMetadata key, TypeMetadata value]) {
-    var arguments = new List<TypeMetadata>();
+    var arguments = <TypeMetadata>[];
 
     // Add type arguments only if key is not null
     if (key != null) {

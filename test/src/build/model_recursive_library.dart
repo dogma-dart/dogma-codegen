@@ -29,7 +29,7 @@ LibraryMetadata modelRecursiveLibrary() =>
 
 /// Metadata for the ModelRecursive class.
 ModelMetadata modelImplicitMetadata() {
-  var fields = [
+  var fields = <SerializableFieldMetadata>[
     new SerializableFieldMetadata.convertValue('s', new TypeMetadata.string()),
     new SerializableFieldMetadata.convertValue(
         'l',

@@ -34,7 +34,7 @@ import 'model_recursive_library.dart';
 //---------------------------------------------------------------------
 
 LibraryMetadata _modelsLibrary() {
-  var exported = [
+  var exported = <LibraryMetadata>[
     enumImplicitLibrary(),
     enumExplicitLibrary(),
     modelBuiltinFunctionsLibrary(),

@@ -19,9 +19,9 @@ import 'package:test/test.dart';
 /// The dummy metadata name.
 const String _metadataName = 'test';
 /// The enumeration values.
-final _values = ['a', 'b', 'c', 'd'];
+final _values = <String>['a', 'b', 'c', 'd'];
 /// The encoded enumeration values.
-final _encoded = ['a_value', 'b_value', 'c_value', 'd_value'];
+final _encoded = <String>['a_value', 'b_value', 'c_value', 'd_value'];
 
 /// Checks the [metadata] values are equivalent to [values] and [encoded].
 void _checkValues(EnumMetadata metadata, List<String> values, List<String> encoded) {

@@ -48,8 +48,7 @@ void generateUnmodifiableModelViewsSource(LibraryMetadata library, StringBuffer 
 /// Generates the source code for converters within a [library] into the
 /// [buffer].
 void generateConvertersSource(LibraryMetadata library,
-                              StringBuffer buffer)
-{
+                              StringBuffer buffer) {
   // Get the converter functions
   var decoderFunctions = _defaultDecoders();
   var encoderFunctions = _defaultEncoders();
@@ -143,7 +142,7 @@ Map<String, FunctionMetadata> _defaultDecoders() {
   };
 }
 
-Map<String, MethodMetadata> _defaultEncoders() {
+Map<String, FunctionMetadata> _defaultEncoders() {
   return {
     'DateTime': new MethodMetadata('toString', new TypeMetadata.string()),
     'Uri': new MethodMetadata('toString', new TypeMetadata.string())

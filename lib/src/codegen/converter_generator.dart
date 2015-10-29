@@ -29,7 +29,7 @@ void generateConverter(ConverterMetadata metadata,
                        ModelMetadata model,
                        StringBuffer buffer,
                       {Map<String, FunctionMetadata> functions}) {
-  functions ??= new Map<String, FunctionMetadata>();
+  functions ??= <String, FunctionMetadata>{};
 
   generateClassDefinition(
       metadata,

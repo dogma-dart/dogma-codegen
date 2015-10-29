@@ -32,7 +32,7 @@ import 'package:dogma_codegen/src/build/libraries.dart';
   ModelMetadata modelFunctionMetadata() {
     var duration = new TypeMetadata('Duration');
 
-    var fields = [
+    var fields = <SerializableFieldMetadata>[
       new SerializableFieldMetadata.convertValue('d', duration),
       new SerializableFieldMetadata.convertUsing(
           'od',

@@ -109,9 +109,9 @@ void main() {
   });
   test('arguments', () {
     var buffer = new StringBuffer();
-    var argumentList = ['a', 'b', 'c'];
+    var argumentList = <String>['a', 'b', 'c'];
     var expectedList = 'a,b,c';
-    var namedArguments = {'d':'d1', 'e': 'e1'};
+    var namedArguments = <String, String>{'d':'d1', 'e': 'e1'};
     var expectedNamed = 'd:d1,e:e1';
 
     // No arguments

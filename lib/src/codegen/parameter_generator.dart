@@ -98,9 +98,8 @@ String _generateDefaultValue(ParameterMetadata parameter,
 /// The [namedArguments] value has a
 void generateArguments(List<String> arguments,
                        StringBuffer buffer,
-                      {Map<String, String> namedArguments})
-{
-  namedArguments ??= new Map<String, String>();
+                      {Map<String, String> namedArguments}) {
+  namedArguments ??= <String, String>{};
 
   // Write the opening parenthesis
   buffer.write('(');

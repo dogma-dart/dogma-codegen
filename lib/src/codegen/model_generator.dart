@@ -39,7 +39,7 @@ void generateModel(ModelMetadata metadata, StringBuffer buffer) {
 
 void _generateModelDefinition(ModelMetadata metadata, StringBuffer buffer) {
   // See if an annotation generator is required
-  var annotationGenerators = new List<AnnotationGenerator>();
+  var annotationGenerators = <AnnotationGenerator>[];
 
   if (metadata.explicitSerialization) {
     annotationGenerators.add(generateFieldAnnotation);
@@ -182,7 +182,7 @@ TypeMetadata _unmodifiableType(TypeMetadata metadata) {
         ? 'UnmodifiableListView'
         : 'UnmodifiableMapView';
 
-    var arguments = [];
+    var arguments = <TypeMetadata>[];
 
     for (var argument in metadata.arguments) {
       arguments.add(_unmodifiableType(argument));

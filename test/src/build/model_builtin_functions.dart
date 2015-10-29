@@ -37,7 +37,7 @@ ModelMetadata modelBuiltinFunctionsMetadata() {
   var dateTime = new TypeMetadata('DateTime');
   var uri = new TypeMetadata('Uri');
 
-  var fields = [
+  var fields = <SerializableFieldMetadata>[
     new SerializableFieldMetadata.convertValue('d', dateTime),
     new SerializableFieldMetadata.convertValue('u', uri),
     new SerializableFieldMetadata.convertValue('ld', new TypeMetadata.list(dateTime)),

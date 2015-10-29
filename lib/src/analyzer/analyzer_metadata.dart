@@ -46,8 +46,8 @@ LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMeta
     return cached[name];
   }
 
-  var importedLibraries = [];
-  var exportedLibraries = [];
+  var importedLibraries = <LibraryMetadata>[];
+  var exportedLibraries = <LibraryMetadata>[];
 
   // Look at the dependencies for metadata
   for (var imported in library.importedLibraries) {
@@ -62,10 +62,10 @@ LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMeta
     }
   }
 
-  var models = [];
-  var enumerations = [];
+  var models = <ModelMetadata>[];
+  var enumerations = <EnumMetadata>[];
   var converters = [];
-  var functions = [];
+  var functions = <FunctionMetadata>[];
   var modelEncoders = [];
   var modelDecoders = [];
   var encodeFunctions = [];
@@ -142,7 +142,7 @@ LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMeta
 
 ModelMetadata modelMetadata(ClassElement element) {
   var implicit = true;
-  var fields = [];
+  var fields = <SerializableFieldMetadata>[];
 
   // Iterate over the fields within the class
   for (var field in element.fields) {
@@ -192,7 +192,7 @@ bool _isSerializableField(FieldElement element) {
 }
 
 TypeMetadata typeMetadata(DartType type) {
-  var arguments = [];
+  var arguments = <TypeMetadata>[];
 
   if (type is InterfaceType) {
     for (var argument in type.typeArguments) {
@@ -228,7 +228,7 @@ EnumMetadata enumMetadata(ClassElement element) {
     });
   }
 
-  var values = [];
+  var values = <String>[];
   for (var enumeration in enumerations) {
     values.add(enumeration.name);
   }

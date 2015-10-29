@@ -30,7 +30,7 @@ LibraryMetadata modelExplicitConvertLibrary() =>
 
 /// Metadata for the ModelExplicitConvert class.
 ModelMetadata modelExplicitConvertMetadata() {
-  var fields = [
+  var fields = <SerializableFieldMetadata>[
     new SerializableFieldMetadata.decodeValue(
         'dI',
         new TypeMetadata.int()

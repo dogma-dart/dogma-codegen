@@ -40,7 +40,7 @@ AnalysisContext analysisContext({Uri projectPath, Uri sdkPath}) {
   var packages = new JavaFile(join('packages', base: projectPath).toFilePath());
 
   // Create the resolvers
-  var resolvers = [
+  var resolvers = <UriResolver>[
       new DartUriResolver(sdk),
       new ResourceUriResolver(PhysicalResourceProvider.INSTANCE),
       new PackageUriResolver([packages])

@@ -22,7 +22,7 @@ import 'serialize_annotation_generator.dart';
 //---------------------------------------------------------------------
 
 void generateEnum(EnumMetadata enumeration, StringBuffer buffer) {
-  var annotationGenerators = new List<AnnotationGenerator>();
+  var annotationGenerators = <AnnotationGenerator>[];
 
   // Write out the encoding if necessary
   if (enumeration.explicitSerialization) {

@@ -28,7 +28,7 @@ LibraryMetadata modelImplicitLibrary() =>
 
 /// Metadata for the ModelImplicit class.
 ModelMetadata modelImplicitMetadata() {
-  var fields = [
+  var fields = <SerializableFieldMetadata>[
     new SerializableFieldMetadata.convertValue('n', new TypeMetadata.num()),
     new SerializableFieldMetadata.convertValue('i', new TypeMetadata.int()),
     new SerializableFieldMetadata.convertValue('d', new TypeMetadata.double()),

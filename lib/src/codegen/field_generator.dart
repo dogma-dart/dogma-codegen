@@ -56,7 +56,7 @@ void generateFields(List<FieldMetadata> fields,
                     List<AnnotationGenerator> annotationGenerators})
 {
   generator ??= generateFieldDeclaration;
-  annotationGenerators ??= new List<AnnotationGenerator>();
+  annotationGenerators ??= <AnnotationGenerator>[];
 
   for (var field in fields) {
     generateField(

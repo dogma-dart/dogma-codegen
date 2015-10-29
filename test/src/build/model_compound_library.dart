@@ -32,7 +32,7 @@ LibraryMetadata modelCompoundLibrary() =>
 
 /// Metadata for the ModelCompound class.
 ModelMetadata modelCompoundMetadata() {
-  var fields = [
+  var fields = <SerializableFieldMetadata>[
     new SerializableFieldMetadata.convertValue('m', new TypeMetadata('ModelImplicit')),
     new SerializableFieldMetadata.convertValue('e', new TypeMetadata('ColorImplicit'))
   ];

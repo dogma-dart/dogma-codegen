@@ -62,10 +62,10 @@ class ClassMetadata extends AnnotatedMetadata {
                 List annotations,
                 String comments})
       : type = new TypeMetadata(name)
-      , implements = implements ?? new List<TypeMetadata>()
-      , typeParameters = typeParameters ?? new List<TypeMetadata>()
-      , fields = fields ?? new List<FieldMetadata>()
-      , methods = methods ?? new List<MethodMetadata>()
-      , constructors = constructors ?? new List<ConstructorMetadata>()
+      , implements = implements ?? <TypeMetadata>[]
+      , typeParameters = typeParameters ?? <TypeMetadata>[]
+      , fields = fields ?? <FieldMetadata>[]
+      , methods = methods ?? <MethodMetadata>[]
+      , constructors = constructors ?? <ConstructorMetadata>[]
       , super(name, annotations, comments);
 }

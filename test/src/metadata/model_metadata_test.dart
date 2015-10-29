@@ -35,7 +35,7 @@ TypeMetadata _nestedMap() => new TypeMetadata('NestedMap');
 
 /// Test entry point.
 void main() {
-  var fields = [
+  var fields = <SerializableFieldMetadata>[
       new SerializableFieldMetadata('n', new TypeMetadata('num'), true, true),
       new SerializableFieldMetadata('d0', _dateTime(), true, true),
       new SerializableFieldMetadata('d1', _dateTime(), true, true),

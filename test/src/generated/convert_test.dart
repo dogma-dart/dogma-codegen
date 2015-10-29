@@ -166,7 +166,7 @@ void main() {
 
     decoded.eI = encodeValues[eIName];
     decoded.eS = encodeValues[eSName];
-    decoded.eL = encodeValues[eLName];
+    decoded.eL = encodeValues[eLName] as List<num>;
 
     var encoder = new ModelExplicitConvertEncoder();
     var encoded = encoder.convert(decoded);

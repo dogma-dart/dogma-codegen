@@ -34,7 +34,7 @@ class EnumMetadata extends ClassMetadata implements SerializeAnnotated {
   /// serialized names.
   factory EnumMetadata(String name,
                        List<String> values,
-                      {List<String> encoded,
+                      {List encoded,
                        String comments,
                        List<String> valueComments})
   {
@@ -44,7 +44,7 @@ class EnumMetadata extends ClassMetadata implements SerializeAnnotated {
     valueComments ??= new List<String>.filled(count, '');
 
     var mapping = {};
-    var fields = new List<EnumFieldMetadata>();
+    var fields = <EnumFieldMetadata>[];
     var enumType = new TypeMetadata(name);
 
     for (var i = 0; i < count; ++i) {

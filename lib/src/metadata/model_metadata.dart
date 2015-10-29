@@ -35,6 +35,9 @@ class ModelMetadata extends ClassMetadata {
   // Properties
   //---------------------------------------------------------------------
 
+  @override
+  List<SerializableFieldMetadata> get fields => super.fields;
+
   /// Whether the model uses explicit serialization.
   ///
   /// Looks for any cases where the field name differs from the serialization
@@ -136,7 +139,7 @@ Iterable<TypeMetadata> _dependencies(Iterable<SerializableFieldMetadata> fields)
 }
 
 List<TypeMetadata> _userDefinedTypes(TypeMetadata metadata) {
-  var values = [];
+  var values = <TypeMetadata>[];
 
   if (!metadata.isBuiltin) {
     if (metadata.isList) {

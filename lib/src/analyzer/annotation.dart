@@ -104,7 +104,11 @@ Serialize annotation(ElementAnnotationImpl element) {
       }
 
       // Create the instance
-      value = mirror.newInstance(new Symbol('${representation.name}'), positionalArguments, namedArguments).reflectee;
+      value = mirror.newInstance(
+          new Symbol('${representation.name}'),
+          positionalArguments,
+          namedArguments
+      ).reflectee;
     }
   } else if (representation is PropertyAccessorElement) {
     if (_isSerializeAnnotation(representation.enclosingElement)) {

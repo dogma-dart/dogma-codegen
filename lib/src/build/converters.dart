@@ -59,7 +59,7 @@ Future<Null> buildConverters(LibraryMetadata models,
                              Uri sourcePath) async
 {
   // Search for any user defined libraries
-  var userDefined = new List<LibraryMetadata>();
+  var userDefined = <LibraryMetadata>[];
 
   await for (var library in findUserDefinedLibraries(sourcePath)) {
     var add = false;
@@ -134,8 +134,8 @@ LibraryMetadata convertersLibrary(LibraryMetadata modelLibrary,
   modelLibrary = packageLibrary(modelLibrary);
 
   // Get the exported libraries
-  var exported = new List<LibraryMetadata>();
-  var loaded = {};
+  var exported = <LibraryMetadata>[];
+  var loaded = <String, LibraryMetadata>{};
 
   for (var export in modelLibrary.exported) {
     exported.add(_convertersLibrary(
@@ -176,7 +176,7 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
   var imported = [modelLibrary] as List<LibraryMetadata>;
 
   // Create the converters
-  var converters = [];
+  var converters = <ConverterMetadata>[];
 
   for (var model in library.models) {
     // Create the decoder
@@ -225,7 +225,7 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
   }
 
   // Create the enum converters
-  var functions = [];
+  var functions = <FunctionMetadata>[];
 
   for (var enumeration in library.enumerations) {
     // Create the type
@@ -293,7 +293,7 @@ ConverterMetadata _converterMetadata(ModelMetadata model,
       : findEncodeFunctionByType;
 
   // Search for dependencies to determine the fields for the converter
-  var fields = new Map<String, FieldMetadata>();
+  var fields = <String, FieldMetadata>{};
 
   for (SerializableFieldMetadata modelField in model.fields) {
     // Get the field information
@@ -392,7 +392,7 @@ ConverterMetadata _converterMetadata(ModelMetadata model,
   }
 
   // Create constructors if fields need to be initialized
-  var constructors = new List<ConstructorMetadata>();
+  var constructors = <ConstructorMetadata>[];
 
   if (fields.isNotEmpty) {
     _logger.finest('Generating constructors for coverter');
@@ -405,7 +405,7 @@ ConverterMetadata _converterMetadata(ModelMetadata model,
     constructors.add(new ConstructorMetadata(constructorType));
 
     // Add a named constructor
-    var constructorParameters = new List<ParameterMetadata>();
+    var constructorParameters = <ParameterMetadata>[];
 
     for (var field in fields.values) {
       constructorParameters.add(new ParameterMetadata(field.name, field.type));
@@ -422,7 +422,7 @@ ConverterMetadata _converterMetadata(ModelMetadata model,
   }
 
   // Create the methods
-  var methods = new List<MethodMetadata>();
+  var methods = <MethodMetadata>[];
 
   // Add the create method
   if (decoder) {
@@ -436,7 +436,7 @@ ConverterMetadata _converterMetadata(ModelMetadata model,
   }
 
   // Add the convert method
-  var parameters = new List<ParameterMetadata>();
+  var parameters = <ParameterMetadata>[];
   var modelType = model.type;
   var mapType = new TypeMetadata.map();
   var returnType;

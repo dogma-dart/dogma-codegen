@@ -54,7 +54,7 @@ void generateConstructorDefinition(ConstructorMetadata metadata,
                                    ConstructorGenerator generator,
                                    useThis: false,
                                    List<AnnotationGenerator> annotationGenerators}) {
-  annotationGenerators ??= new List<AnnotationGenerator>();
+  annotationGenerators ??= <AnnotationGenerator>[];
 
   // Write out metadata
   generateAnnotatedMetadata(metadata, buffer, annotationGenerators);
