@@ -178,11 +178,24 @@ FunctionGenerator _generateConvertMethod(ConverterMetadata converter,
         if (decoder) {
           buffer.write('$modelAccess = $mapAccess');
 
+          var shouldCast = _shouldCast(fieldType);
+
+          // Add a cast for strong mode
+          if (shouldCast) {
+            buffer.write(' ${generateCast(fieldType)}');
+          }
+
           // See if a default value should be set
           var defaultValue = field.defaultsTo;
 
           if ((isOptional) && (defaultValue != null)) {
-            buffer.write('?? ${generateBuiltin(defaultValue)}');
+            buffer.write('??');
+
+            if (shouldCast) {
+              buffer.write(generateTypeArguments(fieldType));
+            }
+
+            buffer.write(generateBuiltin(defaultValue));
           }
 
           buffer.writeln(';');
@@ -240,7 +253,7 @@ FunctionGenerator _generateConvertMethod(ConverterMetadata converter,
 
             decodeValue = fieldName;
           } else if (isMap) {
-            buffer.writeln('var $fieldName = ${generateConstructorCall(fieldType)}');
+            buffer.writeln('var $fieldName = ${generateConstructorCall(fieldType)};');
 
             decodeValue = fieldName;
           } else {
@@ -257,7 +270,8 @@ FunctionGenerator _generateConvertMethod(ConverterMetadata converter,
           var encodeValue;
 
           if (isList) {
-            buffer.writeln('var $fieldName = new List<${convertUsing.returnType.name}>();');
+            var listType = new TypeMetadata.list(convertUsing.returnType);
+            buffer.writeln('var $fieldName = ${generateConstructorCall(listType)};');
 
             var tempName = 'value';
             var convertCall = _generateConvertCall(
@@ -317,4 +331,24 @@ TypeMetadata _getCustomType(TypeMetadata metadata) {
   } else {
     return metadata;
   }
+}
+
+/// Determines if the given type [metadata] requires a cast for strong mode
+/// support.
+bool _shouldCast(TypeMetadata metadata) {
+  var arguments = metadata.arguments;
+  var argumentCount = arguments.length;
+
+  if (metadata.isList) {
+    if (argumentCount != 0) {
+      // For some reason List<String> doesn't seem to trigger strong mode
+      return !metadata.arguments[0].isString;
+    }
+  } else if (metadata.isMap) {
+    if (argumentCount != 0) {
+      return true;
+    }
+  }
+
+  return !metadata.isBuiltin;
 }
