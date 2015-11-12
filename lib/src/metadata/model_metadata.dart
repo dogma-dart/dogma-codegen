@@ -110,7 +110,7 @@ SerializableFieldMetadata findFieldByName(ModelMetadata metadata, String name) {
 
 /// Retrieves all the dependent types from the [metadata].
 Iterable<TypeMetadata> modelDependencies(ModelMetadata metadata)
-    => _dependencies(metadata.fields as List<SerializableFieldMetadata>);
+    => _dependencies(metadata.fields);
 
 /// Retrieves all the dependent types for converters from the [metadata].
 Iterable<TypeMetadata> modelConverterDependencies(ModelMetadata metadata)
