@@ -17,13 +17,17 @@ import 'argument_buffer.dart';
 // Library contents
 //---------------------------------------------------------------------
 
-/// Generates the name for the [type] into the [buffer].
+/// Generates the name for the [type].
 ///
 /// This supports recursive calls for generics.
-String generateType(TypeMetadata type) {
-  var buffer = new StringBuffer();
+String generateType(TypeMetadata type)
+    => '${type.name}${generateTypeArguments(type)}';
 
-  buffer.write(type.name);
+/// Generates the arguments for the [type].
+///
+/// This supports recursive calls for generics.
+String generateTypeArguments(TypeMetadata type) {
+  var buffer = new StringBuffer();
 
   // Look for generics
   var arguments = type.arguments;
@@ -44,6 +48,23 @@ String generateType(TypeMetadata type) {
   return buffer.toString();
 }
 
-/// Generates code to call the default constructor for the [type] into the [buffer].
-String generateConstructorCall(TypeMetadata type)
-    => 'new ${generateType(type)}()';
+/// Generates code to call the default constructor for the [type].
+///
+/// For List and Map types the calls will follow the style guide for their
+/// respective declarations.
+///
+///     var numList = <num>[];
+///     var stringFooMap = <String,Foo>{};
+String generateConstructorCall(TypeMetadata type) {
+  if (type.isList) {
+    return '${generateTypeArguments(type)}[]';
+  } else if (type.isMap) {
+    return '${generateTypeArguments(type)}{}';
+  } else {
+    return 'new ${generateType(type)}()';
+  }
+}
+
+/// Generates code to produce a cast for the [type].
+String generateCast(TypeMetadata type)
+    => 'as ${generateType(type)}';
