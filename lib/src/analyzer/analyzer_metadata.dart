@@ -64,7 +64,7 @@ LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMeta
 
   var models = <ModelMetadata>[];
   var enumerations = <EnumMetadata>[];
-  var converters = [];
+  var converters = <ConverterMetadata>[];
   var functions = <FunctionMetadata>[];
   var modelEncoders = [];
   var modelDecoders = [];
@@ -73,15 +73,15 @@ LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMeta
 
   for (var unit in library.units) {
     for (var type in unit.types) {
-      var metadata = modelMetadata(type);
+      var model = modelMetadata(type);
 
-      if (metadata != null) {
-        models.add(metadata);
+      if (model != null) {
+        models.add(model);
       } else {
-        metadata = converterMetadata(type);
+        var converter = converterMetadata(type);
 
-        if (metadata != null) {
-          converters.add(metadata);
+        if (converter != null) {
+          converters.add(converter);
         }
       }
     }
