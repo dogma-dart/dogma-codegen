@@ -121,13 +121,13 @@ FunctionGenerator _generateConvertMethod(ConverterMetadata converter,
       modelVar = outputVar;
       mapVar = inputVar;
 
-      buffer.writeln('$outputVar ??= create();');
+      buffer.writeln('$outputVar??=create();');
     } else {
       outputVar = 'model';
       modelVar = inputVar;
       mapVar = outputVar;
 
-      buffer.writeln('var $outputVar = {};');
+      buffer.writeln('var $outputVar={};');
     }
 
     buffer.writeln();
@@ -135,7 +135,6 @@ FunctionGenerator _generateConvertMethod(ConverterMetadata converter,
     for (SerializableFieldMetadata field in model.fields) {
       var fieldType = field.type;
       var fieldName = field.name;
-      var isOptional = field.optional;
 
       // See if the field should be outputted
       var shouldOutput = decoder ? field.decode : field.encode;
@@ -144,158 +143,91 @@ FunctionGenerator _generateConvertMethod(ConverterMetadata converter,
         continue;
       }
 
+      // Get what values are on the left and right hand side of the assignment
       var modelAccess = '$modelVar.${field.name}';
       var mapAccess = '$mapVar[\'${field.serializationName}\']';
+      var lhsAccess;
+      var rhsAccess;
+
+      if (decoder) {
+        lhsAccess = modelAccess;
+        rhsAccess = mapAccess;
+      } else {
+        lhsAccess = mapAccess;
+        rhsAccess = modelAccess;
+      }
 
       // See if explicit conversion was requested
       var explicitConvert = decoder ? field.decodeUsing : field.encodeUsing;
 
       if (explicitConvert != null) {
         var function = functions[explicitConvert];
+        var convertValue = _generateConvertCall(
+            function,
+            '',
+            rhsAccess
+        );
 
-        if (decoder) {
-          var decodeValue = _generateConvertCall(
-              function,
-              '',
-              mapAccess
-          );
-
-          buffer.writeln('$modelAccess = $decodeValue;');
-        } else {
-          var encodeValue = _generateConvertCall(
-              function,
-              '',
-              modelAccess
-          );
-
-          buffer.writeln('$mapAccess = $encodeValue;');
-        }
+        buffer.writeln('$lhsAccess = $convertValue;');
 
         continue;
       }
 
-      if (fieldType.isBuiltin) {
-        if (decoder) {
-          buffer.write('$modelAccess = $mapAccess');
+      // Get optional values
+      var isOptional = field.optional;
+      var defaultValue = field.defaultsTo;
 
-          var shouldCast = _shouldCast(fieldType);
+      if ((decoder) && (fieldType.isBuiltin)) {
+        var rhs = _generateValueConversion(
+            rhsAccess,
+            fieldName,
+            fieldType,
+            buffer,
+            converter,
+            functions
+        );
 
-          // Add a cast for strong mode
+        // Write the expression
+        buffer.write('$modelAccess = $rhs');
+
+        // Add a cast for strong mode if required
+        var shouldCast = _shouldCast(fieldType);
+
+        if (shouldCast) {
+          buffer.write(' ${generateCast(fieldType)}');
+        }
+
+        if ((isOptional) && (defaultValue != null)) {
+          buffer.write('??');
+
           if (shouldCast) {
-            buffer.write(' ${generateCast(fieldType)}');
+            buffer.write(generateTypeArguments(fieldType));
           }
 
-          // See if a default value should be set
-          var defaultValue = field.defaultsTo;
-
-          if ((isOptional) && (defaultValue != null)) {
-            buffer.write('??');
-
-            if (shouldCast) {
-              buffer.write(generateTypeArguments(fieldType));
-            }
-
-            buffer.write(generateBuiltin(defaultValue));
-          }
-
-          buffer.writeln(';');
-        } else {
-          if (isOptional) {
-            buffer.writeln('var $fieldName = $modelAccess;');
-            buffer.writeln('if ($fieldName != null) {');
-            modelAccess = fieldName;
-          }
-
-          buffer.writeln('$mapAccess = $modelAccess;');
-
-          if (isOptional) {
-            buffer.writeln('}');
-          }
+          buffer.write(generateBuiltin(defaultValue));
         }
+
+        buffer.write(';');
       } else {
-        var isList = fieldType.isList;
-        var isMap = fieldType.isMap;
-
-        // Determine if a function should be used
-        var typeName = _getCustomType(fieldType).name;
-        var convertUsing = functions[typeName];
-        var converterVar;
-
-        if (convertUsing == null) {
-          convertUsing = new MethodMetadata('convert', new TypeMetadata.map());
-
-          if (model.type.name == typeName) {
-            converterVar = 'this';
-          } else {
-            var modelPosition = decoder ? 1 : 0;
-
-            converterVar = converter.fields.firstWhere(
-                (field) => field.type.arguments[modelPosition].name == typeName).name;
-          }
+        if (isOptional) {
+          buffer.writeln('var $fieldName=$rhsAccess;');
+          buffer.writeln('if($fieldName!=null){');
+          rhsAccess = fieldName;
         }
 
-        if (decoder) {
-          var decodeValue;
+        var rhs = _generateValueConversion(
+            rhsAccess,
+            fieldName,
+            fieldType,
+            buffer,
+            converter,
+            functions
+        );
 
-          if (isList) {
-            buffer.writeln('var $fieldName = ${generateConstructorCall(fieldType)};');
+        buffer.writeln('$lhsAccess=$rhs;');
 
-            var tempName = 'value';
-            var convertCall = _generateConvertCall(
-                convertUsing,
-                converterVar,
-                tempName
-            );
-
-            buffer.writeln('for (var $tempName in $mapAccess){');
-            buffer.writeln('$fieldName.add($convertCall);');
-            buffer.writeln('}');
-
-            decodeValue = fieldName;
-          } else if (isMap) {
-            buffer.writeln('var $fieldName = ${generateConstructorCall(fieldType)};');
-
-            decodeValue = fieldName;
-          } else {
-            decodeValue = _generateConvertCall(
-                convertUsing,
-                converterVar,
-                mapAccess,
-                defaultsTo: modelVar
-            );
-          }
-
-          buffer.writeln('$modelAccess = $decodeValue;');
-        } else {
-          var encodeValue;
-
-          if (isList) {
-            var listType = new TypeMetadata.list(convertUsing.returnType);
-            buffer.writeln('var $fieldName = ${generateConstructorCall(listType)};');
-
-            var tempName = 'value';
-            var convertCall = _generateConvertCall(
-                convertUsing,
-                converterVar,
-                tempName
-            );
-
-            buffer.writeln('for (var $tempName in $modelAccess){');
-            buffer.writeln('$fieldName.add($convertCall);');
-            buffer.writeln('}');
-
-            encodeValue = fieldName;
-          } else if (isMap) {
-
-          } else {
-            encodeValue = _generateConvertCall(
-                convertUsing,
-                converterVar,
-                modelAccess
-            );
-          }
-
-          buffer.writeln('$mapAccess = $encodeValue;');
+        if (isOptional) {
+          buffer.writeln('}');
         }
       }
     }
@@ -303,6 +235,109 @@ FunctionGenerator _generateConvertMethod(ConverterMetadata converter,
     // Return the value
     buffer.writeln('\nreturn $outputVar;');
   };
+}
+
+/// Generates the source code for converting a value.
+String _generateValueConversion(String access,
+                               String varName,
+                               TypeMetadata type,
+                               StringBuffer buffer,
+                               ConverterMetadata converter,
+                               Map<String, FunctionMetadata> functions,
+                              [int depth = 0]) {
+  // Create the variable names for any temporary values
+  var tempVar = '${varName}Temp$depth';
+  var valueVar = '${varName}Value$depth';
+  var keyVar = '${varName}Key$depth';
+
+  // Increase the depth
+  ++depth;
+
+  // Get whether the converter is a decoder
+  var decoder = converter.isDecoder;
+
+  if (type.isBuiltin) {
+    return access;
+  } else if (type.isList) {
+    var genericType = decoder ? generateTypeArguments(type) : '';
+
+    buffer.writeln('var $tempVar=$genericType[];');
+    buffer.writeln('for (var $valueVar in $access){');
+
+    var value = _generateValueConversion(
+        valueVar,
+        varName,
+        type.arguments[0],
+        buffer,
+        converter,
+        functions,
+        depth
+    );
+
+    buffer.writeln('$tempVar.add($value);');
+    buffer.writeln('}');
+
+    return tempVar;
+  } else if (type.isMap) {
+    // Currently assuming this is a valid JSON construct
+    //
+    // This means that the type of the key has to be be a builtin type. For
+    // example a JSON can't be created from a Map<Map<String, Map>, dynamic>.
+    var key = _generateValueConversion(
+        keyVar,
+        varName,
+        type.arguments[0],
+        buffer,
+        converter,
+        functions,
+        depth
+    );
+
+    var genericType = decoder ? generateTypeArguments(type) : '';
+
+    buffer.writeln('var $tempVar=$genericType{};');
+    buffer.writeln('$access.forEach(($keyVar,$valueVar){');
+
+    var value = _generateValueConversion(
+        valueVar,
+        varName,
+        type.arguments[1],
+        buffer,
+        converter,
+        functions,
+        depth
+    );
+
+    buffer.writeln('$tempVar[$key]=$value;');
+    buffer.writeln('});');
+
+    return tempVar;
+  } else {
+    var instance = '';
+
+    // See if a function is being used
+    var convertUsing = functions[type.name];
+
+    if (convertUsing != null) {
+      // Check for a method to see if instance should be set
+      if (convertUsing is MethodMetadata) {
+        instance = access;
+      }
+    } else {
+      convertUsing = new MethodMetadata('convert', new TypeMetadata.map());
+
+      var modelPosition = converter.isDecoder ? 1 : 0;
+
+      // See if the value is the same type as the converter
+      instance = (converter.modelType == type)
+          ? 'this'
+          : converter.fields.firstWhere(
+                (field) => field.type.arguments[modelPosition] == type
+            ).name;
+    }
+
+    return _generateConvertCall(convertUsing, instance, access);
+  }
 }
 
 String _generateConvertCall(FunctionMetadata function,
@@ -319,17 +354,6 @@ String _generateConvertCall(FunctionMetadata function,
     }
   } else {
     return '$name($convert)';
-  }
-}
-
-/// Gets the custom type that will be used in conversion from the [metadata].
-TypeMetadata _getCustomType(TypeMetadata metadata) {
-  if (metadata.isList) {
-    return _getCustomType(metadata.arguments[0]);
-  } else if (metadata.isMap) {
-    return _getCustomType(metadata.arguments[1]);
-  } else {
-    return metadata;
   }
 }
 
