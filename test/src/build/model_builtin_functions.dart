@@ -30,7 +30,7 @@ LibraryMetadata modelBuiltinFunctionsLibrary() =>
     new LibraryMetadata(
         'dogma_codegen.test.libs.src.models.model_builtin_functions',
         join('test/libs/src/models/model_builtin_functions.dart'),
-        models: [modelBuiltinFunctionsMetadata()]);
+        classes: [modelBuiltinFunctionsMetadata()]);
 
 /// Metadata for the ModelBuiltinFunctions class.
 ModelMetadata modelBuiltinFunctionsMetadata() {

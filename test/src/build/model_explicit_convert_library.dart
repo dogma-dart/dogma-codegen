@@ -26,7 +26,7 @@ LibraryMetadata modelExplicitConvertLibrary() =>
         'dogma_codegen.test.libs.src.models.model_explicit_convert',
         join('test/libs/src/models/model_explicit_convert.dart'),
         imported: [dogmaSerialize],
-        models: [modelExplicitConvertMetadata()]);
+        classes: [modelExplicitConvertMetadata()]);
 
 /// Metadata for the ModelExplicitConvert class.
 ModelMetadata modelExplicitConvertMetadata() {

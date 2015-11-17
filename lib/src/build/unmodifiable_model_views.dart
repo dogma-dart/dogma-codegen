@@ -137,6 +137,6 @@ LibraryMetadata _unmodifiableModelViewsLibrary(LibraryMetadata library,
       name,
       uri,
       imported: imported,
-      models: library.models
+      classes: library.classes
   );
 }

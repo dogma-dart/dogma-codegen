@@ -76,7 +76,7 @@ void generateConvertersSource(LibraryMetadata library,
   }
 
   // Look for converters
-  for (var converter in library.converters) {
+  for (ConverterMetadata converter in library.converters) {
     var model = findModel(library, converter.modelType.name);
 
     var functions = converter.isDecoder ? decoderFunctions : encoderFunctions;

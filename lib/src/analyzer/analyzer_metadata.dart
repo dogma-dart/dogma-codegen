@@ -62,26 +62,22 @@ LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMeta
     }
   }
 
-  var models = <ModelMetadata>[];
-  var enumerations = <EnumMetadata>[];
-  var converters = <ConverterMetadata>[];
+  var classes = <ClassMetadata>[];
   var functions = <FunctionMetadata>[];
-  var modelEncoders = [];
-  var modelDecoders = [];
-  var encodeFunctions = [];
-  var decodeFunctions = [];
+  // \TODO Add field checking instantiation
+  var fields = <FieldMetadata>[];
 
   for (var unit in library.units) {
     for (var type in unit.types) {
       var model = modelMetadata(type);
 
       if (model != null) {
-        models.add(model);
+        classes.add(model);
       } else {
         var converter = converterMetadata(type);
 
         if (converter != null) {
-          converters.add(converter);
+          classes.add(converter);
         }
       }
     }
@@ -98,7 +94,7 @@ LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMeta
       var metadata = enumMetadata(enumeration);
 
       if (metadata != null) {
-        enumerations.add(metadata);
+        classes.add(metadata);
       }
     }
   }
@@ -111,14 +107,9 @@ LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMeta
   var metadataCount =
       importedLibraries.length +
       exportedLibraries.length +
-      models.length +
-      enumerations.length +
-      converters.length +
+      classes.length +
       functions.length +
-      modelEncoders.length +
-      modelDecoders.length +
-      encodeFunctions.length +
-      decodeFunctions.length;
+      fields.length;
 
   if (metadataCount > 0) {
     var metadata = new LibraryMetadata(
@@ -126,10 +117,9 @@ LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMeta
         library.definingCompilationUnit.source.uri,
         imported: importedLibraries,
         exported: exportedLibraries,
-        models: models,
-        enumerations: enumerations,
-        converters: converters,
-        functions: functions
+        classes: classes,
+        functions: functions,
+        fields: fields
     );
 
     cached[name] = metadata;

@@ -45,9 +45,7 @@ void main() {
 
     expect(metadata.imported.isEmpty, true);
     expect(metadata.exported.isEmpty, true);
-    expect(metadata.models.isEmpty, true);
-    expect(metadata.converters.isEmpty, true);
-    expect(metadata.enumerations.isEmpty, true);
+    expect(metadata.classes.isEmpty, true);
     expect(metadata.functions.length, 2);
 
     var decoder = _findConverterFunction(metadata, 'decodeDuration');
@@ -64,10 +62,9 @@ void main() {
 
     expect(metadata.imported.isEmpty, true);
     expect(metadata.exported.isEmpty, true);
-    expect(metadata.models.isEmpty, true);
-    expect(metadata.converters.isEmpty, true);
-    expect(metadata.enumerations.isEmpty, true);
+    expect(metadata.classes.isEmpty, true);
     expect(metadata.functions.length, 2);
+    expect(metadata.fields.isEmpty, true);
 
     var decoder = _findConverterFunction(metadata, 'decodeDuration');
     expect(decoder.isDecoder, true);
@@ -83,10 +80,12 @@ void main() {
 
     expect(metadata.imported.isEmpty, true);
     expect(metadata.exported.isEmpty, true);
-    expect(metadata.models.isEmpty, true);
-    expect(metadata.converters.isEmpty, true);
-    expect(metadata.enumerations.length, 1);
+    expect(metadata.classes.length, 1);
+    expect(metadata.models.toList().isEmpty, true);
+    expect(metadata.converters.toList().isEmpty, true);
+    expect(metadata.enumerations.toList().length, 1);
     expect(metadata.functions.isEmpty, true);
+    expect(metadata.fields.isEmpty, true);
 
     var enumeration =_findEnum(metadata, 'ColorExplicit');
     var mapping = enumeration.serializeAnnotation.mapping;
@@ -99,10 +98,11 @@ void main() {
 
     expect(metadata.imported.isEmpty, true);
     expect(metadata.exported.isEmpty, true);
-    expect(metadata.models.isEmpty, true);
-    expect(metadata.converters.isEmpty, true);
-    expect(metadata.enumerations.length, 1);
+    expect(metadata.models.toList().isEmpty, true);
+    expect(metadata.converters.toList().isEmpty, true);
+    expect(metadata.enumerations.toList().length, 1);
     expect(metadata.functions.isEmpty, true);
+    expect(metadata.fields.isEmpty, true);
 
     var enumeration = _findEnum(metadata, 'ColorImplicit');
     var mapping = enumeration.serializeAnnotation.mapping;
@@ -115,10 +115,11 @@ void main() {
 
     expect(metadata.imported.isEmpty, true);
     expect(metadata.exported.isEmpty, true);
-    expect(metadata.models.length, 1);
-    expect(metadata.converters.isEmpty, true);
-    expect(metadata.enumerations.isEmpty, true);
+    expect(metadata.models.toList().length, 1);
+    expect(metadata.converters.toList().isEmpty, true);
+    expect(metadata.enumerations.toList().isEmpty, true);
     expect(metadata.functions.isEmpty, true);
+    expect(metadata.fields.isEmpty, true);
 
     var model = metadata.models.firstWhere((value) => value.name == 'Explicit');
     var convertibleFields = model.convertibleFields.toList();

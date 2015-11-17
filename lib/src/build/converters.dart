@@ -271,7 +271,7 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
       name,
       uri,
       imported: imported,
-      converters: converters,
+      classes: converters,
       functions: functions
   );
 

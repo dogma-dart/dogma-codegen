@@ -28,7 +28,7 @@ LibraryMetadata modelCompoundLibrary() =>
         'dogma_codegen.test.libs.src.models.model_compound',
         join('test/libs/src/models/model_compound.dart'),
         imported: [modelImplicitLibrary(), enumImplicitLibrary()],
-        models: [modelCompoundMetadata()]);
+        classes: [modelCompoundMetadata()]);
 
 /// Metadata for the ModelCompound class.
 ModelMetadata modelCompoundMetadata() {
