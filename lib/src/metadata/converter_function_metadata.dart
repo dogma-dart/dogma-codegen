@@ -40,15 +40,14 @@ class ConverterFunctionMetadata extends FunctionMetadata
   /// If the function has an optional field for setting a default value or for
   /// reusing a model then it should be specified in [modelParameter].
   ///
-  /// If the function should be used by default when convertering a type then
+  /// If the function should be used by default when converting a type then
   /// [isDefaultConverter] should be set to true.
   factory ConverterFunctionMetadata(String name,
                                     TypeMetadata returnType,
                                     ParameterMetadata inputParameter,
                                    {ParameterMetadata modelParameter,
                                     bool isDefaultConverter: false,
-                                    String comments: ''})
-  {
+                                    String comments: ''}) {
     var parameters = <ParameterMetadata>[inputParameter];
 
     if (modelParameter != null) {

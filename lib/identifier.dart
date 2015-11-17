@@ -23,7 +23,7 @@ final RegExp _camelCaseRegExp = new RegExp(r'^[a-z][A-Za-z\d]*$');
 final RegExp _pascalCaseRegExp = new RegExp(r'^[A-Z][A-Za-z\d]*$');
 /// Regular expression for snake case.
 final RegExp _snakeCaseRegExp = new RegExp(r'^[a-z]+[a-z\d]*(?:_[a-z\d]+)*$');
-/// Regular expession for spinal case.
+/// Regular expression for spinal case.
 final RegExp _spinalCaseRegExp = new RegExp(r'^[a-z]+[a-z\d]*(?:-[a-z\d]+)*$');
 
 /// Separator for snake case.

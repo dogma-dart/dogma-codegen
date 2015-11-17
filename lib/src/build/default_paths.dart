@@ -18,7 +18,7 @@ const String defaultModelPath = 'lib/src/models';
 
 /// The default path to the root unmodifiable views library.
 const String defaultUnmodifiableLibrary = 'lib/unmodifiable_model_views.dart';
-/// The default path to the directory where the unmodifiaible views libraries
+/// The default path to the directory where the unmodifiable views libraries
 /// will be present.
 const String defaultUnmodifiablePath = 'lib/src/unmodifiable_model_views';
 

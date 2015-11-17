@@ -54,7 +54,7 @@ ClassGenerator _generateConverterDefinition(ModelMetadata model,
             initializerListGenerator: _generateInitializeList(metadata)
         );
       } else {
-        generateFinalContructor(constructor, buffer);
+        generateFinalConstructor(constructor, buffer);
       }
     }
 
