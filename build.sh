@@ -11,5 +11,5 @@ pub install
 dart --checked test/all.dart
 
 # Run the linter
-pub global activate linter
-pub global run linter .
+#pub global activate linter
+#pub global run linter .
