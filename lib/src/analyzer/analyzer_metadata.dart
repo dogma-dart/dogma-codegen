@@ -39,7 +39,8 @@ bool _shouldLoadLibraryMetadata(LibraryElement library) {
   return scheme != 'dart' && scheme != 'package';
 }
 
-LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMetadata> cached) {
+LibraryMetadata _libraryMetadata(LibraryElement library,
+                                 Map<String, LibraryMetadata> cached) {
   var name = library.name;
 
   if (cached.containsKey(name)) {
@@ -132,7 +133,9 @@ LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMeta
 
 ModelMetadata modelMetadata(ClassElement element) {
   var implicit = true;
-  var fields = <SerializableFieldMetadata>[];
+  var fields = <FieldMetadata>[];
+
+  // \TODO this is missing fields that are not serializable
 
   // Iterate over the fields within the class
   for (var field in element.fields) {
@@ -162,8 +165,13 @@ ModelMetadata modelMetadata(ClassElement element) {
       // Add the field if serializable
       if ((decode) || (encode)) {
         var type = typeMetadata(field.type);
-        var serializationName = serialize?.name ?? '';
-        fields.add(new SerializableFieldMetadata(field.name, type, decode, encode, serializationName: serializationName));
+        var fieldName = field.name;
+
+        if (serialize != null) {
+          fields.add(new SerializableFieldMetadata.annotated(fieldName, type, serialize));
+        } else {
+          fields.add(new SerializableFieldMetadata(field.name, type, decode, encode));
+        }
       }
     }
   }
@@ -272,8 +280,8 @@ FunctionMetadata functionMetadata(FunctionElement element) {
   }
 }
 
-ParameterMetadata parameterMetadata(ParameterElement element)
-    => new ParameterMetadata(
+ParameterMetadata parameterMetadata(ParameterElement element) =>
+    new ParameterMetadata(
         element.name,
         typeMetadata(element.type),
         parameterKind: parameterKind(element.parameterKind.name)
