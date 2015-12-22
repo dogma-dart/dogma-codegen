@@ -29,7 +29,7 @@ typedef void ConstructorGenerator(ConstructorMetadata constructor, StringBuffer 
 /// fields within the class where this.field is used.
 void generateConstructorDeclaration(ConstructorMetadata metadata,
                                     StringBuffer buffer,
-                                   {useThis: false}) {
+                                   {bool useThis: false}) {
   // Write out the factory declaration
   if (metadata.isFactory) {
     buffer.write('factory ');
@@ -62,7 +62,7 @@ void generateConstructorDefinition(ConstructorMetadata metadata,
                                    StringBuffer buffer,
                                   {ConstructorGenerator initializerListGenerator,
                                    ConstructorGenerator generator,
-                                   useThis: false,
+                                   bool useThis: false,
                                    List<AnnotationGenerator> annotationGenerators}) {
   annotationGenerators ??= <AnnotationGenerator>[];
 
