@@ -50,7 +50,7 @@ class ClassMetadata extends AnnotatedMetadata {
   /// The class hierarchy can be specified with the [superclass]. Additionally
   /// interfaces that the class conforms to can be specified in [implements].
   ///
-  /// Currently this is implementation is ignoring mixins so this information
+  /// Currently this implementation is ignoring mixins so this information
   /// is not available to query.
   ClassMetadata(String name,
                {this.supertype,

@@ -16,7 +16,7 @@ import 'package:path/path.dart' as p;
 // Library contents
 //---------------------------------------------------------------------
 
-final currentPathUri = p.toUri(p.current);
+final Uri currentPathUri = p.toUri(p.current);
 
 /// The current path running the application.
 ///
@@ -24,7 +24,7 @@ final currentPathUri = p.toUri(p.current);
 /// converts to a posix style. This is done to ensure that paths are handled
 /// consistently as all path operations will be done using the posix
 /// implementation held in path.
-final currentPath = currentPathUri.toFilePath(windows: false);
+final String currentPath = currentPathUri.toFilePath(windows: false);
 
 Uri join(dynamic value, {dynamic base}) {
   base ??= currentPath;
@@ -107,17 +107,13 @@ String libraryName(String package, dynamic path) {
 }
 
 /// Converts the [value] into a file path.
-String _filePath(dynamic value) {
-  return value is Uri ? value.toFilePath(windows: false) : value;
-}
+String _filePath(dynamic value) =>
+    value is Uri ? value.toFilePath(windows: false) : value;
 
-bool _isInLib(String value) {
-  return
-      value != 'example' &&
-      value != 'test' &&
-      value != 'bin' &&
-      value != 'tool';
-}
+bool _isInLib(String value) =>
+    value != 'example' &&
+    value != 'test' &&
+    value != 'bin' &&
+    value != 'tool';
 
-bool _isDirectory(String value)
-    => p.posix.withoutExtension(value) == value;
+bool _isDirectory(String value) => p.posix.withoutExtension(value) == value;

@@ -27,6 +27,7 @@ abstract class SerializeAnnotated {
 // \TODO Remove if mixin issue is resolved
 
 /// Finds the [Serialize] annotation within a list of [annotations].
-Serialize findSerializeAnnotation(List annotations)
-    => annotations.firstWhere(
-        (annotation) => annotation is Serialize, orElse: () => null);
+Serialize findSerializeAnnotation(List annotations) =>
+    annotations.firstWhere(
+        (annotation) => annotation is Serialize, orElse: () => null
+    );

@@ -109,7 +109,6 @@ class EnumMetadata extends ClassMetadata implements SerializeAnnotated {
   }
 
   /// The type of the encoded values.
-  TypeMetadata get encodeType
-      => new TypeMetadata.runtimeType(
-          serializeAnnotation.mapping.keys.first);
+  TypeMetadata get encodeType =>
+      new TypeMetadata.runtimeType(serializeAnnotation.mapping.keys.first);
 }

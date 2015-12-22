@@ -74,10 +74,8 @@ LibraryMetadata packageLibrary(LibraryMetadata library) {
       packageUri,
       imported: library.imported,
       exported: library.exported,
-      models: library.models,
-      enumerations: library.enumerations,
-      converters: library.converters,
+      classes: library.classes,
       functions: library.functions,
-      mappers: library.mappers
+      fields: library.fields
   );
 }

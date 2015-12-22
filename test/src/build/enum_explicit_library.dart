@@ -26,7 +26,7 @@ LibraryMetadata enumExplicitLibrary() =>
         'dogma_codegen.test.libs.src.models.color_explicit',
         join('test/libs/src/models/color_explicit.dart'),
         imported: [dogmaSerialize],
-        enumerations: [enumExplicitMetadata()]);
+        classes: [enumExplicitMetadata()]);
 
 /// Metadata for the ColorExplicit enumeration.
 EnumMetadata enumExplicitMetadata() =>

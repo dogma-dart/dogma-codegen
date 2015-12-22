@@ -18,7 +18,7 @@ import 'package:test/test.dart';
 
 /// The number of values to use.
 const int _length = 100;
-/// A list of ints.
+/// A list of integers.
 final List<int> _intList = [0, 1, 2, 3];
 /// Expected value of the int list.
 final String _expectedIntList = '[0,1,2,3]';

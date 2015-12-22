@@ -24,7 +24,7 @@ LibraryMetadata modelImplicitLibrary() =>
     new LibraryMetadata(
         'dogma_codegen.test.libs.src.models.model_implicit',
         join('test/libs/src/models/model_implicit.dart'),
-        models: [modelImplicitMetadata()]);
+        classes: [modelImplicitMetadata()]);
 
 /// Metadata for the ModelImplicit class.
 ModelMetadata modelImplicitMetadata() {

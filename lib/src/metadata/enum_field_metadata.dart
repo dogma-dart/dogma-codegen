@@ -34,6 +34,10 @@ class EnumFieldMetadata extends FieldMetadata {
               isStatic: true,
               comments: comments);
 
+  //---------------------------------------------------------------------
+  // Object
+  //---------------------------------------------------------------------
+
   @override
   String toString() => '${type.name}.$name';
 }

@@ -11,7 +11,7 @@ library dogma_codegen.src.codegen.annotation_generator;
 
 /// Definition of a function that generates annotations.
 ///
-/// The generator should test the type of [value] to determine if the annoation
+/// The generator should test the type of [value] to determine if the annotation
 /// declaration should be written to the [buffer].
 typedef void AnnotationGenerator(dynamic value, StringBuffer buffer);
 

@@ -24,7 +24,7 @@ LibraryMetadata enumImplicitLibrary() =>
     new LibraryMetadata(
         'dogma_codegen.test.libs.src.models.color_implicit',
         join('test/libs/src/models/color_implicit.dart'),
-        enumerations: [enumImplicitMetadata()]);
+        classes: [enumImplicitMetadata()]);
 
 /// Metadata for the ColorImplicit enumeration.
 EnumMetadata enumImplicitMetadata() =>

@@ -50,7 +50,8 @@ void generateClassDeclaration(ClassMetadata metadata,
   if (implements.isNotEmpty) {
     buffer.write(' implements ');
 
-    writeArgumentsToBuffer(implements.map((type) => generateType(type)), buffer);
+    writeArgumentsToBuffer(
+        implements.map/*<String>*/((type) => generateType(type)), buffer);
   }
 }
 
@@ -64,8 +65,7 @@ void generateClassDeclaration(ClassMetadata metadata,
 void generateClassDefinition(ClassMetadata metadata,
                              StringBuffer buffer,
                              ClassGenerator generator,
-                            {List<AnnotationGenerator> annotationGenerators})
-{
+                            {List<AnnotationGenerator> annotationGenerators}) {
   annotationGenerators ??= <AnnotationGenerator>[];
 
   // Write out metadata

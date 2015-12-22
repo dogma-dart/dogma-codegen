@@ -22,14 +22,14 @@ import 'type_generator.dart';
 
 void generateParameters(List<ParameterMetadata> parameters,
                         StringBuffer buffer,
-                       {useThis: false}) {
+                       {bool useThis: false}) {
   // Write the opening parenthesis
   buffer.write('(');
 
   var argumentBuffer = new ArgumentBuffer();
 
   // Write the required parameters
-  argumentBuffer.writeAll(findRequiredParameters(parameters).map(
+  argumentBuffer.writeAll(findRequiredParameters(parameters).map/*<String>*/(
       (parameter) => generateRequiredParameter(parameter, useThis)
   ));
 
@@ -58,7 +58,7 @@ void generateParameters(List<ParameterMetadata> parameters,
   buffer.write(')');
 }
 
-String generateParameter(ParameterMetadata parameter, {useThis: false}) {
+String generateParameter(ParameterMetadata parameter, {bool useThis: false}) {
   switch (parameter.parameterKind) {
     case ParameterKind.required:
       return generateRequiredParameter(parameter, useThis);

@@ -25,7 +25,7 @@ LibraryMetadata modelRecursiveLibrary() =>
     new LibraryMetadata(
         'dogma_codegen.test.libs.src.models.model_recursive',
         join('test/libs/src/models/model_recursive.dart'),
-        models: [modelImplicitMetadata()]);
+        classes: [modelImplicitMetadata()]);
 
 /// Metadata for the ModelRecursive class.
 ModelMetadata modelImplicitMetadata() {

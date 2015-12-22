@@ -26,7 +26,7 @@ LibraryMetadata modelOptionalLibrary() =>
         'dogma_codegen.test.libs.src.models.model_optional',
         join('test/libs/src/models/model_optional.dart'),
         imported: [dogmaSerialize],
-        models: [modelOptionalMetadata()]);
+        classes: [modelOptionalMetadata()]);
 
 /// Metadata for the ModelOptional class.
 ModelMetadata modelOptionalMetadata() {

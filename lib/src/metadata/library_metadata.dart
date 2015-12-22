@@ -10,9 +10,11 @@ library dogma_codegen.src.metadata.library_metadata;
 // Imports
 //---------------------------------------------------------------------
 
+import 'class_metadata.dart';
 import 'converter_function_metadata.dart';
 import 'converter_metadata.dart';
 import 'enum_metadata.dart';
+import 'field_metadata.dart';
 import 'function_metadata.dart';
 import 'metadata.dart';
 import 'mapper_metadata.dart';
@@ -35,62 +37,50 @@ class LibraryMetadata extends Metadata {
   final List<LibraryMetadata> imported;
   /// The libraries exported by the library.
   final List<LibraryMetadata> exported;
-  /// The models contained within the library.
-  final List<ModelMetadata> models;
-  /// The enumerations contained within the library.
-  final List<EnumMetadata> enumerations;
-  /// The converters contained within the library.
-  final List<ConverterMetadata> converters;
+  /// The classes contained within the library.
+  final List<ClassMetadata> classes;
   /// The functions contained within the library.
   final List<FunctionMetadata> functions;
-  /// The mappers contained within the library.
-  final List<MapperMetadata> mappers;
+  /// The fields contained within the library.
+  final List<FieldMetadata> fields;
 
   //---------------------------------------------------------------------
   // Construction
   //---------------------------------------------------------------------
 
-  factory LibraryMetadata(String name,
-                  Uri uri,
+  LibraryMetadata(String name,
+                  this.uri,
                  {List<LibraryMetadata> imported,
                   List<LibraryMetadata> exported,
-                  List<ModelMetadata> models,
-                  List<EnumMetadata> enumerations,
-                  List<ConverterMetadata> converters,
+                  List<ClassMetadata> classes,
                   List<FunctionMetadata> functions,
-                  List<MapperMetadata> mappers})
-  {
-    imported ??= [];
-    exported ??= [];
-    models ??= [];
-    enumerations ??= [];
-    converters ??= [];
-    functions ??= [];
-    mappers ??= [];
+                  List<FieldMetadata> fields})
+      : imported = imported ?? <LibraryMetadata>[]
+      , exported = exported ?? <LibraryMetadata>[]
+      , classes = classes ?? <ClassMetadata>[]
+      , functions = functions ?? <FunctionMetadata>[]
+      , fields = fields ?? <FieldMetadata>[]
+      , super(name);
 
-    return new LibraryMetadata._internal(
-        name,
-        uri,
-        imported,
-        exported,
-        models,
-        enumerations,
-        converters,
-        functions,
-        mappers
-    );
-  }
+  //---------------------------------------------------------------------
+  // Properties
+  //---------------------------------------------------------------------
 
-  LibraryMetadata._internal(String name,
-                            this.uri,
-                            this.imported,
-                            this.exported,
-                            this.models,
-                            this.enumerations,
-                            this.converters,
-                            this.functions,
-                            this.mappers)
-      : super(name);
+  @deprecated
+  Iterable<ClassMetadata> get models =>
+      classes.where((value) => value is ModelMetadata);
+
+  @deprecated
+  Iterable<ClassMetadata> get converters =>
+      classes.where((value) => value is ConverterMetadata);
+
+  @deprecated
+  Iterable<ClassMetadata> get enumerations =>
+      classes.where((value) => value is EnumMetadata);
+
+  @deprecated
+  Iterable<ClassMetadata> get mappers =>
+      classes.where((value) => value is MapperMetadata);
 }
 
 //---------------------------------------------------------------------
@@ -184,11 +174,14 @@ Metadata _findMetadata(LibraryMetadata library,
 }
 
 /// Gets the list of [ModelMetadata] from the [library].
-List<ModelMetadata> _modelList(LibraryMetadata library) => library.models;
+List<ClassMetadata> _modelList(LibraryMetadata library) =>
+    library.models.toList();
 /// Gets the list of [EnumMetadata] from the [library].
-List<EnumMetadata> _enumerationList(LibraryMetadata library) => library.enumerations;
+List<ClassMetadata> _enumerationList(LibraryMetadata library) =>
+    library.enumerations.toList();
 /// Gets the list of [FunctionMetadata] from the [library].
-List<FunctionMetadata> _functionList(LibraryMetadata library) => library.functions;
+List<FunctionMetadata> _functionList(LibraryMetadata library) =>
+    library.functions;
 
 //---------------------------------------------------------------------
 // Metadata searching by type

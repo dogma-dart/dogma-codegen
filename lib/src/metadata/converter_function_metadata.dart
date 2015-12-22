@@ -40,15 +40,14 @@ class ConverterFunctionMetadata extends FunctionMetadata
   /// If the function has an optional field for setting a default value or for
   /// reusing a model then it should be specified in [modelParameter].
   ///
-  /// If the function should be used by default when convertering a type then
+  /// If the function should be used by default when converting a type then
   /// [isDefaultConverter] should be set to true.
   factory ConverterFunctionMetadata(String name,
                                     TypeMetadata returnType,
                                     ParameterMetadata inputParameter,
                                    {ParameterMetadata modelParameter,
                                     bool isDefaultConverter: false,
-                                    String comments: ''})
-  {
+                                    String comments: ''}) {
     var parameters = <ParameterMetadata>[inputParameter];
 
     if (modelParameter != null) {
@@ -91,8 +90,7 @@ class ConverterFunctionMetadata extends FunctionMetadata
   @override
   bool get isDecoder => !isEncoder;
   @override
-  TypeMetadata get modelType
-      => isDecoder ? returnType : parameters[0].type;
+  TypeMetadata get modelType => isDecoder ? returnType : parameters[0].type;
 
   //---------------------------------------------------------------------
   // SerializeAnnotated
@@ -106,13 +104,14 @@ class ConverterFunctionMetadata extends FunctionMetadata
   //---------------------------------------------------------------------
 
   /// The encoding type.
-  TypeMetadata get encodeType
-      => isEncoder ? returnType : parameters[0].type;
+  TypeMetadata get encodeType => isEncoder ? returnType : parameters[0].type;
 
   /// Whether this function should used by default for conversion.
   bool get isDefaultConverter => serializeAnnotation != null;
+
   /// Whether this function should be used by default for decoding.
   bool get isDefaultDecoder => isDefaultConverter && isDecoder;
+
   /// Whether this function should be used by default for encoding.
   bool get isDefaultEncoder => isDefaultConverter && isEncoder;
 }

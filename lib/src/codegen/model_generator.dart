@@ -37,17 +37,19 @@ void generateModel(ModelMetadata metadata, StringBuffer buffer) {
   generateClassDefinition(metadata, buffer, _generateModelDefinition);
 }
 
-void _generateModelDefinition(ModelMetadata metadata, StringBuffer buffer) {
+void _generateModelDefinition(ClassMetadata metadata, StringBuffer buffer) {
+  var model = metadata as ModelMetadata;
+
   // See if an annotation generator is required
   var annotationGenerators = <AnnotationGenerator>[];
 
-  if (metadata.explicitSerialization) {
+  if (model.explicitSerialization) {
     annotationGenerators.add(generateFieldAnnotation);
   }
 
   // Generate the fields
   generateFields(
-      metadata.fields,
+      model.fields,
       buffer,
       annotationGenerators: annotationGenerators
   );

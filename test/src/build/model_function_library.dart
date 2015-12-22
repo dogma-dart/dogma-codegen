@@ -26,7 +26,7 @@ import 'package:dogma_codegen/src/build/libraries.dart';
           'dogma_codegen.test.libs.src.models.model_function',
           join('test/libs/src/models/model_function.dart'),
           imported: [dogmaSerialize],
-          models: [modelFunctionMetadata()]);
+          classes: [modelFunctionMetadata()]);
 
   /// Metadata for the ModelBuiltinFunctions class.
   ModelMetadata modelFunctionMetadata() {

@@ -3,7 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-/// Contains the [ParmeterMetadata] class.
+/// Contains the [ParameterMetadata] class.
 library dogma_codegen.src.metadata.parameter_metadata;
 
 //---------------------------------------------------------------------

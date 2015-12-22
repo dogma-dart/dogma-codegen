@@ -3,9 +3,7 @@ build:
   pull: true
   commands:
     - sh build.sh
-  environment:
-    - COVERALLS_TOKEN=$$COVERALLS_TOKEN
 matrix:
   DART_VERSION:
     - latest
-    - "1.13.0-dev.1.0"
+    - "1.14.0-dev.5.0"

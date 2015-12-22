@@ -56,8 +56,7 @@ final TypeMetadata _uriType = new TypeMetadata('Uri');
 /// paths specified using the [writeUnmodifiableViews] function.
 Future<Null> buildConverters(LibraryMetadata models,
                              Uri libraryPath,
-                             Uri sourcePath) async
-{
+                             Uri sourcePath) async {
   // Search for any user defined libraries
   var userDefined = <LibraryMetadata>[];
 
@@ -124,8 +123,7 @@ LibraryMetadata convertersLibrary(LibraryMetadata modelLibrary,
                                   Uri sourcePath,
                                  {List<LibraryMetadata> userDefined,
                                   bool decoders: true,
-                                  bool encoders: true})
-{
+                                  bool encoders: true}) {
   userDefined ??= [];
 
   var packageName = modelLibrary.name.split('.')[0];
@@ -163,8 +161,7 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
                                    Map<String, LibraryMetadata> loaded,
                                    List<LibraryMetadata> userDefined,
                                    bool decoders,
-                                   bool encoders)
-{
+                                   bool encoders) {
   // Check to see if the library was already loaded
   var loadingName = library.name;
 
@@ -173,7 +170,7 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
   }
 
   // Model library should always be included
-  var imported = [modelLibrary] as List<LibraryMetadata>;
+  var imported = <LibraryMetadata>[modelLibrary];
 
   // Create the converters
   var converters = <ConverterMetadata>[];
@@ -271,7 +268,7 @@ LibraryMetadata _convertersLibrary(LibraryMetadata library,
       name,
       uri,
       imported: imported,
-      converters: converters,
+      classes: converters,
       functions: functions
   );
 
@@ -295,7 +292,7 @@ ConverterMetadata _converterMetadata(ModelMetadata model,
   // Search for dependencies to determine the fields for the converter
   var fields = <String, FieldMetadata>{};
 
-  for (SerializableFieldMetadata modelField in model.fields) {
+  for (var modelField in model.serializableFields) {
     // Get the field information
     var fieldName = modelField.name;
     var fieldType = modelField.type;
