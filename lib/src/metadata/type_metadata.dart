@@ -47,30 +47,42 @@ class TypeMetadata extends Metadata {
       : arguments = arguments ?? <TypeMetadata>[]
       , super(name);
 
+  /// Creates an instance of [TypeMetadata] representing a boolean.
   TypeMetadata.bool()
       : arguments = []
       , super(_bool);
 
+  /// Creates an instance of [TypeMetadata] representing an integer.
   TypeMetadata.int()
       : arguments = []
       , super(_int);
 
+  /// Creates an instance of [TypeMetadata] representing a double.
   TypeMetadata.double()
       : arguments = []
       , super(_double);
 
+  /// Creates an instance of [TypeMetadata] representing a number.
   TypeMetadata.num()
       : arguments = []
       , super(_num);
 
+  /// Creates an instance of [TypeMetadata] representing a string.
   TypeMetadata.string()
       : arguments = []
       , super(_string);
 
+  /// Creates an instance of [TypeMetadata] representing a list.
+  ///
+  /// A type [argument] can be provided for additional type information.
   TypeMetadata.list([TypeMetadata argument])
       : arguments = (argument != null) ? [argument] : []
       , super(_list);
 
+  /// Creates an instance of [TypeMetadata] representing a map.
+  ///
+  /// The [key] type and [value] type can be provided for additional type
+  /// information.
   factory TypeMetadata.map([TypeMetadata key, TypeMetadata value]) {
     var arguments = <TypeMetadata>[];
 
@@ -86,6 +98,7 @@ class TypeMetadata extends Metadata {
     return new TypeMetadata._internal(_map, arguments);
   }
 
+  /// Creates an instance of [TypeMetadata] from the runtime type of [value].
   TypeMetadata.runtimeType(dynamic value)
       : arguments = []
       , super(value.runtimeType.toString());
