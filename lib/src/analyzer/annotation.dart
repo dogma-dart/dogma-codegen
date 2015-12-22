@@ -47,59 +47,54 @@ Serialize annotation(ElementAnnotationImpl element) {
       // This ends up creating a generic object containing the resulting
       // fields of the instance. Since the constructors of Serialize always use
       // the this.value notation the evaluated results can be directly used.
-      //
-      // NOTE! The constant evaluation results are from a private API so the
-      // behavior may change. See https://github.com/dart-lang/sdk/issues/23800
-      // for status of the public API.
       var evaluatedFields = element.evaluationResult.value.fields;
 
       // Get the invocation
       var positionalArguments = [];
-      var namedArguments = {};
+      var namedArguments = <Symbol, dynamic>{};
 
       for (var parameter in representation.parameters) {
-        if (parameter is FieldFormalParameterElementImpl) {
-          var parameterName = parameter.name;
-          var parameterField = evaluatedFields[parameterName];
-          var parameterValue = parameterField.value;
+        var parameterName = parameter.name;
+        var parameterField = evaluatedFields[parameterName];
 
-          // Check to see if the value is mapping which currently requires
-          // special treatment. This is using information from the private
-          // fields of the state data so it can break if those details change.
-          if (parameterName == 'mapping') {
-            // Use mirrors to get at the actual state
-            var fieldInstance = reflect(parameterField);
-
-            // Get the _state field
-            var stateInstance = _getPrivateField(fieldInstance, #_state);
-
-            // Get the _entries field
-            var entries = _getPrivateField(stateInstance, #_entries).reflectee as Map<DartObject, DartObject>;
-
-            // Get the values of the enumeration
-            //
-            // Just use the type element from the first value of the map to get
-            // the list of enumerations.
-            var enumerations = enumValues(entries.values.first.type.element);
-
-            parameterValue = {};
-
-            // Generate the map of data
-            entries.forEach((key, value) {
-              // Use mirrors to get the index of the enumeration
-              var valueState = _getPrivateField(reflect(value), #_state);
-              var fieldMap = _getPrivateField(valueState, #_fieldMap).reflectee as Map<String, DartObject>;
-              var index = fieldMap['index'].value;
-
-              parameterValue[key.value] = enumerations[index];
-            });
+        if (representation.name == 'function') {
+          if (parameterName == 'encode') {
+            parameterField = evaluatedFields['encodeUsing'];
+          } else if (parameterName == 'decode') {
+            parameterField = evaluatedFields['decodeUsing'];
           }
+        }
 
-          if (parameter.parameterKind.name == 'NAMED') {
-            namedArguments[new Symbol(parameterName)] = parameterValue;
-          } else {
-            positionalArguments.add(parameterValue);
-          }
+        var parameterValue;
+
+        // Check to see if the value is mapping which currently requires
+        // special treatment. This is using information from the private
+        // fields of the state data so it can break if those details change.
+        if (parameterName == 'mapping') {
+          var entries = parameterField.toMapValue();
+
+          // Get the values of the enumeration
+          //
+          // Just use the type element from the first value of the map to get
+          // the list of enumerations.
+          var enumerations = enumValues(entries.values.first.type.element);
+
+          // Generate the map of data
+          parameterValue = {};
+
+          entries.forEach((key, value) {
+            var enumIndex = value.getField('index').toIntValue();
+
+            parameterValue[_toDartValue(key)] = enumerations[enumIndex];
+          });
+        } else {
+          parameterValue = _toDartValue(parameterField);
+        }
+
+        if (parameter.parameterKind.name == 'NAMED') {
+          namedArguments[new Symbol(parameterName)] = parameterValue;
+        } else {
+          positionalArguments.add(parameterValue);
         }
       }
 
@@ -161,18 +156,25 @@ ClassMirror _getSerializeMirror() {
   return _serializeMirror;
 }
 
-/// Retrieves a private field with the given [symbol] from an instance [mirror].
-///
-/// A private field can be accessed through the mirrors interface but the actual
-/// symbol will contain additional data that prevents an equality from being
-/// performed. However the toString() method can be used to compare the symbols
-/// successfully.
-InstanceMirror _getPrivateField(InstanceMirror mirror, Symbol symbol) {
-  var symbolString = symbol.toString();
-  var classMirror = mirror.type;
+/// Attempts to convert the [value] into a Dart object.
+dynamic _toDartValue(DartObjectImpl value) {
+  var typeName = value.type.displayName;
 
-  var fieldSymbol = classMirror.declarations.keys.firstWhere(
-      (declarationSymbol) => declarationSymbol.toString() == symbolString);
-
-  return mirror.getField(fieldSymbol);
+  switch (typeName) {
+    case 'String':
+      return value.toStringValue();
+    case 'Map':
+      return value.toMapValue();
+    case 'int':
+      return value.toIntValue();
+    case 'double':
+      return value.toDoubleValue();
+    case 'bool':
+      return value.toBoolValue();
+    case 'Null':
+      return null;
+    default:
+      assert(false);
+      return null;
+  }
 }
