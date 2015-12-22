@@ -28,8 +28,7 @@ const String _defaultsTo = 'defaultsTo';
 
 void generateEnumDecoder(ConverterFunctionMetadata metadata,
                          EnumMetadata enumeration,
-                         StringBuffer buffer)
-{
+                         StringBuffer buffer) {
   // Create the value declaration
   var field = new FieldMetadata(
       _encoded,
@@ -54,8 +53,7 @@ void generateEnumDecoder(ConverterFunctionMetadata metadata,
 
 void generateEnumEncoder(ConverterFunctionMetadata metadata,
                          EnumMetadata enumeration,
-                         StringBuffer buffer)
-{
+                         StringBuffer buffer) {
   // Create the value declaration
   var field = new FieldMetadata(
       _decoded,

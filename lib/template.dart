@@ -115,10 +115,10 @@ String renderLibrary(LibraryMetadata library, String source) {
   // Append the additional values
   values['generatedHeader'] = _generatedHeader;
   values['header'] = header;
-  values['code'] = _formatter.format(source);
+  values['code'] = source;
 
   // Render out the template
-  return _template.renderString(values);
+  return _formatter.format(_template.renderString(values));
 }
 
 Map _libraryTemplateValues(LibraryMetadata metadata) {

@@ -40,6 +40,7 @@ Serialize annotation(ElementAnnotationImpl element) {
 
   if (representation is ConstructorElement) {
     if (_isSerializeAnnotation(representation.enclosingElement)) {
+      var representationName = representation.name;
       var mirror = _getSerializeMirror();
 
       // Annotations are constant so get the result of the evaluation
@@ -57,7 +58,7 @@ Serialize annotation(ElementAnnotationImpl element) {
         var parameterName = parameter.name;
         var parameterField = evaluatedFields[parameterName];
 
-        if (representation.name == 'function') {
+        if (representationName == 'function') {
           if (parameterName == 'encode') {
             parameterField = evaluatedFields['encodeUsing'];
           } else if (parameterName == 'decode') {
@@ -100,7 +101,7 @@ Serialize annotation(ElementAnnotationImpl element) {
 
       // Create the instance
       value = mirror.newInstance(
-          new Symbol('${representation.name}'),
+          new Symbol(representationName),
           positionalArguments,
           namedArguments
       ).reflectee;
@@ -137,14 +138,11 @@ Serialize findAnnotation(Element element) {
 }
 
 /// Verify that a field was created by [Serialize.field].
-bool verifySerializeField(Serialize annotation) {
-  return annotation.name.isNotEmpty;
-}
+bool verifySerializeField(Serialize annotation) => annotation.name.isNotEmpty;
 
 /// Checks whether the [element] is referring to the [Serialize] class.
-bool _isSerializeAnnotation(ClassElement element) {
-  return element.name == 'Serialize';
-}
+bool _isSerializeAnnotation(ClassElement element) =>
+    element.name == 'Serialize';
 
 /// Retrieves the class mirror for [Serialize].
 ClassMirror _getSerializeMirror() {

@@ -45,8 +45,7 @@ final Logger _logger = new Logger('dogma_codegen.src.build.unmodifiable_model_vi
 /// paths specified using the [writeUnmodifiableViews] function.
 Future<Null> buildUnmodifiableViews(LibraryMetadata models,
                                     Uri libraryPath,
-                                    Uri sourcePath) async
-{
+                                    Uri sourcePath) async {
   // Search for any user defined libraries
   await for (var library in findUserDefinedLibraries(sourcePath)) {
     _logger.info('Found user defined library at ${library.uri}');
@@ -79,8 +78,7 @@ Future<Null> writeUnmodifiableViews(LibraryMetadata views) async {
 /// libraries will be generated into [sourcePath].
 LibraryMetadata unmodifiableModelViewsLibrary(LibraryMetadata models,
                                               Uri libraryPath,
-                                              Uri sourcePath)
-{
+                                              Uri sourcePath) {
   // \TODO FUNCTION FOR THIS???
   var packageName = models.name.split('.')[0];
 
@@ -108,9 +106,8 @@ LibraryMetadata unmodifiableModelViewsLibrary(LibraryMetadata models,
 LibraryMetadata _unmodifiableModelViewsLibrary(LibraryMetadata library,
                                                LibraryMetadata modelLibrary,
                                                String packageName,
-                                               Uri sourcePath)
-{
-  var imported = [modelLibrary] as List<LibraryMetadata>;
+                                               Uri sourcePath) {
+  var imported = <LibraryMetadata>[modelLibrary];
 
   // \TODO Should be adding library dependencies here
 

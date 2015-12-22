@@ -11,6 +11,7 @@ library dogma_codegen.src.metadata.model_metadata;
 //---------------------------------------------------------------------
 
 import 'class_metadata.dart';
+import 'field_metadata.dart';
 import 'serializable_field_metadata.dart';
 import 'type_metadata.dart';
 
@@ -27,7 +28,7 @@ class ModelMetadata extends ClassMetadata {
   /// Creates an instance of the [ModelMetadata] class with the given [name]
   /// and the given [fields].
   ModelMetadata(String name,
-                List<SerializableFieldMetadata> fields,
+                List<FieldMetadata> fields,
                {String comments})
       : super(name, fields: fields, comments: comments);
 
@@ -35,16 +36,13 @@ class ModelMetadata extends ClassMetadata {
   // Properties
   //---------------------------------------------------------------------
 
-  @override
-  List<SerializableFieldMetadata> get fields => super.fields;
-
   /// Whether the model uses explicit serialization.
   ///
   /// Looks for any cases where the field name differs from the serialization
   /// name. If there are differences in any fields then the model uses explicit
   /// serialization.
   bool get explicitSerialization {
-    for (SerializableFieldMetadata field in fields) {
+    for (var field in serializableFields) {
       if (!field.decode ||
           !field.encode ||
           (field.decodeUsing != null) ||
@@ -80,25 +78,33 @@ class ModelMetadata extends ClassMetadata {
     return false;
   }
 
+  Iterable<SerializableFieldMetadata> get serializableFields sync* {
+    for (var field in fields) {
+      if (field is SerializableFieldMetadata) {
+        yield field;
+      }
+    }
+  }
+
   /// Gets the fields that are convertible within the model.
   Iterable<SerializableFieldMetadata> get convertibleFields
-      => fields.where((field) => field.decode || field.encode);
+      => serializableFields.where((field) => field.decode || field.encode);
 
   /// Gets the fields that are decodable within the model.
   Iterable<SerializableFieldMetadata> get decodableFields
-      => fields.where((field) => field.decode);
+      => serializableFields.where((field) => field.decode);
 
   /// Get the fields that are encodable within the model.
   Iterable<SerializableFieldMetadata> get encodableFields
-      => fields.where((field) => field.encode);
+      => serializableFields.where((field) => field.encode);
 
   /// Get the fields that are list types.
   Iterable<SerializableFieldMetadata> get listFields
-      => fields.where((field) => field.type.isList);
+      => serializableFields.where((field) => field.type.isList);
 
   /// Get the fields that are map types.
   Iterable<SerializableFieldMetadata> get mapFields
-      => fields.where((field) => field.type.isMap);
+      => serializableFields.where((field) => field.type.isMap);
 }
 
 /// Retrieves the field from the [metadata] with the given [name].
@@ -110,7 +116,7 @@ SerializableFieldMetadata findFieldByName(ModelMetadata metadata, String name) {
 
 /// Retrieves all the dependent types from the [metadata].
 Iterable<TypeMetadata> modelDependencies(ModelMetadata metadata)
-    => _dependencies(metadata.fields);
+    => _dependencies(metadata.serializableFields);
 
 /// Retrieves all the dependent types for converters from the [metadata].
 Iterable<TypeMetadata> modelConverterDependencies(ModelMetadata metadata)

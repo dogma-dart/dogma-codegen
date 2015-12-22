@@ -28,8 +28,7 @@ const String _space = ' ';
 void generateCodeComment(String comment,
                          StringBuffer buffer,
                         [int indentBy = 0,
-                         lineLength = 80])
-{
+                         lineLength = 80]) {
   // See if there's anything to write
   if (comment.isEmpty) {
     return;

@@ -18,7 +18,8 @@ import 'package:mustache/mustache.dart';
 /// The path to the default mustache template.
 ///
 /// Package resources are loaded through the Resource API added in Dart 1.12.
-const String defaultClassTemplate = 'package:dogma_codegen/src/template/class_declaration.mustache';
+const String defaultClassTemplate =
+    'package:dogma_codegen/src/template/class_declaration.mustache';
 
 /// The template to use for rendering.
 Template _template;
@@ -46,5 +47,4 @@ void classTemplateSource(String source) {
 }
 
 /// Renders the class definition with the given [values].
-String renderClass(Map values)
-    => _template.renderString(values);
+String renderClass(Map values) => _template.renderString(values);

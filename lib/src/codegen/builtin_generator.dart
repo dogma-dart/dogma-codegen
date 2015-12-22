@@ -69,8 +69,8 @@ String generateMap(Map values, bool lineBreak, bool isConst) {
 }
 
 /// Creates an [ArgumentBuffer] based on whether [lineBreak]s are requested.
-ArgumentBuffer _buffer(bool lineBreak)
-    => lineBreak ? new ArgumentBuffer.lineBreak() : new ArgumentBuffer();
+ArgumentBuffer _buffer(bool lineBreak) =>
+    lineBreak ? new ArgumentBuffer.lineBreak() : new ArgumentBuffer();
 
 /// Gets the separator for a [lineBreak].
 String _separator(bool lineBreak) => lineBreak ? '\n' : '';

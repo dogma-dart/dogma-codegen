@@ -66,8 +66,7 @@ class ArgumentBuffer {
 
 void writeArgumentsToBuffer(Iterable<String> values,
                             StringBuffer buffer,
-                           {lineBreak: false})
-{
+                           {lineBreak: false}) {
   buffer.write(writeArgumentsToString(values, lineBreak: lineBreak));
 }
 
@@ -79,5 +78,5 @@ String writeArgumentsToString(Iterable<String> values, {bool lineBreak: false}) 
   return argumentBuffer.toString();
 }
 
-ArgumentBuffer createArgumentBuffer([bool lineBreak = false])
-    => lineBreak ? new ArgumentBuffer.lineBreak() : new ArgumentBuffer();
+ArgumentBuffer createArgumentBuffer([bool lineBreak = false]) =>
+    lineBreak ? new ArgumentBuffer.lineBreak() : new ArgumentBuffer();

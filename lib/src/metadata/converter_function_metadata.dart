@@ -90,8 +90,7 @@ class ConverterFunctionMetadata extends FunctionMetadata
   @override
   bool get isDecoder => !isEncoder;
   @override
-  TypeMetadata get modelType
-      => isDecoder ? returnType : parameters[0].type;
+  TypeMetadata get modelType => isDecoder ? returnType : parameters[0].type;
 
   //---------------------------------------------------------------------
   // SerializeAnnotated
@@ -105,13 +104,14 @@ class ConverterFunctionMetadata extends FunctionMetadata
   //---------------------------------------------------------------------
 
   /// The encoding type.
-  TypeMetadata get encodeType
-      => isEncoder ? returnType : parameters[0].type;
+  TypeMetadata get encodeType => isEncoder ? returnType : parameters[0].type;
 
   /// Whether this function should used by default for conversion.
   bool get isDefaultConverter => serializeAnnotation != null;
+
   /// Whether this function should be used by default for decoding.
   bool get isDefaultDecoder => isDefaultConverter && isDecoder;
+
   /// Whether this function should be used by default for encoding.
   bool get isDefaultEncoder => isDefaultConverter && isEncoder;
 }

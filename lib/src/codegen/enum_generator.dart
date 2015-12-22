@@ -37,7 +37,9 @@ void generateEnum(EnumMetadata enumeration, StringBuffer buffer) {
   );
 }
 
-void _generateEnumDefinition(EnumMetadata enumeration, StringBuffer buffer) {
+void _generateEnumDefinition(Metadata metadata, StringBuffer buffer) {
+  var enumeration = metadata as EnumMetadata;
+
   generateFields(enumeration.fields, buffer, generator: (field, buf) {
     buffer.write('${field.name},');
   });

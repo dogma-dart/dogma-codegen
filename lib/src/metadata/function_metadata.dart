@@ -48,14 +48,14 @@ class FunctionMetadata extends AnnotatedMetadata {
   //---------------------------------------------------------------------
 
   /// The required parameters for the function.
-  Iterable<ParameterMetadata> get requiredParameters
-      => findRequiredParameters(parameters);
+  Iterable<ParameterMetadata> get requiredParameters =>
+      findRequiredParameters(parameters);
 
   /// The optional parameters for the function.
-  Iterable<ParameterMetadata> get optionalParameters
-      => findOptionalParameters(parameters);
+  Iterable<ParameterMetadata> get optionalParameters =>
+      findOptionalParameters(parameters);
 
   /// The named parameters for the function.
-  Iterable<ParameterMetadata> get namedParameters
-      => findNamedParameters(parameters);
+  Iterable<ParameterMetadata> get namedParameters =>
+      findNamedParameters(parameters);
 }

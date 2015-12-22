@@ -41,17 +41,19 @@ void generateConverter(ConverterMetadata metadata,
 
 ClassGenerator _generateConverterDefinition(ModelMetadata model,
                                             Map<String, FunctionMetadata> functions) {
-  return (ConverterMetadata metadata, StringBuffer buffer) {
+  return (Metadata metadata, StringBuffer buffer) {
+    var converter = metadata as ConverterMetadata;
+
     // Generate the fields
-    generateFields(metadata.fields, buffer);
+    generateFields(converter.fields, buffer);
 
     // Generate the constructors
-    for (var constructor in metadata.constructors) {
+    for (var constructor in converter.constructors) {
       if (constructor.isDefault) {
         generateConstructorDefinition(
             constructor,
             buffer,
-            initializerListGenerator: _generateInitializeList(metadata)
+            initializerListGenerator: _generateInitializeList(converter)
         );
       } else {
         generateFinalConstructor(constructor, buffer);
@@ -59,7 +61,7 @@ ClassGenerator _generateConverterDefinition(ModelMetadata model,
     }
 
     // Generate the create function
-    var createMethod = metadata.methods.firstWhere(
+    var createMethod = converter.methods.firstWhere(
         (method) => method.name == 'create', orElse: () => null);
 
     if (createMethod != null) {
@@ -73,13 +75,13 @@ ClassGenerator _generateConverterDefinition(ModelMetadata model,
     }
 
     // Generate the convert function
-    var convertMethod = metadata.methods.firstWhere(
+    var convertMethod = converter.methods.firstWhere(
         (method) => method.name == 'convert');
 
     generateFunctionDefinition(
         convertMethod,
         buffer,
-        _generateConvertMethod(metadata, model, functions),
+        _generateConvertMethod(converter, model, functions),
         annotationGenerators: [generateOverrideAnnotation]
     );
   };
@@ -132,7 +134,7 @@ FunctionGenerator _generateConvertMethod(ConverterMetadata converter,
 
     buffer.writeln();
 
-    for (SerializableFieldMetadata field in model.fields) {
+    for (var field in model.serializableFields) {
       var fieldType = field.type;
       var fieldName = field.name;
 

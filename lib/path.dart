@@ -107,17 +107,13 @@ String libraryName(String package, dynamic path) {
 }
 
 /// Converts the [value] into a file path.
-String _filePath(dynamic value) {
-  return value is Uri ? value.toFilePath(windows: false) : value;
-}
+String _filePath(dynamic value) =>
+    value is Uri ? value.toFilePath(windows: false) : value;
 
-bool _isInLib(String value) {
-  return
-      value != 'example' &&
-      value != 'test' &&
-      value != 'bin' &&
-      value != 'tool';
-}
+bool _isInLib(String value) =>
+    value != 'example' &&
+    value != 'test' &&
+    value != 'bin' &&
+    value != 'tool';
 
-bool _isDirectory(String value)
-    => p.posix.withoutExtension(value) == value;
+bool _isDirectory(String value) => p.posix.withoutExtension(value) == value;

@@ -91,8 +91,8 @@ void generateConstructorDefinition(ConstructorMetadata metadata,
 /// [buffer] where each parameter corresponds to a field.
 void generateFinalConstructor(ConstructorMetadata metadata,
                              StringBuffer buffer,
-                            {List<AnnotationGenerator> annotationGenerators})
-    => generateConstructorDefinition(metadata,
-                                     buffer,
-                                     useThis: true,
-                                     annotationGenerators: annotationGenerators);
+                            {List<AnnotationGenerator> annotationGenerators}) =>
+    generateConstructorDefinition(metadata,
+                                  buffer,
+                                  useThis: true,
+                                  annotationGenerators: annotationGenerators);
