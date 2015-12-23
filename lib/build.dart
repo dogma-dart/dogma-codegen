@@ -25,6 +25,7 @@ import 'package:logging/logging.dart';
 import 'src/build/build_system.dart';
 import 'src/build/converters.dart';
 import 'src/build/default_paths.dart';
+import 'src/build/mappers.dart';
 import 'src/build/logging.dart';
 import 'src/build/unmodifiable_model_views.dart';
 
@@ -94,13 +95,15 @@ Future<Null> build(List<String> args,
                    bool convert: true,
                    String convertLibrary: defaultConvertLibrary,
                    String convertPath: defaultConvertPath,
-                   String header: ''}) async
-{
+                   bool mapper: true,
+                   String mapperLibrary: defaultMapperLibrary,
+                   String mapperPath: defaultMapperPath,
+                   String header: ''}) async {
   // Initialize logging
   initializeLogging();
 
   // See if a build should happen
-  if (!await shouldBuild(args, [modelLibrary, modelPath])) {
+  if (!await shouldBuild(args, [modelLibrary, modelPath, convertPath])) {
     _logger.info('Build is up to date.');
     return;
   }
@@ -137,6 +140,17 @@ Future<Null> build(List<String> args,
         rootLibrary,
         join(convertLibrary),
         join(convertPath)
+    );
+  }
+
+  // Build the mapper library
+  if (mapper) {
+    _logger.info('Building mapper library');
+
+    await buildMappers(
+        rootLibrary,
+        join(mapperLibrary),
+        join(mapperPath)
     );
   }
 }
