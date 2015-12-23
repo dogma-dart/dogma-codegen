@@ -27,7 +27,7 @@ class ConverterMetadata extends ClassMetadata implements Converter {
   // Construction
   //---------------------------------------------------------------------
 
-  /// Creates an instance of [ConverterMetadata] for the given [type].
+  /// Creates an instance of [ConverterMetadata] for the given [modelType].
   ///
   /// Whether or not the converter will handle decoding is specified in
   /// [decoder].
@@ -37,7 +37,7 @@ class ConverterMetadata extends ClassMetadata implements Converter {
               implements: [modelConverter(modelType, decoder)]);
 
   /// Creates a decodable instance of [ConverterMetadata] using the given
-  /// [type].
+  /// [modelType].
   ///
   /// The name of the class is generated based on the [modelType].
   ConverterMetadata.decoder(TypeMetadata modelType,
@@ -54,7 +54,7 @@ class ConverterMetadata extends ClassMetadata implements Converter {
               comments: comments);
 
   /// Creates a decodable instance of [ConverterMetadata] using the given
-  /// [type].
+  /// [modelType].
   ///
   /// The name of the class is generated based on the [modelType].
   ConverterMetadata.encoder(TypeMetadata modelType,
