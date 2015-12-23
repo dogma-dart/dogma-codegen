@@ -15,6 +15,7 @@ import 'package:dogma_codegen/template.dart';
 import 'enum_generator.dart';
 import 'enum_converter_generator.dart';
 import 'converter_generator.dart';
+import 'mapper_generator.dart';
 import 'model_generator.dart';
 
 //---------------------------------------------------------------------
@@ -100,23 +101,35 @@ void generateConvertersSource(LibraryMetadata library,
   }
 }
 
+/// Generates the source code for mappers within a [library] into the [buffer].
+void generateMappersSource(LibraryMetadata library, StringBuffer buffer) {
+  for (var clazz in library.classes) {
+    if (clazz is MapperMetadata) {
+      generateMapper(clazz, buffer);
+    }
+  }
+}
+
 /// Generates the source code for a [library] that has no content.
 ///
 /// This is used to handle root libraries which just export libraries.
-String generateRootLibrary(LibraryMetadata library)
-    => renderLibrary(library, '');
+String generateRootLibrary(LibraryMetadata library) =>
+    renderLibrary(library, '');
 
 /// Generates the source code for a [library] containing models.
-String generateModelsLibrary(LibraryMetadata library)
-    => _renderLibrary(library, generateModelsSource);
+String generateModelsLibrary(LibraryMetadata library) =>
+    _renderLibrary(library, generateModelsSource);
 
 /// Generates the source code for a [library] containing unmodifiable views of models.
-String generateUnmodifiableModelViewsLibrary(LibraryMetadata library)
-    => _renderLibrary(library, generateUnmodifiableModelViewsSource);
+String generateUnmodifiableModelViewsLibrary(LibraryMetadata library) =>
+    _renderLibrary(library, generateUnmodifiableModelViewsSource);
 
 /// Generates the source code for a [library] containing converters for models.
-String generateConvertersLibrary(LibraryMetadata library)
-    => _renderLibrary(library, generateConvertersSource);
+String generateConvertersLibrary(LibraryMetadata library) =>
+    _renderLibrary(library, generateConvertersSource);
+
+String generateMappersLibrary(LibraryMetadata library) =>
+    _renderLibrary(library, generateMappersSource);
 
 /// Generates the source code for a [library] with the given source [generator].
 String _renderLibrary(LibraryMetadata library, _SourceGenerator generator) {
@@ -127,24 +140,22 @@ String _renderLibrary(LibraryMetadata library, _SourceGenerator generator) {
   return renderLibrary(library, buffer.toString().trim());
 }
 
-Map<String, FunctionMetadata> _defaultDecoders() {
-  return {
-    'DateTime': new ConverterFunctionMetadata(
-        'DateTime.parse',
-        new TypeMetadata('String'),
-        new ParameterMetadata('value', new TypeMetadata('DateTime'))
-    ),
-    'Uri': new ConverterFunctionMetadata(
-        'Uri.parse',
-        new TypeMetadata('String'),
-        new ParameterMetadata('value', new TypeMetadata('Uri'))
-    )
-  };
-}
+Map<String, FunctionMetadata> _defaultDecoders() =>
+    <String, FunctionMetadata>{
+      'DateTime': new ConverterFunctionMetadata(
+          'DateTime.parse',
+          new TypeMetadata('String'),
+          new ParameterMetadata('value', new TypeMetadata('DateTime'))
+      ),
+      'Uri': new ConverterFunctionMetadata(
+          'Uri.parse',
+          new TypeMetadata('String'),
+          new ParameterMetadata('value', new TypeMetadata('Uri'))
+      )
+    };
 
-Map<String, FunctionMetadata> _defaultEncoders() {
-  return {
-    'DateTime': new MethodMetadata('toString', new TypeMetadata.string()),
-    'Uri': new MethodMetadata('toString', new TypeMetadata.string())
-  };
-}
+Map<String, FunctionMetadata> _defaultEncoders() =>
+    <String, FunctionMetadata>{
+      'DateTime': new MethodMetadata('toString', new TypeMetadata.string()),
+      'Uri': new MethodMetadata('toString', new TypeMetadata.string())
+    };

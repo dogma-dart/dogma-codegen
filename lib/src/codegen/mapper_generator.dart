@@ -3,7 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma_codegen.src.codegen.enum_converter_generator;
+library dogma_codegen.src.codegen.mapper_generator;
 
 //---------------------------------------------------------------------
 // Imports
@@ -20,26 +20,9 @@ import 'type_generator.dart';
 
 /// Writes out the class definition for a mapper using the [metadata].
 void generateMapper(MapperMetadata metadata, StringBuffer buffer) {
-  var name = metadata.name;
-  var modelName = metadata.type.name;
-
-  // Write the class declaration
-  generateClassDeclaration(metadata, buffer);
-
-  // Write the default constructor
-  buffer.writeln('$name()');
-  _writeSuperConstructor(
-      'new ${metadata.decoder.name}()',
-      'new ${metadata.encoder.name}()',
-      buffer
-  );
-
-  // Write the other constructor
-  // \TODO
-
-  buffer.writeln('}');
+  generateClassDefinition(metadata, buffer, _generateMapperDefinition);
 }
 
-void _writeSuperConstructor(String decoder, String encoder, StringBuffer buffer) {
-  buffer.writeln(': super(connection, decoder: $decoder, encoder: $encoder);');
+void _generateMapperDefinition(ClassMetadata metadata, StringBuffer buffer) {
+  var mapper = metadata as MapperMetadata;
 }
