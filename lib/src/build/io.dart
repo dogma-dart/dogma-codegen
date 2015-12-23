@@ -86,6 +86,10 @@ Future<Null> writeUnmodifiableModelViewsLibrary(LibraryMetadata library) =>
 Future<Null> writeConvertersLibrary(LibraryMetadata library) =>
     _writeLibrary(library, generateConvertersLibrary);
 
+/// Writes the [library] of mappers to disk.
+Future<Null> writeMappersLibrary(LibraryMetadata library) =>
+    _writeLibrary(library, generateMappersLibrary);
+
 /// Writes the [library] to disk using the [generator].
 Future<Null> _writeLibrary(LibraryMetadata library, LibraryGenerator generator) async {
   var file = new File(library.uri.toFilePath());

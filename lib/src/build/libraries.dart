@@ -49,6 +49,22 @@ final LibraryMetadata dogmaConvert = new LibraryMetadata(
     Uri.parse('package:dogma_convert/convert.dart')
 );
 
+/// The dogma_connection.connection library.
+///
+/// This is required for generated Mappers.
+final LibraryMetadata dogmaConnection = new LibraryMetadata(
+    'dogma_connection.connection',
+    Uri.parse('package:dogma_connection/connection.dart')
+);
+
+/// The dogma_mapper.mapper library.
+///
+/// This is required for generated Mappers.
+final LibraryMetadata dogmaMapper = new LibraryMetadata(
+    'dogma_mapper.mapper',
+    Uri.parse('package:dogma_mapper/mapper.dart')
+);
+
 /// Converts a library from a file URI into a package URI.
 ///
 /// Will just return the library if it is already either a dart or package
