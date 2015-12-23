@@ -33,6 +33,10 @@ Uri join(dynamic value, {dynamic base}) {
     base = base.toFilePath(windows: false);
   }
 
+  if (value is String) {
+    value = p.posix.joinAll(p.split(value));
+  }
+
   var joined = p.posix.join(base, value);
 
   return p.posix.toUri(joined);

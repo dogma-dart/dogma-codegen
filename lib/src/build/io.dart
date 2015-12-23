@@ -17,7 +17,6 @@ import 'dart:io';
 // Library contents
 //---------------------------------------------------------------------
 
-import 'package:path/path.dart' as p;
 import 'package:dogma_codegen/codegen.dart';
 import 'package:dogma_codegen/metadata.dart';
 import 'package:dogma_codegen/template.dart';
@@ -58,7 +57,7 @@ Future<bool> canGenerateFileAt(Uri uri) async {
 
 /// Gets the
 File _getFile(Uri uri) {
-  var path = p.posix.fromUri(uri);
+  var path = uri.toFilePath();
 
   return new File(path);
 }
