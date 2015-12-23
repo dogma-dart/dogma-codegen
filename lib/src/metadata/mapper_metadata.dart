@@ -21,60 +21,39 @@ import 'type_metadata.dart';
 /// Contains metadata for a mapper.
 class MapperMetadata extends ClassMetadata {
   //---------------------------------------------------------------------
-  // Member variables
-  //---------------------------------------------------------------------
-
-  /// The decoder the mapper uses.
-  final ConverterMetadata decoder;
-  /// The encoder the mapper uses.
-  final ConverterMetadata encoder;
-
-  //---------------------------------------------------------------------
   // Construction
   //---------------------------------------------------------------------
 
-  /// Creates an instance of [MapperMetadata] with the given name.
+  /// Creates an instance of [ConverterMetadata] for the given [type].
   ///
-  /// If [decoder] is provided then the mapper can make queries for data. If
-  /// [encoder] is provided then the mapper can execute commands on data.
-  factory MapperMetadata(String name,
-                        {ConverterMetadata decoder,
-                         ConverterMetadata encoder})
-  {
-    var modelType = decoder != null
-        ? decoder.modelType
-        : encoder.modelType;
-
-    return new MapperMetadata._internal(name, modelType, decoder, encoder);
-  }
-
-  /// Creates an instance of [MapperMetadata].
-  ///
-  /// For internal use by the factory constructor.
-  MapperMetadata._internal(String name,
-                           TypeMetadata modelType,
-                           this.decoder,
-                           this.encoder)
+  /// Whether or not the converter will handle decoding is specified in
+  /// [decoder].
+  MapperMetadata(String name, TypeMetadata modelType)
       : super(name, supertype: mapper(modelType));
+
+  /// Creates an instance of [MapperMetadata] for the given [modelType].
+  MapperMetadata.type(TypeMetadata modelType)
+      : super(defaultMapperName(modelType), supertype: mapper(modelType));
 
   //---------------------------------------------------------------------
   // Properties
   //---------------------------------------------------------------------
 
-  /// The type of model the mapper accepts.
-  TypeMetadata get modelType {
-    return decoder != null
-        ? decoder.modelType
-        : encoder.modelType;
-  }
+  /// The model type associated with the mapper.
+  TypeMetadata get modelType => supertype.arguments[0];
 
   //---------------------------------------------------------------------
   // Class methods
   //---------------------------------------------------------------------
 
-  /// Creates a generic Mapper type from the [modelType].
-  ///
-  /// Used to generate the supertype of the [MapperMetadata].
-  static TypeMetadata mapper(TypeMetadata modelType)
-      => new TypeMetadata('FluentQuery', arguments: [modelType]);
+  /// Gets the type for a mapper with the given [modelType].
+  static TypeMetadata mapper(TypeMetadata modelType) {
+    var arguments = <TypeMetadata>[modelType];
+
+    return new TypeMetadata('Mapper', arguments: arguments);
+  }
+
+  /// Gets the default name for a mapper with the given [modelType].
+  static String defaultMapperName(TypeMetadata modelType) =>
+      '${modelType.name}Mapper';
 }
