@@ -11,6 +11,7 @@ library dogma_codegen.src.codegen.mapper_generator;
 
 import 'package:dogma_codegen/metadata.dart';
 
+import 'constructor_generator.dart';
 import 'class_generator.dart';
 import 'type_generator.dart';
 
@@ -25,4 +26,22 @@ void generateMapper(MapperMetadata metadata, StringBuffer buffer) {
 
 void _generateMapperDefinition(ClassMetadata metadata, StringBuffer buffer) {
   var mapper = metadata as MapperMetadata;
+
+  var defaultConstructor = mapper.constructors[0];
+
+  generateConstructorDefinition(
+      defaultConstructor,
+      buffer,
+      initializerListGenerator: _generateMapperConstructor
+  );
+}
+
+void _generateMapperConstructor(ConstructorMetadata constructor,
+                                StringBuffer buffer) {
+  buffer.write('super(${constructor.parameters[0].name},');
+
+  buffer.write('decoder: decoder,');
+  buffer.write('encoder: encoder');
+
+  buffer.write(')');
 }

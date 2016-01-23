@@ -20,6 +20,7 @@ import 'package:dart_style/dart_style.dart';
 import 'package:dogma_codegen/metadata.dart';
 import 'package:dogma_codegen/path.dart';
 import 'package:mustache/mustache.dart';
+import 'package:resource/resource.dart';
 
 import 'src/template/class_declaration.dart';
 

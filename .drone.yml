@@ -5,5 +5,4 @@ build:
     - sh build.sh
 matrix:
   DART_VERSION:
-    - latest
-    - "1.14.0-dev.5.0"
+    - "1.14.0-dev.7.2"

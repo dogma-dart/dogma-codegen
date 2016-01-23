@@ -1,23 +1,26 @@
 name: dogma_codegen
 version: 0.0.1
 description: Code generation for the Dogma libraries.
+author: Don Olmstead <don.j.olmstead@gmail.com>
+homepage: http://dogma-dart.github.io/
 environment:
-  sdk: '>=1.12.0 <2.0.0'
+  sdk: '>=1.14.0-any <2.0.0'
 dependencies:
+  analyzer: 0.27.1
   args: ^0.13.2
   cli_util: ^0.0.1+2
   dart_style: ^0.2.0
   dogma_convert: ^0.0.1
-  mustache: ^0.2.3
-  yaml: ^2.1.3
   logging: ^0.11.1+1
-  analyzer: 0.27.1
+  mustache: ^0.2.3
+  resource: ^1.0.1
+  yaml: ^2.1.3
 dev_dependencies:
   coverage: ^0.7.1
   dogma_codegen_test: ^0.0.1
+  dogma_connection: ^0.0.1
+  dogma_mapper: ^0.0.1
   test: ^0.12.3+9
-author: Don Olmstead <don.j.olmstead@gmail.com>
-homepage: http://dogma-dart.github.io/
 transformers:
 - test/pub_serve:
     $exclude: test/src/generated/**_test{.*,}.dart

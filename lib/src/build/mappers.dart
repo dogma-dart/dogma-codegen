@@ -30,20 +30,24 @@ import 'io.dart';
 /// The logger for the library.
 final Logger _logger = new Logger('dogma_codegen.src.build.mappers');
 
-Future<Null> buildMappers(LibraryMetadata models,
-                          Uri libraryPath,
-                          Uri sourcePath) async {
+Future<LibraryMetadata> buildMappers(LibraryMetadata models,
+                                     LibraryMetadata convert,
+                                     Uri libraryPath,
+                                     Uri sourcePath) async {
   // Search for any user defined libraries
   //var userDefined = <LibraryMetadata>[];
 
   // Create the equivalent library
   var mapper = mappersLibrary(
       models,
+      convert,
       libraryPath,
       sourcePath
   );
 
   await writeMapper(mapper);
+
+  return mapper;
 }
 
 /// Writes the [mapper] library to disk.
@@ -60,6 +64,7 @@ Future<Null> writeMapper(LibraryMetadata mapper) async {
 }
 
 LibraryMetadata mappersLibrary(LibraryMetadata modelLibrary,
+                               LibraryMetadata convertLibrary,
                                Uri libraryPath,
                                Uri sourcePath) {
   // \TODO standard thing for this???
@@ -76,6 +81,7 @@ LibraryMetadata mappersLibrary(LibraryMetadata modelLibrary,
     addIfNotNull(exported, _mappersLibrary(
         export,
         modelLibrary,
+        convertLibrary,
         packageName,
         sourcePath,
         loaded,
@@ -91,6 +97,7 @@ LibraryMetadata mappersLibrary(LibraryMetadata modelLibrary,
 
 LibraryMetadata _mappersLibrary(LibraryMetadata library,
                                 LibraryMetadata modelLibrary,
+                                LibraryMetadata convertLibrary,
                                 String packageName,
                                 Uri sourcePath,
                                 Map<String, LibraryMetadata> loaded,
@@ -106,15 +113,47 @@ LibraryMetadata _mappersLibrary(LibraryMetadata library,
   // Include the libraries
   var imported = <LibraryMetadata>[
       dogmaConnection,
+      dogmaConvert,
       dogmaMapper,
-      modelLibrary
+      modelLibrary,
+      convertLibrary
   ];
 
   // Create the mappers
   var mappers = <MapperMetadata>[];
 
   for (var model in library.models) {
-    mappers.add(new MapperMetadata.type(model.type));
+    var modelType = model.type;
+
+    var constructors = <ConstructorMetadata>[];
+
+    // Create the default constructor
+    // \TODO should this be constructed in the mapper metadata?
+    var constructorParameters = <ParameterMetadata>[
+        new ParameterMetadata('connection', new TypeMetadata('Connection')),
+        new ParameterMetadata(
+            'decoder',
+            ConverterMetadata.modelDecoder(modelType),
+            parameterKind: ParameterKind.named
+        ),
+        new ParameterMetadata(
+            'encoder',
+            ConverterMetadata.modelEncoder(modelType),
+            parameterKind: ParameterKind.named
+        )
+    ];
+
+    var defaultConstructor = new ConstructorMetadata(
+        new TypeMetadata(MapperMetadata.defaultMapperName(modelType)),
+        parameters: constructorParameters
+    );
+
+    constructors.add(defaultConstructor);
+
+    // Create the mapper
+    var mapper = new MapperMetadata.type(modelType, constructors: constructors);
+
+    mappers.add(mapper);
   }
 
   if (mappers.isEmpty) {

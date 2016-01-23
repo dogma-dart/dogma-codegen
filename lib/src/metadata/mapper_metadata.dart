@@ -10,8 +10,9 @@ library dogma_codegen.src.metadata.mapper_metadata;
 // Imports
 //---------------------------------------------------------------------
 
-import 'converter_metadata.dart';
 import 'class_metadata.dart';
+import 'constructor_metadata.dart';
+import 'converter_metadata.dart';
 import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
@@ -28,12 +29,23 @@ class MapperMetadata extends ClassMetadata {
   ///
   /// Whether or not the converter will handle decoding is specified in
   /// [decoder].
-  MapperMetadata(String name, TypeMetadata modelType)
-      : super(name, supertype: mapper(modelType));
+  MapperMetadata(String name,
+                 TypeMetadata modelType,
+                {List<ConstructorMetadata> constructors,
+                 String comments})
+      : super(name,
+              supertype: mapper(modelType),
+              constructors: constructors,
+              comments: comments);
 
   /// Creates an instance of [MapperMetadata] for the given [modelType].
-  MapperMetadata.type(TypeMetadata modelType)
-      : super(defaultMapperName(modelType), supertype: mapper(modelType));
+  MapperMetadata.type(TypeMetadata modelType,
+                     {List<ConstructorMetadata> constructors,
+                      String comments})
+      : super(defaultMapperName(modelType),
+              supertype: mapper(modelType),
+              constructors: constructors,
+              comments: comments);
 
   //---------------------------------------------------------------------
   // Properties

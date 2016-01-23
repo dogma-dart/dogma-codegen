@@ -94,21 +94,21 @@ class ConverterMetadata extends ClassMetadata implements Converter {
     return new TypeMetadata('Converter', arguments: arguments);
   }
 
-  static TypeMetadata modelConverter(TypeMetadata modelType, bool decoder)
-      => decoder ? modelDecoder(modelType) : modelEncoder(modelType);
+  static TypeMetadata modelConverter(TypeMetadata modelType, bool decoder) =>
+      decoder ? modelDecoder(modelType) : modelEncoder(modelType);
 
-  static TypeMetadata modelDecoder(TypeMetadata modelType)
-      => new TypeMetadata('ModelDecoder', arguments: [modelType]);
+  static TypeMetadata modelDecoder(TypeMetadata modelType) =>
+      new TypeMetadata('ModelDecoder', arguments: [modelType]);
 
-  static TypeMetadata modelEncoder(TypeMetadata modelType)
-      => new TypeMetadata('ModelEncoder', arguments: [modelType]);
+  static TypeMetadata modelEncoder(TypeMetadata modelType) =>
+      new TypeMetadata('ModelEncoder', arguments: [modelType]);
 
-  static String defaultConverterName(TypeMetadata modelType, bool decoder)
-      => decoder ? defaultDecoderName(modelType) : defaultEncoderName(modelType);
+  static String defaultConverterName(TypeMetadata modelType, bool decoder) =>
+      decoder ? defaultDecoderName(modelType) : defaultEncoderName(modelType);
 
-  static String defaultDecoderName(TypeMetadata modelType)
-      => '${modelType.name}Decoder';
+  static String defaultDecoderName(TypeMetadata modelType) =>
+      '${modelType.name}Decoder';
 
-  static String defaultEncoderName(TypeMetadata modelType)
-      => '${modelType.name}Encoder';
+  static String defaultEncoderName(TypeMetadata modelType) =>
+      '${modelType.name}Encoder';
 }

@@ -54,9 +54,9 @@ final TypeMetadata _uriType = new TypeMetadata('Uri');
 ///
 /// The function will also write the resulting libraries to disk based on the
 /// paths specified using the [writeUnmodifiableViews] function.
-Future<Null> buildConverters(LibraryMetadata models,
-                             Uri libraryPath,
-                             Uri sourcePath) async {
+Future<LibraryMetadata> buildConverters(LibraryMetadata models,
+                                        Uri libraryPath,
+                                        Uri sourcePath) async {
   // Search for any user defined libraries
   var userDefined = <LibraryMetadata>[];
 
@@ -88,6 +88,8 @@ Future<Null> buildConverters(LibraryMetadata models,
   );
 
   await writeConvert(convert);
+
+  return convert;
 }
 
 /// Writes the [convert] library to disk.

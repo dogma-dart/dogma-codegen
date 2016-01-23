@@ -15,6 +15,7 @@ import 'package:dogma_codegen/metadata.dart';
 import 'package:dogma_codegen/path.dart';
 import 'package:dogma_codegen/src/build/converters.dart';
 import 'package:dogma_codegen/src/build/io.dart';
+import 'package:dogma_codegen/src/build/mappers.dart';
 import 'package:dogma_codegen/src/build/models.dart';
 import 'package:dogma_codegen_test/isolate_test.dart';
 
@@ -57,6 +58,7 @@ LibraryMetadata _modelsLibrary() {
 /// Test entry point.
 void main() {
   var modelsLibrary = _modelsLibrary();
+  var convert;
 
   group('Models', () {
     setUp(() async {
@@ -69,7 +71,7 @@ void main() {
 
   group('Convert', () {
     setUp(() async {
-      await buildConverters(
+      convert = await buildConverters(
           modelsLibrary,
           join('test/libs/convert.dart'),
           join('test/libs/src/convert')
@@ -77,5 +79,21 @@ void main() {
     });
 
     testInIsolate('generated code', join('test/src/generated/convert_test.dart'));
+  });
+
+  group('Mapper', () {
+    setUp(() async {
+      await createDirectory('test/libs/src/mapper');
+      await buildMappers(
+          modelsLibrary,
+          convert,
+          join('test/libs/mapper.dart'),
+          join('test/libs/src/mapper')
+      );
+    });
+
+    test('Foo', () {
+      expect(true, true);
+    });
   });
 }

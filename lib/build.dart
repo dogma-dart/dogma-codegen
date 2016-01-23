@@ -136,21 +136,22 @@ Future<Null> build(List<String> args,
   if (convert) {
     _logger.info('Building convert library');
 
-    await buildConverters(
+    var convertersLibrary = await buildConverters(
         rootLibrary,
         join(convertLibrary),
         join(convertPath)
     );
-  }
 
-  // Build the mapper library
-  if (mapper) {
-    _logger.info('Building mapper library');
+    // Build the mapper library
+    if (mapper) {
+      _logger.info('Building mapper library');
 
-    await buildMappers(
-        rootLibrary,
-        join(mapperLibrary),
-        join(mapperPath)
-    );
+      await buildMappers(
+          rootLibrary,
+          convertersLibrary,
+          join(mapperLibrary),
+          join(mapperPath)
+      );
+    }
   }
 }
