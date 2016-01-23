@@ -21,4 +21,5 @@ pubspec.lock
 # Ignore generated code in tests
 test/libs/models.dart
 test/libs/convert.dart
+test/libs/mapper.dart
 test/libs/src
