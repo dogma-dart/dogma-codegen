@@ -21,6 +21,3 @@ dev_dependencies:
   dogma_connection: ^0.0.1
   dogma_mapper: ^0.0.1
   test: ^0.12.3+9
-transformers:
-- test/pub_serve:
-    $exclude: test/src/generated/**_test{.*,}.dart
