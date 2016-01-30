@@ -1,5 +1,5 @@
 name: dogma_codegen
-version: 0.0.1
+version: 0.0.2
 description: Code generation for the Dogma libraries.
 author: Don Olmstead <don.j.olmstead@gmail.com>
 homepage: http://dogma-dart.github.io/
