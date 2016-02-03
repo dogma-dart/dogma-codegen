@@ -5,4 +5,11 @@ build:
     - sh build.sh
 matrix:
   DART_VERSION:
-    - "1.14.0-dev.7.2"
+    - latest
+    - dev
+publish:
+  coverage:
+    token: $$COVERAGE_TOKEN
+    when:
+      matrix:
+        DART_VERSION: latest
