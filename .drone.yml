@@ -9,7 +9,6 @@ matrix:
     - dev
 publish:
   coverage:
-    token: $$COVERAGE_TOKEN
     when:
       matrix:
         DART_VERSION: latest
