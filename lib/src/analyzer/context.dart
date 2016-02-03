@@ -18,7 +18,8 @@ import 'package:analyzer/src/generated/sdk_io.dart' show DirectoryBasedDartSdk;
 import 'package:analyzer/src/generated/source.dart';
 import 'package:analyzer/src/generated/source_io.dart';
 import 'package:cli_util/cli_util.dart';
-import 'package:dogma_codegen/path.dart';
+
+import '../../path.dart';
 
 //---------------------------------------------------------------------
 // Library contents

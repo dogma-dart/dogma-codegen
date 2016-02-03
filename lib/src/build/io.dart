@@ -17,9 +17,9 @@ import 'dart:io';
 // Library contents
 //---------------------------------------------------------------------
 
-import 'package:dogma_codegen/codegen.dart';
-import 'package:dogma_codegen/metadata.dart';
-import 'package:dogma_codegen/template.dart';
+import '../../codegen.dart';
+import '../../metadata.dart';
+import '../../template.dart';
 
 //---------------------------------------------------------------------
 // Library contents

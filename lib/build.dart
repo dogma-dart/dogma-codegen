@@ -17,10 +17,11 @@ import 'dart:async';
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_codegen/analyzer.dart';
-import 'package:dogma_codegen/path.dart';
-import 'package:dogma_codegen/template.dart' as template;
 import 'package:logging/logging.dart';
+
+import 'analyzer.dart';
+import 'path.dart';
+import 'template.dart' as template;
 
 import 'src/build/build_system.dart';
 import 'src/build/converters.dart';

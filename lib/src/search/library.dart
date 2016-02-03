@@ -10,7 +10,7 @@ library dogma_codegen.src.search.library;
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_codegen/metadata.dart';
+import '../../metadata.dart';
 
 //---------------------------------------------------------------------
 // Library contents

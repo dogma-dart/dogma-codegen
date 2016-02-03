@@ -21,7 +21,8 @@ import 'dart:io';
 //---------------------------------------------------------------------
 
 import 'package:yaml/yaml.dart';
-import 'package:dogma_codegen/path.dart';
+
+import '../../path.dart';
 
 //---------------------------------------------------------------------
 // Library contents

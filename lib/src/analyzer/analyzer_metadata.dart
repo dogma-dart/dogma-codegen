@@ -14,9 +14,9 @@ import 'package:analyzer/src/generated/element.dart';
 import 'package:analyzer/src/generated/engine.dart';
 import 'package:analyzer/src/generated/java_io.dart';
 import 'package:analyzer/src/generated/source_io.dart';
-
-import 'package:dogma_codegen/metadata.dart';
 import 'package:dogma_convert/serialize.dart';
+
+import '../../metadata.dart';
 
 import 'annotation.dart';
 import 'utils.dart';

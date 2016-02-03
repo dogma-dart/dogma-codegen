@@ -10,7 +10,7 @@ library dogma_codegen.src.codegen.parameter_generator;
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_codegen/metadata.dart';
+import '../../metadata.dart';
 
 import 'argument_buffer.dart';
 import 'builtin_generator.dart';

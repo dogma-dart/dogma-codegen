@@ -9,7 +9,7 @@ library dogma_codegen.src.codegen.enum_converter_generator;
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_codegen/metadata.dart';
+import '../../metadata.dart';
 
 import 'function_generator.dart';
 import 'field_generator.dart';

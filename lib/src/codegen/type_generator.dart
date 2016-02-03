@@ -9,7 +9,7 @@ library dogma_codegen.src.codegen.utils;
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_codegen/metadata.dart';
+import '../../metadata.dart';
 
 import 'argument_buffer.dart';
 

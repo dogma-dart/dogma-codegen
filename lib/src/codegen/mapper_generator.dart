@@ -9,7 +9,7 @@ library dogma_codegen.src.codegen.mapper_generator;
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_codegen/metadata.dart';
+import '../../metadata.dart';
 
 import 'constructor_generator.dart';
 import 'class_generator.dart';

@@ -9,8 +9,8 @@ library dogma_codegen.src.codegen.library_generator;
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_codegen/metadata.dart';
-import 'package:dogma_codegen/template.dart';
+import '../../metadata.dart';
+import '../../template.dart';
 
 import 'enum_generator.dart';
 import 'enum_converter_generator.dart';

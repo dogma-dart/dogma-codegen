@@ -9,10 +9,11 @@ library dogma_codegen.src.metadata.route_metadata;
 // Imports
 //---------------------------------------------------------------------
 
-import 'metadata.dart';
-
 import 'package:path/path.dart';
-import 'package:dogma_codegen/identifier.dart';
+
+import '../../identifier.dart';
+
+import 'metadata.dart';
 
 //---------------------------------------------------------------------
 // Library contents

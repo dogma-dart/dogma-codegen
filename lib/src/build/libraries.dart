@@ -9,8 +9,8 @@ library dogma_codegen.src.build.libraries;
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_codegen/metadata.dart';
-import 'package:dogma_codegen/path.dart' as p;
+import '../../metadata.dart';
+import '../../path.dart' as p;
 
 //---------------------------------------------------------------------
 // Library contents

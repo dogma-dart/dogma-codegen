@@ -19,7 +19,7 @@ import 'dart:async';
 import 'package:args/args.dart';
 import 'package:logging/logging.dart';
 
-import 'package:dogma_codegen/path.dart' as p;
+import '../../path.dart' as p;
 
 import 'io.dart';
 

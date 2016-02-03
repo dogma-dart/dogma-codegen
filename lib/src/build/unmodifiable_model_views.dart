@@ -16,9 +16,10 @@ import 'dart:async';
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_codegen/metadata.dart';
-import 'package:dogma_codegen/path.dart';
 import 'package:logging/logging.dart';
+
+import '../../metadata.dart';
+import '../../path.dart';
 
 import 'libraries.dart';
 import 'io.dart';

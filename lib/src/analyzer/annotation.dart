@@ -7,10 +7,14 @@
 library dogma_codegen.src.analyzer.annotation;
 
 //---------------------------------------------------------------------
-// Imports
+// Standard Libraries
 //---------------------------------------------------------------------
 
 import 'dart:mirrors';
+
+//---------------------------------------------------------------------
+// Imports
+//---------------------------------------------------------------------
 
 import 'package:analyzer/src/generated/constant.dart';
 import 'package:analyzer/src/generated/element.dart';

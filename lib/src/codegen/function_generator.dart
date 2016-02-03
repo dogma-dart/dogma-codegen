@@ -10,7 +10,7 @@ library dogma_codegen.src.codegen.function_generator;
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_codegen/metadata.dart';
+import '../../metadata.dart';
 
 import 'annotated_metadata_generator.dart';
 import 'annotation_generator.dart';
