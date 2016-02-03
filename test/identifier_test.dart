@@ -54,8 +54,8 @@ void main() {
     expect(isSpinalCase('snake_case_string'), false);
     expect(isSpinalCase('spinal-case-string'), true);
 
-    expect(isSnakeCase('almost-Spinal-case-00'), false);
-    expect(isSnakeCase('match-with-di-00'), true);
+    expect(isSpinalCase('almost-Spinal-case-00'), false);
+    expect(isSpinalCase('match-with-di-00'), true);
   });
 
   var camelCaseWords = ['anIdentifierString', 'withDigits01'];
