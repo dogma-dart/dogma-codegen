@@ -25,6 +25,7 @@ import 'src/codegen/parameter_generator_test.dart' as parameter_generator_test;
 import 'src/codegen/serialize_annotation_generator_test.dart' as serialize_annotation_generator_test;
 
 import 'identifier_test.dart' as identifier_test;
+import 'schema_test.dart' as schema_test;
 
 import 'src/metadata/converter_function_metadata_test.dart' as converter_function_metadata_test;
 import 'src/metadata/converter_metadata_test.dart' as converter_metadata_test;
