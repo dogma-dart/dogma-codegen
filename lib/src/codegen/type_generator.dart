@@ -20,8 +20,8 @@ import 'argument_buffer.dart';
 /// Generates the name for the [type].
 ///
 /// This supports recursive calls for generics.
-String generateType(TypeMetadata type)
-    => '${type.name}${generateTypeArguments(type)}';
+String generateType(TypeMetadata type) =>
+    '${type.name}${generateTypeArguments(type)}';
 
 /// Generates the arguments for the [type].
 ///
@@ -66,5 +66,4 @@ String generateConstructorCall(TypeMetadata type) {
 }
 
 /// Generates code to produce a cast for the [type].
-String generateCast(TypeMetadata type)
-    => 'as ${generateType(type)}';
+String generateCast(TypeMetadata type) => 'as ${generateType(type)}';
