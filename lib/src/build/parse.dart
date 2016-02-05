@@ -29,21 +29,21 @@ import '../../path.dart';
 //---------------------------------------------------------------------
 
 /// Reads the contents of a JSON file at the [path].
-Future<dynamic> jsonFile(dynamic path) async {
+Future<dynamic /*=T*/> jsonFile/*<T>*/(dynamic path) async {
   var contents = await _readFile(path);
 
-  return JSON.decode(contents);
+  return JSON.decode(contents) as dynamic /*=T*/;
 }
 
 /// Reads the contents of a YAML file at the [path].
 ///
 /// The output of the yaml library is unmodifiable. If modification of the
 /// output is required then [clone] should be set to true.
-Future<dynamic> yamlFile(dynamic path, {bool clone: false}) async {
+Future<dynamic /*=T*/> yamlFile/*<T>*/(dynamic path, {bool clone: false}) async {
   var contents = await _readFile(path);
-  var value = loadYaml(contents);
+  var value = loadYaml(contents) as dynamic /*=T*/;
 
-  return clone ? _cloneYaml(value) : value;
+  return clone ? _cloneYaml/*<T>*/(value) : value;
 }
 
 /// Gets the contents of a file at the given [path].
@@ -59,7 +59,7 @@ Future<String> _readFile(String path) {
 ///
 /// This function recursively goes through a yaml file and performs a deep copy
 /// of the data.
-dynamic _cloneYaml(dynamic yaml) {
+dynamic/*=T*/ _cloneYaml/*<T>*/(dynamic yaml) {
   var value;
 
   if (yaml is Map) {
@@ -78,5 +78,5 @@ dynamic _cloneYaml(dynamic yaml) {
     value = yaml;
   }
 
-  return value;
+  return value as dynamic /*=T*/;
 }
