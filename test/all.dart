@@ -50,6 +50,7 @@ void main() {
     group('Serialize', serialize_annotation_generator_test.main);
   });
   group('Identifier tests', identifier_test.main);
+  group('Schema tests', schema_test.main);
   group('Metadata tests', () {
     group('ConverterMetadata', converter_metadata_test.main);
     group('EnumMetadata', enum_metadata_test.main);
