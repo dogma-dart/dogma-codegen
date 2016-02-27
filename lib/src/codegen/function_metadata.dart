@@ -3,19 +3,16 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-/// Contains functions to write out class declarations.
-library dogma_codegen.src.codegen.function_generator;
-
 //---------------------------------------------------------------------
 // Imports
 //---------------------------------------------------------------------
 
-import '../../metadata.dart';
+import 'package:dogma_source_analyzer/metadata.dart';
 
-import 'annotated_metadata_generator.dart';
-import 'annotation_generator.dart';
-import 'parameter_generator.dart';
-import 'type_generator.dart';
+import 'annotated_metadata.dart';
+import 'annotation.dart';
+import 'parameter_metadata.dart';
+import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -26,6 +23,7 @@ import 'type_generator.dart';
 /// The source code generated is written into the [buffer].
 typedef void FunctionGenerator(FunctionMetadata function, StringBuffer buffer);
 
+/// Creates the declaration for the function [metadata] into the [buffer].
 void generateFunctionDeclaration(FunctionMetadata metadata, StringBuffer buffer) {
   buffer.write(generateType(metadata.returnType));
   buffer.write(' ');
@@ -34,6 +32,8 @@ void generateFunctionDeclaration(FunctionMetadata metadata, StringBuffer buffer)
   generateParameters(metadata.parameters, buffer);
 }
 
+/// Creates the definition for the function [metadata] into the [buffer] using
+/// the [generator] for the body.
 void generateFunctionDefinition(FunctionMetadata metadata,
                                 StringBuffer buffer,
                                 FunctionGenerator generator,

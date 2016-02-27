@@ -3,9 +3,6 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-/// Contains the [ArgumentBuffer] class.
-library dogma_codegen.src.codegen.argument_buffer;
-
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
@@ -64,12 +61,14 @@ class ArgumentBuffer {
   String toString() => _buffer.toString();
 }
 
+/// Writes the [values] to the [buffer].
 void writeArgumentsToBuffer(Iterable<String> values,
                             StringBuffer buffer,
                            {bool lineBreak: false}) {
   buffer.write(writeArgumentsToString(values, lineBreak: lineBreak));
 }
 
+/// Writes the [values] to a string.
 String writeArgumentsToString(Iterable<String> values, {bool lineBreak: false}) {
   var argumentBuffer = createArgumentBuffer(lineBreak);
 
@@ -78,5 +77,6 @@ String writeArgumentsToString(Iterable<String> values, {bool lineBreak: false}) 
   return argumentBuffer.toString();
 }
 
+/// Creates an [ArgumentBuffer] with an optional [lineBreak].
 ArgumentBuffer createArgumentBuffer([bool lineBreak = false]) =>
     lineBreak ? new ArgumentBuffer.lineBreak() : new ArgumentBuffer();

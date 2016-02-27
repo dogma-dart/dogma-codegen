@@ -3,18 +3,16 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma_codegen.src.codegen.field_generator;
-
 //---------------------------------------------------------------------
 // Imports
 //---------------------------------------------------------------------
 
-import '../../metadata.dart';
+import 'package:dogma_source_analyzer/metadata.dart';
 
-import 'annotation_generator.dart';
-import 'annotated_metadata_generator.dart';
+import 'annotation.dart';
+import 'annotated_metadata.dart';
 import 'builtin_generator.dart';
-import 'type_generator.dart';
+import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
 // Library contents

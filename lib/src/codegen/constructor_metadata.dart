@@ -3,17 +3,15 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma_codegen.src.codegen.constructor_generator;
-
 //---------------------------------------------------------------------
 // Imports
 //---------------------------------------------------------------------
 
-import '../../metadata.dart';
+import 'package:dogma_source_analyzer/metadata.dart';
 
-import 'annotated_metadata_generator.dart';
-import 'annotation_generator.dart';
-import 'parameter_generator.dart';
+import 'annotated_metadata.dart';
+import 'annotation.dart';
+import 'parameter_metadata.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -90,9 +88,11 @@ void generateConstructorDefinition(ConstructorMetadata metadata,
 /// Generates a constructor definition with the given [metadata] into the
 /// [buffer] where each parameter corresponds to a field.
 void generateFinalConstructor(ConstructorMetadata metadata,
-                             StringBuffer buffer,
-                            {List<AnnotationGenerator> annotationGenerators}) =>
-    generateConstructorDefinition(metadata,
-                                  buffer,
-                                  useThis: true,
-                                  annotationGenerators: annotationGenerators);
+                              StringBuffer buffer,
+                             {List<AnnotationGenerator> annotationGenerators}) =>
+    generateConstructorDefinition(
+        metadata,
+        buffer,
+        useThis: true,
+        annotationGenerators: annotationGenerators
+    );

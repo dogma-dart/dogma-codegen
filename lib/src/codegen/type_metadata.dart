@@ -3,13 +3,11 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma_codegen.src.codegen.utils;
-
 //---------------------------------------------------------------------
 // Imports
 //---------------------------------------------------------------------
 
-import '../../metadata.dart';
+import 'package:dogma_source_analyzer/metadata.dart';
 
 import 'argument_buffer.dart';
 

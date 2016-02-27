@@ -3,9 +3,6 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-/// Contains source code generators for built in types.
-library dogma_codegen.src.codegen.builtin_generator;
-
 //---------------------------------------------------------------------
 // Imports
 //---------------------------------------------------------------------
