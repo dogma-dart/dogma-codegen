@@ -18,5 +18,7 @@ export 'src/codegen/comments.dart';
 export 'src/codegen/constructor_metadata.dart';
 export 'src/codegen/field_metadata.dart';
 export 'src/codegen/function_metadata.dart';
+export 'src/codegen/override_annotation.dart';
 export 'src/codegen/parameter_metadata.dart';
+export 'src/codegen/protected_annotation.dart';
 export 'src/codegen/type_metadata.dart';
