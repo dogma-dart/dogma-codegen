@@ -1,21 +1,18 @@
-// Copyright (c) 2015, the Dogma Project Authors.
+// Copyright (c) 2015-2016, the Dogma Project Authors.
 // Please see the AUTHORS file for details. All rights reserved.
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
-
-/// Contains functions to write out class declarations.
-library dogma_codegen.src.codegen.class_generator;
 
 //---------------------------------------------------------------------
 // Imports
 //---------------------------------------------------------------------
 
-import '../../metadata.dart';
+import 'package:dogma_source_analyzer/metadata.dart';
 
-import 'annotation_generator.dart';
+import 'annotation.dart';
 import 'argument_buffer.dart';
-import 'annotated_metadata_generator.dart';
-import 'type_generator.dart';
+import 'annotated_metadata.dart';
+import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -44,14 +41,28 @@ void generateClassDeclaration(ClassMetadata metadata,
     buffer.write(generateType(supertype));
   }
 
-  // Write the implements clause if necessary
-  var implements = metadata.implements;
+  // Write the with clause if necessary
+  var mixins = metadata.mixins;
 
-  if (implements.isNotEmpty) {
+  if (mixins.isNotEmpty) {
+    buffer.write(' with ');
+
+    writeArgumentsToBuffer(
+        mixins.map/*<String>*/((type) => generateType(type)),
+        buffer
+    );
+  }
+
+  // Write the implements clause if necessary
+  var interfaces = metadata.interfaces;
+
+  if (interfaces.isNotEmpty) {
     buffer.write(' implements ');
 
     writeArgumentsToBuffer(
-        implements.map/*<String>*/((type) => generateType(type)), buffer);
+        interfaces.map/*<String>*/((type) => generateType(type)),
+        buffer
+    );
   }
 }
 
@@ -75,7 +86,8 @@ void generateClassDefinition(ClassMetadata metadata,
   generateClassDeclaration(
       metadata,
       buffer,
-      metadata is EnumMetadata ? 'enum' : 'class'
+  // \TODO ENUMS!
+      'class'//metadata is EnumMetadata ? 'enum' : 'class'
   );
   buffer.writeln('{');
 
