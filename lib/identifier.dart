@@ -11,6 +11,7 @@
 /// * Pascal case - AnIdentifierName (Corresponds to class names)
 /// * Camel case - anIdentifierName (Corresponds to fields/properties/functions names)
 /// * Snake case - an_identifier_name (Corresponds to library and file names)
+/// * Spinal case - an-identifier-name
 library dogma_codegen.identifier;
 
 //---------------------------------------------------------------------
@@ -32,8 +33,7 @@ const String _snakeSeparator = '_';
 const String _spinalSeparator = '-';
 
 /// Determines whether a [name] is in pascal case.
-bool isCamelCase(String name)
-    => _camelCaseRegExp.hasMatch(name);
+bool isCamelCase(String name) => _camelCaseRegExp.hasMatch(name);
 
 /// Converts a [name] to camel case.
 ///
@@ -73,24 +73,23 @@ String camelCaseFromWords(List<String> words) {
 /// Converts a camel case [name] to pascal case.
 ///
 /// Assumes that [name] is in camel case.
-String camelToPascalCase(String name)
-    => name[0].toUpperCase() + name.substring(1);
+String camelToPascalCase(String name) =>
+    name[0].toUpperCase() + name.substring(1);
 
 /// Converts a camel case [name] to snake case.
 ///
 /// Assumes that [name] is in camel case.
-String camelToSnakeCase(String name)
-    => snakeCaseFromWords(_pascalAndCamelToWords(name));
+String camelToSnakeCase(String name) =>
+    snakeCaseFromWords(_pascalAndCamelToWords(name));
 
 /// Converts a camel case [name] to spinal case.
 ///
 /// Assumes that [name] is in camel case.
-String camelToSpinalCase(String name)
-    => spinalCaseFromWords(_pascalAndCamelToWords(name));
+String camelToSpinalCase(String name) =>
+    spinalCaseFromWords(_pascalAndCamelToWords(name));
 
 /// Determines whether a [name] is in pascal case.
-bool isPascalCase(String name)
-    => _pascalCaseRegExp.hasMatch(name);
+bool isPascalCase(String name) => _pascalCaseRegExp.hasMatch(name);
 
 /// Converts a [name] to pascal case.
 ///
@@ -125,24 +124,23 @@ String pascalCaseFromWords(List<String> words) {
 /// Converts a pascal case [name] to camel case.
 ///
 /// Assumes that [name] is in pascal case.
-String pascalToCamelCase(String name)
-    => name[0].toLowerCase() + name.substring(1);
+String pascalToCamelCase(String name) =>
+    name[0].toLowerCase() + name.substring(1);
 
 /// Converts a pascal case [name] to snake case.
 ///
 /// Assumes that [name] is in pascal case.
-String pascalToSnakeCase(String name)
-    => snakeCaseFromWords(_pascalAndCamelToWords(name));
+String pascalToSnakeCase(String name) =>
+    snakeCaseFromWords(_pascalAndCamelToWords(name));
 
 /// Converts a pascal case [name] to spinal case.
 ///
 /// Assumes that [name] is in pascal case.
-String pascalToSpinalCase(String name)
-    => spinalCaseFromWords(_pascalAndCamelToWords(name));
+String pascalToSpinalCase(String name) =>
+    spinalCaseFromWords(_pascalAndCamelToWords(name));
 
 /// Determines whether a [name] is in snake case.
-bool isSnakeCase(String name)
-    => _snakeCaseRegExp.hasMatch(name);
+bool isSnakeCase(String name) => _snakeCaseRegExp.hasMatch(name);
 
 /// Converts a [name] to snake case.
 ///
@@ -161,30 +159,29 @@ String snakeCase(String name) {
 }
 
 /// Converts a list of [words] to snake case.
-String snakeCaseFromWords(List<String> words)
-    => _spinalSnakeFromWords(words, _snakeSeparator);
+String snakeCaseFromWords(List<String> words) =>
+    _spinalSnakeFromWords(words, _snakeSeparator);
 
 /// Converts a snake case [name] to pascal case.
 ///
 /// Assumes that [name] is actually in snake case.
-String snakeToPascalCase(String name)
-    => pascalCaseFromWords(name.split(_snakeSeparator));
+String snakeToPascalCase(String name) =>
+    pascalCaseFromWords(name.split(_snakeSeparator));
 
 /// Converts snake case to camel case.
 ///
 /// Assumes that [name] is actually in snake case.
-String snakeToCamelCase(String name)
-    => camelCaseFromWords(name.split(_snakeSeparator));
+String snakeToCamelCase(String name) =>
+    camelCaseFromWords(name.split(_snakeSeparator));
 
 /// Converts snake case to spinal case.
 ///
 /// Assumes that [name] is actually in snake case.
-String snakeToSpinalCase(String name)
-    => name.replaceAll(_snakeSeparator, '-');
+String snakeToSpinalCase(String name) =>
+    name.replaceAll(_snakeSeparator, '-');
 
 /// Determines whether a [name] is in spinal case.
-bool isSpinalCase(String name)
-    => _spinalCaseRegExp.hasMatch(name);
+bool isSpinalCase(String name) => _spinalCaseRegExp.hasMatch(name);
 
 /// Converts a [name] to spinal case.
 ///
@@ -203,27 +200,29 @@ String spinalCase(String name) {
 }
 
 /// Converts a list of [words] to spinal case.
-String spinalCaseFromWords(List<String> words)
-    => _spinalSnakeFromWords(words, _spinalSeparator);
+String spinalCaseFromWords(List<String> words) =>
+    _spinalSnakeFromWords(words, _spinalSeparator);
 
 /// Converts a snake case [name] to pascal case.
 ///
 /// Assumes that [name] is actually in snake case.
-String spinalToPascalCase(String name)
-    => pascalCaseFromWords(name.split(_spinalSeparator));
+String spinalToPascalCase(String name) =>
+    pascalCaseFromWords(name.split(_spinalSeparator));
 
 /// Converts snake case to camel case.
 ///
 /// Assumes that [name] is actually in snake case.
-String spinalToCamelCase(String name)
-    => camelCaseFromWords(name.split(_spinalSeparator));
+String spinalToCamelCase(String name) =>
+    camelCaseFromWords(name.split(_spinalSeparator));
 
 /// Converts snake case to spinal case.
 ///
 /// Assumes that [name] is actually in snake case.
-String spinalToSnakeCase(String name)
-    => name.replaceAll(_spinalSeparator, _snakeSeparator);
+String spinalToSnakeCase(String name) =>
+    name.replaceAll(_spinalSeparator, _snakeSeparator);
 
+/// Creates a spinal or snake case identifier from the [words] using the
+/// corresponding [separator],
 String _spinalSnakeFromWords(List<String> words, String separator) {
   var buffer = new StringBuffer();
   var wordCount = words.length;
