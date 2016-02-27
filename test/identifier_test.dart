@@ -3,8 +3,6 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma_codegen.test.src.analyzer.identifier_test;
-
 //---------------------------------------------------------------------
 // Imports
 //---------------------------------------------------------------------
@@ -19,43 +17,43 @@ import 'package:test/test.dart';
 /// Test entry point.
 void main() {
   test('isCamelCase', () {
-    expect(isCamelCase('camelCaseString'), true);
-    expect(isCamelCase('PascalCaseString'), false);
-    expect(isCamelCase('snake_case_string'), false);
-    expect(isCamelCase('spinal-case-string'), false);
+    expect(isCamelCase('camelCaseString'), isTrue);
+    expect(isCamelCase('PascalCaseString'), isFalse);
+    expect(isCamelCase('snake_case_string'), isFalse);
+    expect(isCamelCase('spinal-case-string'), isFalse);
 
-    expect(isCamelCase('almostCamelCase_00'), false);
-    expect(isCamelCase('matchWithDI00'), true);
+    expect(isCamelCase('almostCamelCase_00'), isFalse);
+    expect(isCamelCase('matchWithDI00'), isTrue);
   });
 
   test('isPascalCase', () {
-    expect(isPascalCase('camelCaseString'), false);
-    expect(isPascalCase('PascalCaseString'), true);
-    expect(isPascalCase('snake_case_string'), false);
-    expect(isPascalCase('spinal-case-string'), false);
+    expect(isPascalCase('camelCaseString'), isFalse);
+    expect(isPascalCase('PascalCaseString'), isTrue);
+    expect(isPascalCase('snake_case_string'), isFalse);
+    expect(isPascalCase('spinal-case-string'), isFalse);
 
-    expect(isPascalCase('almostPascalCase_00'), false);
-    expect(isPascalCase('MatchWithDI00'), true);
+    expect(isPascalCase('almostPascalCase_00'), isFalse);
+    expect(isPascalCase('MatchWithDI00'), isTrue);
   });
 
   test('isSnakeCase', () {
-    expect(isSnakeCase('camelCaseString'), false);
-    expect(isSnakeCase('PascalCaseString'), false);
-    expect(isSnakeCase('snake_case_string'), true);
-    expect(isSnakeCase('spinal-case-string'), false);
+    expect(isSnakeCase('camelCaseString'), isFalse);
+    expect(isSnakeCase('PascalCaseString'), isFalse);
+    expect(isSnakeCase('snake_case_string'), isTrue);
+    expect(isSnakeCase('spinal-case-string'), isFalse);
 
-    expect(isSnakeCase('almost_Snake_case_00'), false);
-    expect(isSnakeCase('match_with_di_00'), true);
+    expect(isSnakeCase('almost_Snake_case_00'), isFalse);
+    expect(isSnakeCase('match_with_di_00'), isTrue);
   });
 
   test('isSpinalCase', () {
-    expect(isSpinalCase('camelCaseString'), false);
-    expect(isSpinalCase('PascalCaseString'), false);
-    expect(isSpinalCase('snake_case_string'), false);
-    expect(isSpinalCase('spinal-case-string'), true);
+    expect(isSpinalCase('camelCaseString'), isFalse);
+    expect(isSpinalCase('PascalCaseString'), isFalse);
+    expect(isSpinalCase('snake_case_string'), isFalse);
+    expect(isSpinalCase('spinal-case-string'), isTrue);
 
-    expect(isSpinalCase('almost-Spinal-case-00'), false);
-    expect(isSpinalCase('match-with-di-00'), true);
+    expect(isSpinalCase('almost-Spinal-case-00'), isFalse);
+    expect(isSpinalCase('match-with-di-00'), isTrue);
   });
 
   var camelCaseWords = ['anIdentifierString', 'withDigits01'];

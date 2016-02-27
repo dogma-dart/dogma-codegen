@@ -11,16 +11,18 @@
 
 import 'package:test/test.dart';
 
-import 'codegen.dart' as codegen;
-import 'identifier_test.dart' as identifier_test;
-import 'schema_test.dart' as schema_test;
+import 'src/codegen/argument_buffer_test.dart' as argument_buffer_test;
+import 'src/codegen/builtin_generator_test.dart' as builtin_generator_test;
+import 'src/codegen/comments_test.dart' as comments_test;
+import 'src/codegen/parameter_metadata_test.dart' as parameter_metadata_test;
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
 void main() {
-  group('Codegen tests', codegen.main);
-  group('Identifier tests', identifier_test.main);
-  group('Schema tests', schema_test.main);
+  group('ArgumentBuffer', argument_buffer_test.main);
+  group('Builtin', builtin_generator_test.main);
+  group('Comments', comments_test.main);
+  group('ParameterMetadata', parameter_metadata_test.main);
 }

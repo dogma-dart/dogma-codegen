@@ -3,14 +3,13 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma_codegen.test.src.codegen.comment_generator_test;
-
 //---------------------------------------------------------------------
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_codegen/src/codegen/comment_generator.dart';
 import 'package:test/test.dart';
+
+import 'package:dogma_codegen/codegen.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -42,20 +41,20 @@ void main() {
   test('Line breaks inserted', () {
     var lines = _commentLines(_longLineOfTest);
 
-    expect(lines.length, 2);
+    expect(lines, hasLength(2));
     expect(lines[0].endsWith('when'), isTrue);
     expect(lines[1].startsWith('/// busted'), isTrue);
   });
   test('Allow overrun', () {
     var lines = _commentLines(_overrunWord);
 
-    expect(lines.length, 2);
+    expect(lines, hasLength(2));
     expect(lines[0].endsWith('Single'), isTrue);
     expect(lines[1].length, greaterThan(80));
   });
   test('Markdown comments', () {
     var lines = _commentLines(_markdownComment);
 
-    expect(lines.length, 3);
+    expect(lines, hasLength(3));
   });
 }

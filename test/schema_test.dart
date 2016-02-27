@@ -3,8 +3,6 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma_codegen.test.src.analyzer.schema_test;
-
 //---------------------------------------------------------------------
 // Standard libraries
 //---------------------------------------------------------------------

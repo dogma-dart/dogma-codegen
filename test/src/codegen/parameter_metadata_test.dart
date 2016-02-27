@@ -3,15 +3,14 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma_codegen.test.src.codegen.parameter_generator_test;
-
 //---------------------------------------------------------------------
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_codegen/metadata.dart';
-import 'package:dogma_codegen/src/codegen/parameter_generator.dart';
+import 'package:dogma_source_analyzer/metadata.dart';
 import 'package:test/test.dart';
+
+import 'package:dogma_codegen/codegen.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -38,9 +37,9 @@ void main() {
     var parameter = new ParameterMetadata(_value, _type, parameterKind: ParameterKind.optional);
 
     expect(generateParameter(parameter), _expectedRequired);
-    expect(generateOptionalParameter(parameter, false), _expectedRequired);
+    expect(generatePositionalParameter(parameter, false), _expectedRequired);
     expect(generateParameter(parameter, useThis: true), _expectedThisRequired);
-    expect(generateOptionalParameter(parameter, true), _expectedThisRequired);
+    expect(generatePositionalParameter(parameter, true), _expectedThisRequired);
   });
   test('optional with default', () {
     var parameter = new ParameterMetadata(_value, _type, parameterKind: ParameterKind.optional, defaultValue: _defaultsTo);
@@ -48,9 +47,9 @@ void main() {
     var expectedThis = '$_expectedThisRequired=\'defaultsTo\'';
 
     expect(generateParameter(parameter), expected);
-    expect(generateOptionalParameter(parameter, false), expected);
+    expect(generatePositionalParameter(parameter, false), expected);
     expect(generateParameter(parameter, useThis: true), expectedThis);
-    expect(generateOptionalParameter(parameter, true), expectedThis);
+    expect(generatePositionalParameter(parameter, true), expectedThis);
   });
   test('named', () {
     var parameter = new ParameterMetadata(_value, _type, parameterKind: ParameterKind.named);

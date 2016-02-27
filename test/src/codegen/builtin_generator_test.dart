@@ -3,14 +3,13 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma_codegen.test.src.codegen.builtin_generator_test;
-
 //---------------------------------------------------------------------
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_codegen/src/codegen/builtin_generator.dart';
 import 'package:test/test.dart';
+
+import 'package:dogma_codegen/codegen.dart';
 
 //---------------------------------------------------------------------
 // Library contents
