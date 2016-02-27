@@ -3,18 +3,16 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-/// Contains functions to write out class declarations.
-library dogma_codegen.src.codegen.parameter_generator;
-
 //---------------------------------------------------------------------
 // Imports
 //---------------------------------------------------------------------
 
-import '../../metadata.dart';
+import 'package:dogma_source_analyzer/metadata.dart';
+import 'package:dogma_source_analyzer/matcher.dart';
 
 import 'argument_buffer.dart';
 import 'builtin_generator.dart';
-import 'type_generator.dart';
+import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -29,23 +27,35 @@ void generateParameters(List<ParameterMetadata> parameters,
   var argumentBuffer = new ArgumentBuffer();
 
   // Write the required parameters
-  argumentBuffer.writeAll(findRequiredParameters(parameters).map/*<String>*/(
-      (parameter) => generateRequiredParameter(parameter, useThis)
-  ));
+  argumentBuffer.writeAll(
+      parameters
+          .where(requiredParameterMatch)
+          .map/*<String>*/(
+              (parameter) => generateRequiredParameter(parameter, useThis)
+          )
+  );
 
-  // Write optional parameters
-  var optionalArguments = writeArgumentsToString(findOptionalParameters(parameters).map(
-      (parameter) => generateOptionalParameter(parameter, useThis)
-  ));
+  // Write positional parameters
+  var positionalArguments = writeArgumentsToString(
+      parameters
+          .where(positionalParameterMatch)
+          .map/*<String>*/(
+              (parameter) => generateRequiredParameter(parameter, useThis)
+          )
+  );
 
-  if (optionalArguments.isNotEmpty) {
-    argumentBuffer.write('[$optionalArguments]');
+  if (positionalArguments.isNotEmpty) {
+    argumentBuffer.write('[$positionalArguments]');
   }
 
   // Write named parameters
-  var namedArguments = writeArgumentsToString(findNamedParameters(parameters).map(
-      (parameter) => generateNamedParameter(parameter, useThis)
-  ));
+  var namedArguments = writeArgumentsToString(
+      parameters
+          .where(namedParameterMatch)
+          .map/*<String>*/(
+              (parameter) => generateRequiredParameter(parameter, useThis)
+          )
+  );
 
   if (namedArguments.isNotEmpty) {
     argumentBuffer.write('{$namedArguments}');
@@ -58,17 +68,27 @@ void generateParameters(List<ParameterMetadata> parameters,
   buffer.write(')');
 }
 
+/// Generates the source code for a [parameter].
+///
+/// This will determine what type of parameter is present before generating
+/// the code. If the type is known then the specific generator function should
+/// be called instead.
+///
+/// If [useThis] is `true` then the value will be prefixed with `this`.
 String generateParameter(ParameterMetadata parameter, {bool useThis: false}) {
   switch (parameter.parameterKind) {
     case ParameterKind.required:
       return generateRequiredParameter(parameter, useThis);
-    case ParameterKind.optional:
-      return generateOptionalParameter(parameter, useThis);
+    case ParameterKind.positional:
+      return generatePositionalParameter(parameter, useThis);
     case ParameterKind.named:
       return generateNamedParameter(parameter, useThis);
   }
 }
 
+/// Generates the source code for a required [parameter].
+///
+/// If [useThis] is `true` then the value will be prefixed with `this`.
 String generateRequiredParameter(ParameterMetadata parameter, bool useThis) {
   var prefix = useThis
       ? 'this.'
@@ -77,14 +97,23 @@ String generateRequiredParameter(ParameterMetadata parameter, bool useThis) {
   return '$prefix${parameter.name}';
 }
 
-String generateOptionalParameter(ParameterMetadata parameter, bool useThis)
-    => '${generateRequiredParameter(parameter, useThis)}${_generateDefaultValue(parameter, '=')}';
+/// Generates the source code for a positional [parameter].
+///
+/// If [useThis] is `true` then the value will be prefixed with `this`.
+String generatePositionalParameter(ParameterMetadata parameter, bool useThis) =>
+    '${generateRequiredParameter(parameter, useThis)}${_generateDefaultValue(parameter, '=')}';
 
-String generateNamedParameter(ParameterMetadata parameter, bool useThis)
-    => '${generateRequiredParameter(parameter, useThis)}${_generateDefaultValue(parameter, ':')}';
+/// Generates the source code for a named [parameter].
+///
+/// If [useThis] is `true` then the value will be prefixed with `this`.
+String generateNamedParameter(ParameterMetadata parameter, bool useThis) =>
+    '${generateRequiredParameter(parameter, useThis)}${_generateDefaultValue(parameter, ':')}';
 
-String _generateDefaultValue(ParameterMetadata parameter,
-                             String separator) {
+/// Generates the default value for the [parameter].
+///
+/// A [separator] can be specified to handle the syntax difference between
+/// positional and named parameters.
+String _generateDefaultValue(ParameterMetadata parameter, String separator) {
   var defaultValue = parameter.defaultValue;
 
   return defaultValue != null
