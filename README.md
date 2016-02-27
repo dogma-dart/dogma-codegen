@@ -3,7 +3,7 @@
 > Code generation for the Dogma libraries
 
 [![Build Status](http://beta.drone.io/api/badges/dogma-dart/dogma-codegen/status.svg)](http://beta.drone.io/dogma-dart/dogma-codegen)
-[![Coverage Status](https://coveralls.io/repos/dogma-dart/dogma-codegen/badge.svg?branch=master&service=github)](https://coveralls.io/github/dogma-dart/dogma-codegen?branch=master)
+[![Coverage Status](https://aircover.co/badges/dogma-dart/dogma-codegen/coverage.svg)](https://aircover.co/dogma-dart/dogma-codegen)
 [![Pub Status](https://img.shields.io/pub/v/dogma_codegen.svg)](https://pub.dartlang.org/packages/dogma_codegen)
 [![Stories in Ready](https://badge.waffle.io/dogma-dart/dogma-codegen.svg?label=ready&title=Ready)](http://waffle.io/dogma-dart/dogma-codegen)
 
