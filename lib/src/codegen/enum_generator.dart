@@ -3,9 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-/// Contains functions to write out the declaration of an enum.
-library dogma_codegen.src.codegen.enum_generator;
-
+/*
 //---------------------------------------------------------------------
 // Imports
 //---------------------------------------------------------------------
@@ -44,3 +42,4 @@ void _generateEnumDefinition(Metadata metadata, StringBuffer buffer) {
     buffer.write('${field.name},');
   });
 }
+*/
