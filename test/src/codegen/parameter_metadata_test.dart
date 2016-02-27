@@ -34,7 +34,7 @@ void main() {
     expect(generateRequiredParameter(parameter, true), _expectedThisRequired);
   });
   test('optional', () {
-    var parameter = new ParameterMetadata(_value, _type, parameterKind: ParameterKind.optional);
+    var parameter = new ParameterMetadata(_value, _type, parameterKind: ParameterKind.positional);
 
     expect(generateParameter(parameter), _expectedRequired);
     expect(generatePositionalParameter(parameter, false), _expectedRequired);
@@ -42,7 +42,7 @@ void main() {
     expect(generatePositionalParameter(parameter, true), _expectedThisRequired);
   });
   test('optional with default', () {
-    var parameter = new ParameterMetadata(_value, _type, parameterKind: ParameterKind.optional, defaultValue: _defaultsTo);
+    var parameter = new ParameterMetadata(_value, _type, parameterKind: ParameterKind.positional, defaultValue: _defaultsTo);
     var expected = '$_expectedRequired=\'$_defaultsTo\'';
     var expectedThis = '$_expectedThisRequired=\'defaultsTo\'';
 
@@ -72,8 +72,8 @@ void main() {
   test('parameters', () {
     var r0 = new ParameterMetadata('r0', _type);
     var r1 = new ParameterMetadata('r1', _type);
-    var o0 = new ParameterMetadata('o0', _type, parameterKind: ParameterKind.optional);
-    var o1 = new ParameterMetadata('o1', _type, parameterKind: ParameterKind.optional);
+    var o0 = new ParameterMetadata('o0', _type, parameterKind: ParameterKind.positional);
+    var o1 = new ParameterMetadata('o1', _type, parameterKind: ParameterKind.positional);
     var n0 = new ParameterMetadata('n0', _type, parameterKind: ParameterKind.named);
     var n1 = new ParameterMetadata('n1', _type, parameterKind: ParameterKind.named);
 
