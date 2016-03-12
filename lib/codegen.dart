@@ -16,6 +16,7 @@ export 'src/codegen/builtin_generator.dart';
 export 'src/codegen/class_metadata.dart';
 export 'src/codegen/comments.dart';
 export 'src/codegen/constructor_metadata.dart';
+export 'src/codegen/deprecated_annotation.dart';
 export 'src/codegen/field_metadata.dart';
 export 'src/codegen/function_metadata.dart';
 export 'src/codegen/override_annotation.dart';
