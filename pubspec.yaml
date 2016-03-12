@@ -8,8 +8,7 @@ environment:
 dependencies:
   analyzer: ^0.27.1
   args: ^0.13.2
-  build:
-    path: ../build
+  build: ^0.2.0
   cli_util: ^0.0.1+2
   dart_style: ^0.2.0
   dogma_source_analyzer:
