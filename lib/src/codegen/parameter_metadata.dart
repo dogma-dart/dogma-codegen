@@ -18,7 +18,12 @@ import 'type_metadata.dart';
 // Library contents
 //---------------------------------------------------------------------
 
-void generateParameters(List<ParameterMetadata> parameters,
+/// Generates the [parameters] into the [buffer].
+///
+/// If [useThis] is used then the type is not output into the parameter and
+/// instead it is prefixed with a `this.`. Only set [useThis] to true when
+/// generating constructors.
+void generateParameters(Iterable<ParameterMetadata> parameters,
                         StringBuffer buffer,
                        {bool useThis: false}) {
   // Write the opening parenthesis
@@ -125,7 +130,7 @@ String _generateDefaultValue(ParameterMetadata parameter, String separator) {
 /// [arguments] into the [buffer].
 ///
 /// The [namedArguments] value has a
-void generateArguments(List<String> arguments,
+void generateArguments(Iterable<String> arguments,
                        StringBuffer buffer,
                       {Map<String, String> namedArguments}) {
   namedArguments ??= <String, String>{};
