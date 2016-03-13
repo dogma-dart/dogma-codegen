@@ -12,6 +12,7 @@ import 'package:dogma_source_analyzer/metadata.dart';
 import 'annotated_metadata.dart';
 import 'annotation.dart';
 import 'parameter_metadata.dart';
+import 'scope.dart';
 import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
@@ -48,17 +49,11 @@ void generateFunctionDefinition(FunctionMetadata metadata,
   generateFunctionDeclaration(metadata, buffer);
 
   // Open the function definition
-  if (useArrow) {
-    buffer.write('=>');
-  } else {
-    buffer.writeln('{');
-  }
+  openScope(buffer, useArrow);
 
   // Write the function definition
   generator(metadata, buffer);
 
   // Close the function definition
-  if (!useArrow) {
-    buffer.writeln('}');
-  }
+  closeScope(buffer, useArrow);
 }
