@@ -22,4 +22,5 @@ export 'src/codegen/function_metadata.dart';
 export 'src/codegen/override_annotation.dart';
 export 'src/codegen/parameter_metadata.dart';
 export 'src/codegen/protected_annotation.dart';
+export 'src/codegen/scope.dart';
 export 'src/codegen/type_metadata.dart';
