@@ -12,6 +12,7 @@ import 'package:dogma_source_analyzer/metadata.dart';
 import 'annotation.dart';
 import 'annotated_metadata.dart';
 import 'builtin_generator.dart';
+import 'scope.dart';
 import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
@@ -48,21 +49,37 @@ void generateField(FieldMetadata field,
 ///
 /// Any annotations that are present on the [fields] are passed to the
 /// [annotationGenerators].
-void generateFields(List<FieldMetadata> fields,
+void generateFields(Iterable<FieldMetadata> fields,
                     StringBuffer buffer,
-                   {FieldGenerator generator,
+                   {FieldGenerator fieldGenerator,
+                    FieldGenerator getterGenerator,
+                    FieldGenerator setterGenerator,
                     List<AnnotationGenerator> annotationGenerators})
 {
-  generator ??= generateFieldDeclaration;
+  fieldGenerator ??= generateFieldDeclaration;
   annotationGenerators ??= <AnnotationGenerator>[];
 
   for (var field in fields) {
-    generateField(
-        field,
-        buffer,
-        generator,
-        annotationGenerators
-    );
+    if (field.isProperty) {
+      generateAnnotatedMetadata(field, buffer, annotationGenerators);
+
+      if (field.getter) {
+        assert(getterGenerator != null);
+        generateGetterDefinition(field, buffer, getterGenerator);
+      }
+
+      if (field.setter) {
+        assert(setterGenerator != null);
+        generateSetterDefinition(field, buffer, setterGenerator);
+      }
+    } else {
+      generateField(
+          field,
+          buffer,
+          fieldGenerator,
+          annotationGenerators
+      );
+    }
   }
 }
 
@@ -95,4 +112,65 @@ void generateFieldDeclaration(FieldMetadata field, StringBuffer buffer) {
 
   // Terminate the declaration
   buffer.writeln(';');
+}
+
+/// Creates a getter declaration for the field [metadata] into the [buffer].
+void generateGetterDeclaration(FieldMetadata metadata, StringBuffer buffer) {
+  // Write out a static declaration
+  if (metadata.isStatic) {
+    buffer.write('static ');
+  }
+
+  buffer.write('${generateType(metadata.type)} get ${metadata.name}');
+}
+
+/// Creates a setter declaration for the field [metadata] into the [buffer].
+void generateSetterDeclaration(FieldMetadata metadata,
+                               StringBuffer buffer,
+                              [String parameterName = 'value']) {
+  // Write out a static declaration
+  if (metadata.isStatic) {
+    buffer.write('static ');
+  }
+
+  buffer.write('set ${metadata.name}(${generateType(metadata.type)} $parameterName)');
+}
+
+/// Creates the definition of a getter for the field [metadata] into the
+/// [buffer] using the [generator] for the body.
+///
+/// If [useArrow] is true then an arrow function will be generated.
+void generateGetterDefinition(FieldMetadata metadata,
+                              StringBuffer buffer,
+                              FieldGenerator generator,
+                             {bool useArrow: true}) {
+  // Write the getter declaration
+  generateGetterDeclaration(metadata, buffer);
+
+  // Open the getter definition
+  openScope(buffer, useArrow);
+
+  // Write the getter definition
+  generator(metadata, buffer);
+
+  // Close the getter definition
+  closeScope(buffer, useArrow);
+}
+
+/// Creates the definition of a setter for the field [metadata] into the
+/// [buffer] using the [generator] for the body.
+void generateSetterDefinition(FieldMetadata metadata,
+                              StringBuffer buffer,
+                              FieldGenerator generator) {
+  // Write the setter declaration
+  generateSetterDeclaration(metadata, buffer);
+
+  // Open the setter definition
+  openScope(buffer);
+
+  // Write the setter definition
+  generator(metadata, buffer);
+
+  // Close the getter definition
+  closeScope(buffer);
 }
