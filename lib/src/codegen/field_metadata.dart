@@ -24,21 +24,21 @@ import 'type_metadata.dart';
 /// The source code generated is written into the [buffer].
 typedef void FieldGenerator(FieldMetadata field, StringBuffer buffer);
 
-/// Generates the source code for the [field] into the [buffer] using the
-/// [generator].
+/// Generates the source code for the field [metadata] into the [buffer] using
+/// the [generator].
 ///
-/// Any annotations that are present on the [field] are passed to the
+/// Any annotations that are present on the [metadata] are passed to the
 /// [annotationGenerators].
-void generateField(FieldMetadata field,
+void generateField(FieldMetadata metadata,
                    StringBuffer buffer,
                    FieldGenerator generator,
                    List<AnnotationGenerator> annotationGenerators)
 {
   // Write out metadata
-  generateAnnotatedMetadata(field, buffer, annotationGenerators);
+  generateAnnotatedMetadata(metadata, buffer, annotationGenerators);
 
   // Write the declaration
-  generator(field, buffer);
+  generator(metadata, buffer);
 }
 
 /// Generates the source code for the [fields] into the [buffer].
@@ -83,27 +83,27 @@ void generateFields(Iterable<FieldMetadata> fields,
   }
 }
 
-/// Generates the source code of the [field] into the [buffer] for a member
+/// Generates the source code of the [metadata] into the [buffer] for a member
 /// variable declaration.
-void generateFieldDeclaration(FieldMetadata field, StringBuffer buffer) {
+void generateFieldDeclaration(FieldMetadata metadata, StringBuffer buffer) {
   // Write out a static declaration
-  if (field.isStatic) {
+  if (metadata.isStatic) {
     buffer.write('static ');
   }
 
-  var isConst = field.isConst;
+  var isConst = metadata.isConst;
 
   // Write out const and final declaration
   if (isConst) {
     buffer.write('const ');
-  } else if (field.isFinal) {
+  } else if (metadata.isFinal) {
     buffer.write('final ');
   }
 
-  buffer.write('${generateType(field.type)} ${field.name}');
+  buffer.write('${generateType(metadata.type)} ${metadata.name}');
 
   // Write out the default value if necessary
-  var defaultValue = field.defaultValue;
+  var defaultValue = metadata.defaultValue;
 
   if (defaultValue != null) {
     buffer.write('=');
