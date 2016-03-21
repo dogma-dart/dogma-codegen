@@ -25,7 +25,18 @@ import 'metadata_step.dart';
 
 /// An implementation of [MetadataStep] which uses the analyzer to create the
 /// metadata.
-class AnalyzerMetadataStep implements MetadataStep {
+abstract class AnalyzerMetadataStep implements MetadataStep {
+  //---------------------------------------------------------------------
+  // Properties
+  //---------------------------------------------------------------------
+
+  /// The annotation creators to use.
+  List<AnalyzeAnnotation> get annotationCreators;
+
+  //---------------------------------------------------------------------
+  // MetadataStep
+  //---------------------------------------------------------------------
+
   @override
   Future<LibraryMetadata> metadata(BuildStep buildStep) async {
     var input = buildStep.input;
@@ -33,6 +44,9 @@ class AnalyzerMetadataStep implements MetadataStep {
     var resolver = await buildStep.resolve(inputId);
     var library = resolver.getLibrary(inputId);
 
-    return libraryMetadataFromElement(library);
+    return libraryMetadataFromElement(
+        library,
+        annotationCreators: annotationCreators
+    );
   }
 }
