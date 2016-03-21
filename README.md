@@ -20,7 +20,7 @@ describing models and full RESTful APIs. Before using Dogma Codegen directly con
 instead as even more code can be automatically generated.
 
 | Library | Models | Unmodifiable Views | [Convert](https://github.com/dogma-dart/dogma-convert) | [Mapper](https://github.com/dogma-dart/dogma-mapper) | [Fluent Queries](https://github.com/dogma-dart/dogma-mapper) |
-|--|-|-|-|-|-|
+|---|---|---|---|---|---|
 | Codegen | :x: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | [JSON Schema](https://github.com/dogma-dart/dogma-json-schema) | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | [Swagger](https://github.com/dogma-dart/dogma-swagger) | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
