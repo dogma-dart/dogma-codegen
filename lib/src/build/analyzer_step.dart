@@ -41,12 +41,22 @@ abstract class AnalyzerMetadataStep implements MetadataStep {
   Future<LibraryMetadata> metadata(BuildStep buildStep) async {
     var input = buildStep.input;
     var inputId = input.id;
-    var resolver = await buildStep.resolve(inputId);
-    var library = resolver.getLibrary(inputId);
 
-    return libraryMetadataFromElement(
-        library,
+    // Use the resolver to get the library element
+    var resolver = await buildStep.resolve(inputId);
+    var libraryElement = resolver.getLibrary(inputId);
+
+    // Create the metadata
+    var libraryMetadata = libraryMetadataFromElement(
+        libraryElement,
         annotationCreators: annotationCreators
     );
+
+    // Release the resolver
+    //
+    // \TODO Remove when no longer necessary
+    resolver.release();
+
+    return libraryMetadata;
   }
 }
