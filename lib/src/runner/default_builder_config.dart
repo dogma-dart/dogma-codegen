@@ -40,6 +40,7 @@ class DefaultBuilderConfig implements BuilderConfig {
   /// build step can be passed into the constructor to determine the set of
   /// inputs.
   factory DefaultBuilderConfig(String name, Map values, [BuilderConfig previous]) {
+    // Get the input package
     var inputPackage = values['input_package'] ?? '';
 
     // Get the input set
