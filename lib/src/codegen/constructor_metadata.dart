@@ -12,6 +12,7 @@ import 'package:dogma_source_analyzer/metadata.dart';
 import 'annotated_metadata.dart';
 import 'annotation.dart';
 import 'parameter_metadata.dart';
+import 'scope.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -61,6 +62,7 @@ void generateConstructorDefinition(ConstructorMetadata metadata,
                                   {ConstructorGenerator initializerListGenerator,
                                    ConstructorGenerator generator,
                                    bool useThis: false,
+                                   bool useArrow: false,
                                    List<AnnotationGenerator> annotationGenerators}) {
   annotationGenerators ??= <AnnotationGenerator>[];
 
@@ -77,9 +79,9 @@ void generateConstructorDefinition(ConstructorMetadata metadata,
   }
 
   if (generator != null) {
-    buffer.write('{');
+    openScope(buffer, useArrow);
     generator(metadata, buffer);
-    buffer.writeln('}');
+    closeScope(buffer, useArrow);
   } else {
     buffer.writeln(';');
   }
