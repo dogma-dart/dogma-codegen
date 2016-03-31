@@ -35,17 +35,17 @@ void generateCodeComment(String comment,
   // Split the comments into lines
   var split = comment.split('\n');
 
+  print(split.length);
+
   // Get the maximum length of a line in the comments
   var length = lineLength - indentBy -_commentPrefix.length;
 
   // Iterate through the values
   for (var value in split) {
-    var trimmed;
+    var trimmed = false;
 
     // Any lines of text should be broken up unless they're markdown comments
     if (!value.startsWith(_markdownIndent)) {
-      trimmed = true;
-
       while (value.length > lineLength) {
         var i = length - 1;
         var foundSpace = value[i] == _space;
@@ -80,9 +80,9 @@ void generateCodeComment(String comment,
         buffer.write(_commentPrefix);
         buffer.writeln(value.substring(0, i).trimRight());
         value = value.substring(i).trimLeft();
+
+        trimmed = true;
       }
-    } else {
-      trimmed = false;
     }
 
     // Only write a blank line if it was present in the original string
