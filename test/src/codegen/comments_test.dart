@@ -25,6 +25,10 @@ const String _markdownComment =
 r'''    Here's a really long markdown comment that should end up using a single line even though its over the count.
     Here's a really long markdown comment that should end up using a single line even though its over the count.
     Here's a really long markdown comment that should end up using a single line even though its over the count.''';
+const String _paragraphs =
+r'''Here's a line of text.
+
+Here's another line of text.''';
 
 List<String> _commentLines(String comment) {
   var buffer = new StringBuffer();
@@ -54,6 +58,11 @@ void main() {
   });
   test('Markdown comments', () {
     var lines = _commentLines(_markdownComment);
+
+    expect(lines, hasLength(3));
+  });
+  test('Paragraph comments', () {
+    var lines = _commentLines(_paragraphs);
 
     expect(lines, hasLength(3));
   });
