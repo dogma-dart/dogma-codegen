@@ -18,10 +18,11 @@ import 'type_metadata.dart';
 // Library contents
 //---------------------------------------------------------------------
 
-/// Definition of a function that generates the source code for a class.
+/// Definition of a function that generates the source code for a class from
+/// the [metadata].
 ///
 /// The source code generated is written into the [buffer].
-typedef void ClassGenerator(ClassMetadata field, StringBuffer buffer);
+typedef void ClassGenerator(ClassMetadata metadata, StringBuffer buffer);
 
 /// Generates the declaration for the [metadata] into the [buffer].
 ///
@@ -86,8 +87,7 @@ void generateClassDefinition(ClassMetadata metadata,
   generateClassDeclaration(
       metadata,
       buffer,
-  // \TODO ENUMS!
-      'class'//metadata is EnumMetadata ? 'enum' : 'class'
+      metadata is EnumMetadata ? 'enum' : 'class'
   );
   buffer.writeln('{');
 
