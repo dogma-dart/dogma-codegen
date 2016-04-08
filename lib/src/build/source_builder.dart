@@ -14,7 +14,9 @@ import 'dart:async';
 //---------------------------------------------------------------------
 
 import 'package:build/build.dart';
+import 'package:dart_style/dart_style.dart';
 
+import 'library_header_generation_step.dart';
 import 'metadata_step.dart';
 import 'source_generation_step.dart';
 import 'view_generation_step.dart';
@@ -25,39 +27,85 @@ import 'view_step.dart';
 //---------------------------------------------------------------------
 
 abstract class SourceBuilder extends Builder
+                                with LibraryHeaderGenerationStep
                           implements MetadataStep,
                                      SourceGenerationStep,
                                      ViewGenerationStep,
                                      ViewStep {
+  //---------------------------------------------------------------------
+  // Member variables
+  //---------------------------------------------------------------------
+
+  /// The name of the package to output into.
+  final String package;
+  /// The output directory.
+  final String libraryOutput;
+  /// The [formatter] for the generated source code.
+  final DartFormatter formatter;
+  @override
+  final bool outputLibraryName = false;
+  @override
+  final String copyright = '';
+
+  //---------------------------------------------------------------------
+  // Constructor
+  //---------------------------------------------------------------------
+
+  SourceBuilder(String package,
+                this.libraryOutput,
+                DartFormatter formatter)
+      : package = package
+      , formatter = formatter ?? new DartFormatter();
+
+  //---------------------------------------------------------------------
+  // Builder
+  //---------------------------------------------------------------------
+
   @override
   Future build(BuildStep step) async {
+    var contents = step.input.stringContents;
+
+    // Determine if the output should be created
+    var outputAssetId = _processedAssetId(
+        step.input.id,
+        package,
+        libraryOutput
+    );
+
     var inputMetadata = await metadata(step);
-
-    if (inputMetadata != null) {
-      print(inputMetadata.uri.toString());
-
-      for (var clazz in inputMetadata.classes) {
-        print(clazz.name);
-      }
-
-      for (var function in inputMetadata.functions) {
-        print(function.name);
-      }
-
-      for (var field in inputMetadata.fields) {
-        print(field.name);
-      }
-
-      print('');
-    }
-
     var inputMetadataView = view(inputMetadata);
     var generatedMetadataView = viewGeneration(inputMetadataView);
-    var generatedSourceCode = sourceCode(generatedMetadataView);
 
-    print(generatedSourceCode);
+    var buffer = new StringBuffer();
+    generateHeader(generatedMetadataView.metadata, buffer);
+
+    var generatedSourceCode = sourceCode(generatedMetadataView);
+    buffer.writeln(generatedSourceCode);
+
+    if (generatedSourceCode.isNotEmpty) {
+      var input = step.input;
+      var formattedSourceCode = formatter.format(buffer.toString(), uri: new Uri());
+      //var formattedSourceCode = buffer.toString(); //formatter.formatStatement(buffer.toString());
+
+      var outputAssetId = _processedAssetId(input.id, package, libraryOutput);
+      var outputAsset = new Asset(outputAssetId, formattedSourceCode);
+
+      await step.writeAsString(outputAsset);
+    }
   }
 
   @override
-  List<AssetId> declareOutputs(AssetId inputId) => [inputId.addExtension('.copy')];
+  List<AssetId> declareOutputs(AssetId inputId) =>
+      [_processedAssetId(inputId, package, libraryOutput)];
+
+  static AssetId _processedAssetId(AssetId inputId,
+                                   String package,
+                                   String outputDirectory) {
+    // \TODO Move into path package
+    var path = inputId.path;
+    var split = path.lastIndexOf('/');
+    var filename = path.substring(split + 1);
+
+    return new AssetId(package, '$outputDirectory/$filename');
+  }
 }
