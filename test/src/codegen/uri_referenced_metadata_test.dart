@@ -48,7 +48,6 @@ void _expectImportDirective(UriReferencedMetadata metadata,
   generateUriReference(metadata, from, 'import', buffer);
 
   var actual = buffer.toString();
-  print(actual);
 
   expect(actual, equalsIgnoringWhitespace(expected));
 }
