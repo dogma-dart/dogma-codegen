@@ -35,8 +35,6 @@ void generateCodeComment(String comment,
   // Split the comments into lines
   var split = comment.split('\n');
 
-  print(split.length);
-
   // Get the maximum length of a line in the comments
   var length = lineLength - indentBy -_commentPrefix.length;
 
