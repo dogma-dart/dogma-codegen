@@ -23,5 +23,7 @@ void openScope(StringBuffer buffer, [bool useArrow = false]) {
 void closeScope(StringBuffer buffer, [bool useArrow = false]) {
   if (!useArrow) {
     buffer.writeln('}');
+  } else {
+    buffer.writeln(';');
   }
 }
