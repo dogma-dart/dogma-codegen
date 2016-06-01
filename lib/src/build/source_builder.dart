@@ -90,7 +90,7 @@ abstract class SourceBuilder extends Builder
       var outputAssetId = _processedAssetId(input.id, package, libraryOutput);
       var outputAsset = new Asset(outputAssetId, formattedSourceCode);
 
-      await step.writeAsString(outputAsset);
+      step.writeAsString(outputAsset);
     }
   }
 

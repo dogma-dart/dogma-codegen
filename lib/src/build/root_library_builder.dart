@@ -89,7 +89,7 @@ class RootLibraryBuilder extends Builder with LibraryHeaderGenerationStep {
     var output = new Asset(rootLibrary, buffer.toString());
 
     // Write the asset out
-    await buildStep.writeAsString(output);
+    buildStep.writeAsString(output);
   }
 
   @override
