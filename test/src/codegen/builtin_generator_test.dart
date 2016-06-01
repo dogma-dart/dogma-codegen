@@ -31,7 +31,7 @@ final Map _map = {'ints': _intList, 'strings': _stringList};
 final String _expectedMap = '{\'ints\':$_expectedIntList,\'strings\':$_expectedStringList}';
 
 /// A test enum.
-enum TestEnum {
+enum _TestEnum {
   foo, bar, fizz, buzz
 }
 
@@ -67,7 +67,7 @@ void main() {
     expect(generateMap(_map, false, false), _expectedMap);
   });
   test('Enum', () {
-    expect(generateBuiltin(TestEnum.bar), TestEnum.bar.toString());
+    expect(generateBuiltin(_TestEnum.bar), _TestEnum.bar.toString());
   });
   test('Line break', () {
     var expected;
