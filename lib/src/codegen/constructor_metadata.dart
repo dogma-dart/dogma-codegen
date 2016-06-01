@@ -34,6 +34,11 @@ void generateConstructorDeclaration(ConstructorMetadata metadata,
     buffer.write('factory ');
   }
 
+  // Write out the const declaration
+  if (metadata.isConst) {
+    buffer.write('const ');
+  }
+
   // Write the constructor type
   buffer.write(metadata.returnType.name);
 
