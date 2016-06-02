@@ -5,7 +5,7 @@ pipeline:
     commands:
       - sh build.sh
     environment:
-      - DARTANALYZER_FLAGS=--fatal-warnings
+      - DARTANALYZER_FLAGS=
   coverage:
     when:
       matrix:
