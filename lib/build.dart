@@ -12,6 +12,7 @@ library dogma_codegen.build;
 export 'src/build/analyzer_step.dart';
 export 'src/build/asset.dart';
 export 'src/build/metadata_step.dart';
+export 'src/build/predefined_metadata_step.dart';
 export 'src/build/root_library_builder.dart';
 export 'src/build/skip_view_generation_step.dart';
 export 'src/build/source_builder.dart';
