@@ -18,6 +18,4 @@ dependencies:
   resource: ^1.1.0
   yaml: ^2.1.3
 dev_dependencies:
-  dogma_codegen_test:
-    path: ../dogma-codegen-test
   test: ^0.12.3+9
