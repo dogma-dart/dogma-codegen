@@ -21,6 +21,10 @@ import 'package:dogma_source_analyzer/metadata.dart';
 //---------------------------------------------------------------------
 
 /// A step in the build process that gets the metadata for a library.
+///
+/// In the SourceBuilder the results of the [MetadataStep] are passed on to the
+/// ViewStep.
 abstract class MetadataStep {
+  /// Generates [LibraryMetadata] from the [buildStep].
   Future<LibraryMetadata> metadata(BuildStep buildStep);
 }

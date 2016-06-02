@@ -15,6 +15,12 @@ import '../../view.dart';
 // Library contents
 //---------------------------------------------------------------------
 
+/// A step in the build process that takes the inputted metadata and provides
+/// a view over the data.
+///
+/// In the SourceBuilder the results of the [ViewStep] are passed on to the
+/// ViewGenerationStep.
 abstract class ViewStep {
+  /// Generates a [MetadataView] over the given [metadata].
   MetadataView<LibraryMetadata> view(LibraryMetadata metadata);
 }

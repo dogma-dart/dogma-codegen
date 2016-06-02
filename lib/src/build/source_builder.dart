@@ -27,6 +27,21 @@ import 'view_step.dart';
 // Library contents
 //---------------------------------------------------------------------
 
+/// The base class for a builder that generates source code.
+///
+/// The [SourceBuilder] class orchestrates the generation of code. It pipelines
+/// the build into multiple steps.
+///
+/// 1. [MetadataStep]
+/// 2. [ViewStep]
+/// 3. [ViewGenerationStep].
+/// 4. [SourceGenerationStep].
+///
+/// If any source code is generated it will output the file to the
+/// [libraryOutput] directory.
+///
+/// Typically an implementer just extends the [SourceBuilder] and provides
+/// implementations of the steps being implemented.
 abstract class SourceBuilder extends Builder
                                 with LibraryHeaderGenerationStep
                           implements MetadataStep,

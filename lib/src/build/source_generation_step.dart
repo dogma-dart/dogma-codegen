@@ -15,6 +15,8 @@ import '../../view.dart';
 // Library contents
 //---------------------------------------------------------------------
 
+/// A step in the build process that generates source code for a library.
 abstract class SourceGenerationStep {
+  /// Generates code from the library [source].
   String sourceCode(MetadataView<LibraryMetadata> source);
 }
