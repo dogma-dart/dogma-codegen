@@ -15,6 +15,7 @@ import 'dart:async';
 
 import 'package:build/build.dart';
 import 'package:dart_style/dart_style.dart';
+import 'package:meta/meta.dart';
 
 import 'library_header_generation_step.dart';
 import 'metadata_step.dart';
@@ -63,49 +64,52 @@ abstract class SourceBuilder extends Builder
 
   @override
   Future build(BuildStep step) async {
-    var contents = step.input.stringContents;
-
-    // Determine if the output should be created
-    var outputAssetId = _processedAssetId(
-        step.input.id,
-        package,
-        libraryOutput
-    );
-
+    // Get the metadata
     var inputMetadata = await metadata(step);
+
+    // Create the view over the metadata for processing
     var inputMetadataView = view(inputMetadata);
+
+    // Build out the view for the generated code
     var generatedMetadataView = viewGeneration(inputMetadataView);
 
+    // Create the header
     var buffer = new StringBuffer();
     generateHeader(generatedMetadataView.metadata, buffer);
 
+    // Create the source code
     var generatedSourceCode = sourceCode(generatedMetadataView);
     buffer.writeln(generatedSourceCode);
 
+    // See if anything should be outputted
     if (generatedSourceCode.isNotEmpty) {
-      var input = step.input;
-      var formattedSourceCode = formatter.format(buffer.toString(), uri: new Uri());
-      //var formattedSourceCode = buffer.toString(); //formatter.formatStatement(buffer.toString());
+      // Format the source code
+      //
+      // The uri parameter is required or else it will throw on Windows
+      var formattedSourceCode = formatter.format(
+          buffer.toString(),
+          uri: new Uri()
+      );
 
-      var outputAssetId = _processedAssetId(input.id, package, libraryOutput);
-      var outputAsset = new Asset(outputAssetId, formattedSourceCode);
+      // Output the asset
+      var outputAsset = new Asset(outputAssetId(step.input.id), formattedSourceCode);
 
       step.writeAsString(outputAsset);
     }
   }
 
   @override
-  List<AssetId> declareOutputs(AssetId inputId) =>
-      [_processedAssetId(inputId, package, libraryOutput)];
+  List<AssetId> declareOutputs(AssetId inputId) => [outputAssetId(inputId)];
 
-  static AssetId _processedAssetId(AssetId inputId,
-                                   String package,
-                                   String outputDirectory) {
+  AssetId outputAssetId(AssetId inputId) {
     // \TODO Move into path package
     var path = inputId.path;
     var split = path.lastIndexOf('/');
-    var filename = path.substring(split + 1);
+    var original = path.substring(split + 1);
 
-    return new AssetId(package, '$outputDirectory/$filename');
+    return new AssetId(package, '$libraryOutput/${filename(original)}');
   }
+
+  @protected
+  String filename(String original) => original;
 }
