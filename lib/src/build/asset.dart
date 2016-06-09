@@ -30,3 +30,22 @@ AssetId rootAssetIdFromUri(Uri uri) {
 
   return new AssetId(currentPackageName, path);
 }
+
+/// Transforms the [input] asset Uri into a package or file Uri.
+///
+/// When using `build` the source code Uris are in the form
+/// `asset:package_name/path`. This function will convert it to a Uri that can
+/// be used within a library metadata.
+Uri assetUriTransform(Uri input) {
+  if (input.scheme != 'asset') {
+    return input;
+  }
+
+  var pathSegments = input.pathSegments;
+  var package = pathSegments[0];
+  var path = pathSegments.sublist(1).join('/');
+
+  return (package == currentPackageName)
+      ? p.join(path)
+      : new Uri(scheme: 'package', path: path);
+}
