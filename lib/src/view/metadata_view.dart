@@ -16,7 +16,7 @@ import 'package:dogma_source_analyzer/metadata.dart';
 /// Provides a view over [Metadata].
 ///
 /// This view allows wrapping of metadata into a more specific interface.
-abstract class MetadataView<T extends Metadata> {
+class MetadataView<T extends Metadata> {
   /// The metadata being wrapped.
   final T metadata;
 
