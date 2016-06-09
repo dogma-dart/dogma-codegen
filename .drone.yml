@@ -6,10 +6,10 @@ pipeline:
       - sh build.sh
     environment:
       - DARTANALYZER_FLAGS=
-  coverage:
-    when:
-      matrix:
-        DART_VERSION: latest
+#  coverage:
+#    when:
+#      matrix:
+#        DART_VERSION: latest
 
 matrix:
   DART_VERSION:
