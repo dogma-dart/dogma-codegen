@@ -57,6 +57,11 @@ abstract class LibraryHeaderGenerationStep {
       buffer.writeln(copyright);
     }
 
+    // Write the library declaration if requested or required
+    if ((outputLibraryName) || (metadata.annotations.isNotEmpty)) {
+      generateLibraryDeclaration(metadata);
+    }
+
     // Write the imports
     for (var imported in metadata.imports) {
       generateUriReference(imported, metadata.uri, 'import', buffer);
