@@ -20,6 +20,7 @@ export 'src/codegen/deprecated_annotation.dart';
 export 'src/codegen/enum_metadata.dart';
 export 'src/codegen/field_metadata.dart';
 export 'src/codegen/function_metadata.dart';
+export 'src/codegen/library_metadata.dart';
 export 'src/codegen/override_annotation.dart';
 export 'src/codegen/parameter_metadata.dart';
 export 'src/codegen/protected_annotation.dart';
