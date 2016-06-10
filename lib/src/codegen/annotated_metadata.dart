@@ -24,12 +24,13 @@ import 'comments.dart';
 /// [annotationGenerators].
 void generateAnnotatedMetadata(AnnotatedMetadata metadata,
                                StringBuffer buffer,
-                               List<AnnotationGenerator> annotationGenerators)
-{
+                               List<AnnotationGenerator> annotationGenerators) {
   // Write the comments out
   generateCodeComment(metadata.comments, buffer);
 
   // Write out any annotations
+  annotationGenerators ??= <AnnotationGenerator>[];
+
   for (var annotation in metadata.annotations) {
     for (var annotationGenerator in annotationGenerators) {
       annotationGenerator(annotation, buffer);
