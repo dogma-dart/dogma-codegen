@@ -10,15 +10,16 @@
 import 'package:dogma_source_analyzer/metadata.dart';
 import 'package:dogma_source_analyzer/path.dart' as p;
 
-import 'annotation.dart';
 import 'argument_buffer.dart';
-import 'annotated_metadata.dart';
-import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
+/// Generates a uri reference from the [metadata] into the [buffer].
+///
+/// The [directive], either import or export, is relative to the value of
+/// [from] when a file uri is encountered.
 void generateUriReference(UriReferencedMetadata metadata,
                           Uri from,
                           String directive,
