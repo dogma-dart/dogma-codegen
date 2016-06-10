@@ -86,7 +86,7 @@ String generateParameter(ParameterMetadata parameter, {bool useThis: false}) {
       return generateRequiredParameter(parameter, useThis);
     case ParameterKind.positional:
       return generatePositionalParameter(parameter, useThis);
-    case ParameterKind.named:
+    default: // ParameterKind.named:
       return generateNamedParameter(parameter, useThis);
   }
 }
