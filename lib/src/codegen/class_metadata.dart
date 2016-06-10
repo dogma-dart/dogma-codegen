@@ -78,8 +78,6 @@ void generateClassDefinition(ClassMetadata metadata,
                              StringBuffer buffer,
                              ClassGenerator generator,
                             {List<AnnotationGenerator> annotationGenerators}) {
-  annotationGenerators ??= <AnnotationGenerator>[];
-
   // Write out metadata
   generateAnnotatedMetadata(metadata, buffer, annotationGenerators);
 

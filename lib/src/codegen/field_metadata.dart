@@ -43,9 +43,11 @@ void generateField(FieldMetadata metadata,
 
 /// Generates the source code for the [fields] into the [buffer].
 ///
-/// The [generator] specifies the function to write the source code for the
+/// The [fieldGenerator] specifies the function to write the source code for the
 /// field. By default it is assumed that this is just a member variable and the
-/// [generateMemberVariable] function is used.
+/// [generateFieldDeclaration] function is used. If a getter/setter pair is
+/// required then [getterGenerator] and [setterGenerator] can be used for
+/// generating the output.
 ///
 /// Any annotations that are present on the [fields] are passed to the
 /// [annotationGenerators].
@@ -57,7 +59,6 @@ void generateFields(Iterable<FieldMetadata> fields,
                     List<AnnotationGenerator> annotationGenerators})
 {
   fieldGenerator ??= generateFieldDeclaration;
-  annotationGenerators ??= <AnnotationGenerator>[];
 
   for (var field in fields) {
     if (field.isProperty) {

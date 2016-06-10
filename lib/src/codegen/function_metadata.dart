@@ -40,8 +40,6 @@ void generateFunctionDefinition(FunctionMetadata metadata,
                                 FunctionGenerator generator,
                                {List<AnnotationGenerator> annotationGenerators,
                                 bool useArrow: false}) {
-  annotationGenerators ??= <AnnotationGenerator>[];
-
   // Write out metadata
   generateAnnotatedMetadata(metadata, buffer, annotationGenerators);
 

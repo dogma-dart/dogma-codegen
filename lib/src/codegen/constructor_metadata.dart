@@ -56,7 +56,7 @@ void generateConstructorDeclaration(ConstructorMetadata metadata,
 /// Generates a constructor definition with the given [metadata] into the
 /// [buffer].
 ///
-/// An [initializeListGenerator] can be used to fill out an initializer list
+/// An [initializerListGenerator] can be used to fill out an initializer list
 /// within the constructor. A [generator] is used to make the definition of the
 /// constructor.
 ///
@@ -69,8 +69,6 @@ void generateConstructorDefinition(ConstructorMetadata metadata,
                                    bool useThis: false,
                                    bool useArrow: false,
                                    List<AnnotationGenerator> annotationGenerators}) {
-  annotationGenerators ??= <AnnotationGenerator>[];
-
   // Write out metadata
   generateAnnotatedMetadata(metadata, buffer, annotationGenerators);
 
