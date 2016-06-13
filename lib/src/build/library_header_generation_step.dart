@@ -8,7 +8,6 @@
 //---------------------------------------------------------------------
 
 import 'package:dogma_source_analyzer/metadata.dart';
-import 'package:dogma_source_analyzer/path.dart' as p;
 import 'package:meta/meta.dart';
 
 import '../../codegen.dart';
@@ -59,7 +58,7 @@ abstract class LibraryHeaderGenerationStep {
 
     // Write the library declaration if requested or required
     if ((outputLibraryName) || (metadata.annotations.isNotEmpty)) {
-      generateLibraryDeclaration(metadata);
+      generateLibraryDeclaration(metadata, 'test', buffer);
     }
 
     // Write the imports
