@@ -22,6 +22,11 @@ class BuilderConfig {
   String copyright;
   /// Whether library names should be outputted.
   String outputLibraryName;
+  /// Whether the timestamp should be added to built files.
+  ///
+  /// This should be false when the generated files are checked into a
+  /// repository.
+  bool outputBuildTimestamps;
   /// The configuration for the Dart formatter.
   FormatterConfig formatterConfig;
   /// Individual configurations for build targets.
