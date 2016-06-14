@@ -17,6 +17,10 @@ import 'package:build/build.dart';
 import 'package:dart_style/dart_style.dart';
 import 'package:meta/meta.dart';
 
+import 'asset.dart';
+import 'builder_config.dart';
+import 'configurable.dart';
+import 'formatter_config.dart';
 import 'library_header_generation_step.dart';
 import 'metadata_step.dart';
 import 'source_generation_step.dart';
@@ -37,13 +41,14 @@ import 'view_step.dart';
 /// 3. [ViewGenerationStep].
 /// 4. [SourceGenerationStep].
 ///
-/// If any source code is generated it will output the file to the
-/// [libraryOutput] directory.
+/// If any source code is generated it will output the file to the output
+/// directory within the [config].
 ///
 /// Typically an implementer just extends the [SourceBuilder] and provides
 /// implementations of the steps being implemented.
 abstract class SourceBuilder extends Builder
-                                with LibraryHeaderGenerationStep
+                                with Configurable,
+                                     LibraryHeaderGenerationStep
                           implements MetadataStep,
                                      SourceGenerationStep,
                                      ViewGenerationStep,
@@ -52,26 +57,22 @@ abstract class SourceBuilder extends Builder
   // Member variables
   //---------------------------------------------------------------------
 
-  /// The name of the package to output into.
+  @override
   final String package;
-  /// The output directory.
-  final String libraryOutput;
+  @override
+  final BuilderConfig config;
   /// The [formatter] for the generated source code.
   final DartFormatter formatter;
-  @override
-  final bool outputLibraryName = false;
-  @override
-  final String copyright = '';
 
   //---------------------------------------------------------------------
   // Constructor
   //---------------------------------------------------------------------
 
-  SourceBuilder(String package,
-                this.libraryOutput,
-                DartFormatter formatter)
-      : package = package
-      , formatter = formatter ?? new DartFormatter();
+  /// Creates an instance of [SourceBuilder] with the given [config].
+  SourceBuilder(BuilderConfig config)
+      : package = currentPackageName
+      , config = config
+      , formatter = formatterFromConfig(config.formatterConfig);
 
   //---------------------------------------------------------------------
   // Builder
@@ -122,7 +123,10 @@ abstract class SourceBuilder extends Builder
     var split = path.lastIndexOf('/');
     var original = path.substring(split + 1);
 
-    return new AssetId(package, '$libraryOutput/${filename(original)}');
+    return new AssetId(
+        package,
+        '${config.libraryOutput}/${filename(original)}'
+    );
   }
 
   @protected
