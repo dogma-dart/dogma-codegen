@@ -67,7 +67,8 @@ Map transformConfig(Map input) {
     if (inputSet.isEmpty) {
       assert(previousStep != null);
 
-      inputSet.add('${previousStep[BuilderConfigDecoder.outputLibraryNameKey]}/*.dart');
+      inputSet.add(
+          '${previousStep[BuilderConfigDecoder.outputLibraryNameKey]}/*.dart');
     }
 
     step['input_set'] = inputSet;
@@ -81,19 +82,27 @@ Map transformConfig(Map input) {
 
 /// Applies the [defaults] to the [step].
 void _applyDefaults(Map step, Map defaults) {
-  step[BuilderConfigDecoder.copyrightKey] ??= defaults[BuilderConfigDecoder.copyrightKey];
-  step[BuilderConfigDecoder.outputLibraryNameKey] ??= defaults[BuilderConfigDecoder.outputLibraryNameKey];
+  step[BuilderConfigDecoder.copyrightKey] ??=
+      defaults[BuilderConfigDecoder.copyrightKey];
+  step[BuilderConfigDecoder.outputLibraryNameKey] ??=
+      defaults[BuilderConfigDecoder.outputLibraryNameKey];
+  step[BuilderConfigDecoder.outputBuildTimestampsKey] ??=
+      defaults[BuilderConfigDecoder.outputBuildTimestampsKey];
 
   var formatter = step[BuilderConfigDecoder.formatterKey];
 
   if (formatter == null) {
-    step[BuilderConfigDecoder.formatterKey] = defaults[BuilderConfigDecoder.formatterKey];
+    step[BuilderConfigDecoder.formatterKey] =
+        defaults[BuilderConfigDecoder.formatterKey];
   } else {
     var formatterDefaults = defaults[BuilderConfigDecoder.formatterKey];
 
-    formatter[FormatterConfigDecoder.lineEndingKey] ??= formatterDefaults[FormatterConfigDecoder.lineEndingKey];
-    formatter[FormatterConfigDecoder.pageWidthKey] ??= formatterDefaults[FormatterConfigDecoder.pageWidthKey];
-    formatter[FormatterConfigDecoder.indentKey] ??= formatterDefaults[FormatterConfigDecoder.indentKey];
+    formatter[FormatterConfigDecoder.lineEndingKey] ??=
+        formatterDefaults[FormatterConfigDecoder.lineEndingKey];
+    formatter[FormatterConfigDecoder.pageWidthKey] ??=
+        formatterDefaults[FormatterConfigDecoder.pageWidthKey];
+    formatter[FormatterConfigDecoder.indentKey] ??=
+        formatterDefaults[FormatterConfigDecoder.indentKey];
   }
 }
 
@@ -106,11 +115,13 @@ Map _getDefaults(Map input) {
 
   defaults[BuilderConfigDecoder.copyrightKey] ??= '';
   defaults[BuilderConfigDecoder.outputLibraryNameKey] ??= false;
+  defaults[BuilderConfigDecoder.outputBuildTimestampsKey] ??= true;
 
   // Create the formatter
   var formatter = defaults[BuilderConfigDecoder.formatterKey] ?? {};
 
-  formatter[FormatterConfigDecoder.lineEndingKey] ??= Platform.isWindows ? '\n' : '\r\n';
+  formatter[FormatterConfigDecoder.lineEndingKey] ??=
+      Platform.isWindows ? '\n' : '\r\n';
   formatter[FormatterConfigDecoder.pageWidthKey] ??= 80;
   formatter[FormatterConfigDecoder.indentKey] ??= 0;
 
