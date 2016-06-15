@@ -9,7 +9,6 @@
 
 import 'package:dogma_source_analyzer/metadata.dart';
 import 'package:dogma_source_analyzer/path.dart';
-import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
 import 'package:dogma_codegen/codegen.dart';
