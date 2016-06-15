@@ -34,8 +34,8 @@ class BuilderConfigDecoder extends Converter<Map, BuilderConfig>
   static const String libraryOutputKey = 'output_directory';
   /// The key for the copyright information.
   static const String copyrightKey = 'copyright';
-  /// The key for whether library names should be outputted.
-  static const String outputLibraryNameKey = 'output_library_name';
+  /// The key for whether library directive should be outputted.
+  static const String outputLibraryDirectiveKey = 'output_library_directive';
   /// The key for whether build timestamps should be outputted.
   static const String outputBuildTimestampsKey = 'output_build_timestamps';
   /// The key for the formatter values.
@@ -73,7 +73,7 @@ class BuilderConfigDecoder extends Converter<Map, BuilderConfig>
 
     model.libraryOutput = input[libraryOutputKey];
     model.copyright = input[copyrightKey];
-    model.outputLibraryName = input[outputLibraryNameKey];
+    model.outputLibraryDirective = input[outputLibraryDirectiveKey];
     model.outputBuildTimestamps = input[outputBuildTimestampsKey];
 
     model.formatterConfig =
