@@ -19,36 +19,38 @@ import 'package:dogma_source_analyzer/metadata.dart';
 import 'package:dogma_source_analyzer/path.dart' as p;
 
 import 'asset.dart';
+import 'configurable.dart';
 import 'library_header_generation_step.dart';
+import 'root_library_builder_config.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
 /// Builds the root library which exports the contents of a source directory.
-class RootLibraryBuilder extends Builder with LibraryHeaderGenerationStep {
+class RootLibraryBuilder extends Builder
+                            with LibraryHeaderGenerationStep
+                      implements Configurable {
   //---------------------------------------------------------------------
   // Member variables
   //---------------------------------------------------------------------
 
+  @override
+  final String package;
+  @override
+  RootLibraryBuilderConfig config;
   /// The asset identifier for the root library.
-  final AssetId rootLibrary;
-  /// The path to the source directory.
-  final Uri sourceDirectory;
-  @override
-  final bool outputLibraryName = false;
-  @override
-  final String copyright = '';
+  final AssetId _rootLibrary;
 
   //---------------------------------------------------------------------
   // Constructor
   //---------------------------------------------------------------------
 
-  /// Creates an instance of the [RootLibraryBuilder] which outputs a root
-  /// [library] which exports the contents of [sourceDirectory].
-  RootLibraryBuilder(String library, String sourceDirectory)
-      : rootLibrary = rootAssetIdFromUri(p.join(library))
-      , sourceDirectory = p.join(sourceDirectory);
+  /// Creates an instance of the [RootLibraryBuilder] with the given [config].
+  RootLibraryBuilder(RootLibraryBuilderConfig config)
+      : package = currentPackageName
+      , config = config
+      , _rootLibrary = rootAssetIdFromUri(p.join(config.libraryPath));
 
   //---------------------------------------------------------------------
   // Builder
@@ -63,7 +65,7 @@ class RootLibraryBuilder extends Builder with LibraryHeaderGenerationStep {
     var exports = <UriReferencedMetadata>[];
 
     // Iterate over the directory
-    var directory = new Directory(sourceDirectory.toFilePath());
+    var directory = new Directory(p.join(config.sourceDirectory).toFilePath());
 
     await for (var value in directory.list(recursive: false, followLinks: false)) {
       if (value is File) {
@@ -78,7 +80,7 @@ class RootLibraryBuilder extends Builder with LibraryHeaderGenerationStep {
     }
 
     // Create the library
-    var library = new LibraryMetadata(p.join(rootLibrary.path), exports: exports);
+    var library = new LibraryMetadata(p.join(_rootLibrary.path), exports: exports);
 
     // Write the header
     var buffer = new StringBuffer();
@@ -86,12 +88,12 @@ class RootLibraryBuilder extends Builder with LibraryHeaderGenerationStep {
     generateHeader(library, buffer);
 
     // Create the asset
-    var output = new Asset(rootLibrary, buffer.toString());
+    var output = new Asset(_rootLibrary, buffer.toString());
 
     // Write the asset out
     buildStep.writeAsString(output);
   }
 
   @override
-  List<AssetId> declareOutputs(AssetId inputId) => [ rootLibrary ];
+  List<AssetId> declareOutputs(AssetId inputId) => [ _rootLibrary ];
 }
