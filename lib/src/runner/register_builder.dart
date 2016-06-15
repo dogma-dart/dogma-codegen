@@ -12,9 +12,8 @@
 /// Builders that use the [RegisterBuilder] annotation can have their
 /// configuration and instances automatically created through reflection.
 ///
-/// The other requirement is for the constructor to have the following
-/// signature.
-// \TODO Add information on expected signature
+/// The other requirement is for the constructor to take a single argument
+/// which is a BuilderConfig.
 class RegisterBuilder {
   /// The associated name for the builder.
   ///
