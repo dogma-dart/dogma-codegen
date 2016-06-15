@@ -11,18 +11,12 @@
 
 import 'package:test/test.dart';
 
-import 'codegen.dart' as codegen;
-import 'identifier_test.dart' as identifier_test;
-import 'runner.dart' as runner;
-import 'schema_test.dart' as schema_test;
+import 'src/runner/builder_manager_test.dart' as builder_manager_test;
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
 void main() {
-  group('Codegen tests', codegen.main);
-  group('Identifier tests', identifier_test.main);
-  group('Runner tests', runner.main);
-  group('Schema tests', schema_test.main);
+  group('BuilderManager', builder_manager_test.main);
 }
