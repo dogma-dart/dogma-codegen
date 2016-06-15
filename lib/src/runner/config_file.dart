@@ -58,7 +58,7 @@ Map transformConfig(Map input) {
     _applyDefaults(step, defaults);
 
     step['input_package'] ??= currentPackageName;
-    step[BuilderConfigDecoder.outputLibraryNameKey] ??= 'lib/src/$name';
+    step[BuilderConfigDecoder.outputLibraryDirectiveKey] ??= 'lib/src/$name';
 
     // Set the input step
     var inputSet = _parseInputSet(step['input_set']);
@@ -68,7 +68,7 @@ Map transformConfig(Map input) {
       assert(previousStep != null);
 
       inputSet.add(
-          '${previousStep[BuilderConfigDecoder.outputLibraryNameKey]}/*.dart');
+          '${previousStep[BuilderConfigDecoder.outputLibraryDirectiveKey]}/*.dart');
     }
 
     step['input_set'] = inputSet;
@@ -84,8 +84,8 @@ Map transformConfig(Map input) {
 void _applyDefaults(Map step, Map defaults) {
   step[BuilderConfigDecoder.copyrightKey] ??=
       defaults[BuilderConfigDecoder.copyrightKey];
-  step[BuilderConfigDecoder.outputLibraryNameKey] ??=
-      defaults[BuilderConfigDecoder.outputLibraryNameKey];
+  step[BuilderConfigDecoder.outputLibraryDirectiveKey] ??=
+      defaults[BuilderConfigDecoder.outputLibraryDirectiveKey];
   step[BuilderConfigDecoder.outputBuildTimestampsKey] ??=
       defaults[BuilderConfigDecoder.outputBuildTimestampsKey];
 
@@ -114,7 +114,7 @@ Map _getDefaults(Map input) {
   var defaults = input['defaults'] ?? {};
 
   defaults[BuilderConfigDecoder.copyrightKey] ??= '';
-  defaults[BuilderConfigDecoder.outputLibraryNameKey] ??= false;
+  defaults[BuilderConfigDecoder.outputLibraryDirectiveKey] ??= false;
   defaults[BuilderConfigDecoder.outputBuildTimestampsKey] ??= true;
 
   // Create the formatter

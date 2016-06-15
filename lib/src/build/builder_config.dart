@@ -20,8 +20,12 @@ class BuilderConfig {
   String libraryOutput;
   /// The copyright information to output within the built file.
   String copyright;
-  /// Whether library names should be outputted.
-  String outputLibraryName;
+  /// Whether library directives should always be outputted.
+  ///
+  /// The library directive is currently optional. By setting the value to
+  /// `true` it will always be outputted even in cases where it is not
+  /// required.
+  bool outputLibraryDirective;
   /// Whether the timestamp should be added to built files.
   ///
   /// This should be false when the generated files are checked into a

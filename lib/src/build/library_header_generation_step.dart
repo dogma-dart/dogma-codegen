@@ -46,7 +46,7 @@ abstract class LibraryHeaderGenerationStep implements Configurable {
     }
 
     // Write the library declaration if requested or required
-    if ((true) || (metadata.annotations.isNotEmpty)) {
+    if ((config.outputLibraryDirective) || (metadata.annotations.isNotEmpty)) {
       generateLibraryDeclaration(metadata, 'test', buffer);
     }
 
