@@ -8,7 +8,6 @@
 //---------------------------------------------------------------------
 
 import 'dart:convert';
-import 'dart:io';
 
 //---------------------------------------------------------------------
 // Imports
@@ -31,6 +30,8 @@ class TargetConfigDecoder extends Converter<Map, TargetConfig>
 
   /// The key for the exclude value.
   static const String excludeKey = 'exclude';
+  /// The key for the comments value.
+  static const String commentsKey = 'comments';
 
   //---------------------------------------------------------------------
   // Constructor
@@ -51,6 +52,7 @@ class TargetConfigDecoder extends Converter<Map, TargetConfig>
     model ??= create();
 
     model.exclude = input[excludeKey] ?? false;
+    model.comments = input[commentsKey] ?? '';
 
     return model;
   }

@@ -9,6 +9,11 @@
 
 /// Configuration for an output of the SourceBuilder.
 class TargetConfig {
+  /// Comments for the target.
+  ///
+  /// This can be used to provide explicit code comments for the generated
+  /// structure.
+  String comments;
   /// Whether the target should not be outputted.
   bool exclude;
 }
