@@ -19,5 +19,12 @@ abstract class Configurable<T extends TargetConfig> {
   /// The name of the package to output into.
   String get package;
   /// The configuration for the builder.
-  BuilderConfig get config;
+  BuilderConfig<T> get config;
+
+  /// Retrieve the target config for the [name].
+  ///
+  /// If the [name] is not present in the [config] then the default value is
+  /// returned instead.
+  T getTargetConfig(String name) =>
+      config.targets[name] ?? config.defaultTarget;
 }
