@@ -17,6 +17,7 @@ import 'package:build/build.dart';
 import 'package:dogma_source_analyzer/analyzer.dart';
 import 'package:dogma_source_analyzer/metadata.dart';
 
+import 'asset.dart';
 import 'metadata_step.dart';
 
 //---------------------------------------------------------------------
@@ -49,7 +50,8 @@ abstract class AnalyzerMetadataStep implements MetadataStep {
     // Create the metadata
     var libraryMetadata = libraryMetadataFromElement(
         libraryElement,
-        annotationCreators: annotationCreators
+        annotationCreators: annotationCreators,
+        uriTransform: assetUriTransform
     );
 
     // Release the resolver
