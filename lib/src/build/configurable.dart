@@ -8,13 +8,14 @@
 //---------------------------------------------------------------------
 
 import 'builder_config.dart';
+import 'target_config.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
 /// Contains configuration for source builders.
-abstract class Configurable {
+abstract class Configurable<T extends TargetConfig> {
   /// The name of the package to output into.
   String get package;
   /// The configuration for the builder.

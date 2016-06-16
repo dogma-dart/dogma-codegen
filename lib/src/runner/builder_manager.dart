@@ -248,13 +248,15 @@ class BuilderManager {
   /// Creates a new [ModelDecoder] by instantiating a new object through the
   /// class [mirror].
   static ModelDecoder _createModelDecoder(ClassMirror mirror) =>
-      mirror.newInstance(_defaultConstructor, []).reflectee;
+      mirror.newInstance(_defaultConstructor, [])
+          .reflectee as ModelDecoder;
 
   /// Creates a new [SourceBuilder] by instantiating a new object through the
   /// class [mirror] and the [config].
   static SourceBuilder _createSourceBuilder(ClassMirror mirror,
                                             BuilderConfig config) =>
-      mirror.newInstance(_defaultConstructor, [config]).reflectee;
+      mirror.newInstance(_defaultConstructor, [config])
+          .reflectee as SourceBuilder;
 
   /// Creates a function which uses the [builderMirror] and [decoderMirror]
   /// to instantiate a [SourceBuilder].
@@ -263,7 +265,7 @@ class BuilderManager {
     var decoder = _createModelDecoder(decoderMirror);
 
     return (input) {
-      var config = decoder.convert(input);
+      var config = decoder.convert(input) as BuilderConfig;
 
       return _createSourceBuilder(builderMirror, config);
     };

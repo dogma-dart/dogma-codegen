@@ -15,7 +15,7 @@ import 'target_config.dart';
 //---------------------------------------------------------------------
 
 /// Configuration for a SourceBuilder.
-class BuilderConfig {
+class BuilderConfig<T extends TargetConfig> {
   //---------------------------------------------------------------------
   // Class variables
   //---------------------------------------------------------------------
@@ -48,6 +48,8 @@ class BuilderConfig {
   bool outputBuildTimestamps = outputBuildTimestampsDefault;
   /// The configuration for the Dart formatter.
   FormatterConfig formatterConfig = new FormatterConfig();
+  /// The default target config.
+  T defaultTarget;
   /// Individual configurations for build targets.
-  Map<String, TargetConfig> targets = <String, TargetConfig>{};
+  Map<String, T> targets = <String, T>{};
 }

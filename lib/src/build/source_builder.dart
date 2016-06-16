@@ -24,6 +24,7 @@ import 'formatter_config.dart';
 import 'library_header_generation_step.dart';
 import 'metadata_step.dart';
 import 'source_generation_step.dart';
+import 'target_config.dart';
 import 'view_generation_step.dart';
 import 'view_step.dart';
 
@@ -46,13 +47,13 @@ import 'view_step.dart';
 ///
 /// Typically an implementer just extends the [SourceBuilder] and provides
 /// implementations of the steps being implemented.
-abstract class SourceBuilder extends Builder
-                                with Configurable,
-                                     LibraryHeaderGenerationStep
-                          implements MetadataStep,
-                                     SourceGenerationStep,
-                                     ViewGenerationStep,
-                                     ViewStep {
+abstract class SourceBuilder<T extends TargetConfig> extends Builder
+                                                        with Configurable<T>,
+                                                             LibraryHeaderGenerationStep
+                                                  implements MetadataStep,
+                                                             SourceGenerationStep,
+                                                             ViewGenerationStep,
+                                                             ViewStep {
   //---------------------------------------------------------------------
   // Member variables
   //---------------------------------------------------------------------
@@ -60,7 +61,7 @@ abstract class SourceBuilder extends Builder
   @override
   final String package;
   @override
-  final BuilderConfig config;
+  final BuilderConfig<T> config;
   /// The [formatter] for the generated source code.
   final DartFormatter formatter;
 

@@ -24,8 +24,8 @@ import 'target_config_convert.dart';
 //---------------------------------------------------------------------
 
 /// Decoder for a [BuilderConfig].
-class BuilderConfigDecoder extends Converter<Map, BuilderConfig>
-                        implements ModelDecoder<BuilderConfig> {
+class BuilderConfigDecoder<T extends TargetConfig> extends Converter<Map, BuilderConfig<T>>
+                           implements ModelDecoder<BuilderConfig<T>> {
   //---------------------------------------------------------------------
   // Member variables
   //---------------------------------------------------------------------
@@ -65,10 +65,10 @@ class BuilderConfigDecoder extends Converter<Map, BuilderConfig>
   //---------------------------------------------------------------------
 
   @override
-  BuilderConfig create() => new BuilderConfig();
+  BuilderConfig<T> create() => new BuilderConfig() as BuilderConfig<T>;
 
   @override
-  BuilderConfig convert(Map input, [BuilderConfig model]) {
+  BuilderConfig<T> convert(Map input, [BuilderConfig<T> model]) {
     model ??= create();
 
     model.libraryOutput = input[libraryOutputKey];

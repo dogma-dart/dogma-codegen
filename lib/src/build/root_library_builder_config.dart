@@ -8,13 +8,14 @@
 //---------------------------------------------------------------------
 
 import 'builder_config.dart';
+import 'target_config.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
 /// Configuration for a RootLibraryBuilder.
-class RootLibraryBuilderConfig extends BuilderConfig {
+class RootLibraryBuilderConfig extends BuilderConfig<TargetConfig> {
   /// The relative path to the library.
   String libraryPath;
   /// The relative path to the directory containing the sources for the library.

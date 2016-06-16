@@ -22,6 +22,7 @@ import 'asset.dart';
 import 'configurable.dart';
 import 'library_header_generation_step.dart';
 import 'root_library_builder_config.dart';
+import 'target_config.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -29,8 +30,8 @@ import 'root_library_builder_config.dart';
 
 /// Builds the root library which exports the contents of a source directory.
 class RootLibraryBuilder extends Builder
-                            with LibraryHeaderGenerationStep
-                      implements Configurable {
+                            with LibraryHeaderGenerationStep,
+                                 Configurable<TargetConfig> {
   //---------------------------------------------------------------------
   // Member variables
   //---------------------------------------------------------------------
