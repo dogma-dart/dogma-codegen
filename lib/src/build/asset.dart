@@ -25,11 +25,12 @@ final String currentPackageName = currentPackageGraph.root.name;
 /// Creates an asset id based on the [uri].
 ///
 /// This assumes that the [uri] is within the current package.
-AssetId rootAssetIdFromUri(Uri uri) {
-  var path = p.relative(uri);
+AssetId rootAssetIdFromUri(Uri uri) =>
+    rootAssetFromRelativePath(p.relative(uri));
 
-  return new AssetId(currentPackageName, path);
-}
+/// Creates an asset id based on the relative [path].
+AssetId rootAssetFromRelativePath(String path) =>
+    new AssetId(currentPackageName, path);
 
 /// Transforms the [input] asset Uri into a package or file Uri.
 ///
