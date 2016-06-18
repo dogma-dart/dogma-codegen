@@ -14,6 +14,7 @@ import 'dart:mirrors';
 //---------------------------------------------------------------------
 
 import 'package:dogma_convert/convert.dart';
+import 'package:logging/logging.dart';
 
 import '../../build.dart';
 import 'register_builder.dart';
@@ -24,6 +25,10 @@ import 'register_builder.dart';
 
 /// A function that creates a [SourceBuilder] from the [input] config.
 typedef SourceBuilder BuilderCreator(Map input);
+
+/// The logger for the library.
+final Logger _logger =
+    new Logger('dogma_codegen.src.runner.builder_manager');
 
 /// Handles the registration of builders to perform build steps.
 ///
@@ -66,23 +71,30 @@ class BuilderManager {
     var buildLibrary = mirrorSystem.findLibrary(#dogma_codegen.build);
 
     if (buildLibrary == null) {
+      _logger.severe('The dogma_codgen.build library was not found');
       throw new ArgumentError('The dogma_codegen.build library was not found');
     }
 
     var convertLibrary = mirrorSystem.findLibrary(#dogma_convert.convert);
 
     if (convertLibrary == null) {
+      _logger.severe('The dogma_convert.convert library was not found');
       throw new ArgumentError('The dogma_convert.convert library was not found');
     }
 
     // Find the required mirrors
     var builderMirror = _findClass(buildLibrary, #SourceBuilder);
-    var configMirror = _findClass(buildLibrary, #BuilderConfig);
+    var configurableMirror = _findClass(buildLibrary, #Configurable);
+    var builderConfigMirror = _findClass(buildLibrary, #BuilderConfig);
+    var targetConfigMirror = _findClass(buildLibrary, #TargetConfig);
     var decoderMirror = _findClass(convertLibrary, #ModelDecoder);
 
     // If this is null then something went really wrong
     assert(builderMirror != null);
-    assert(configMirror != null);
+    assert(configurableMirror != null);
+    assert(builderConfigMirror != null);
+    assert(targetConfigMirror != null);
+    assert(decoderMirror != null);
 
     // Find all implementations of SourceBuilder
     var builders = _findSubclasses(buildLibrary, builderMirror);
@@ -105,45 +117,71 @@ class BuilderManager {
       if (register != null) {
         var registerAs = register.name;
 
+        _logger.info('Attempting to register ${builder.simpleName} as $registerAs');
+
         var constructor = builder.declarations[builder.simpleName] as MethodMirror;
         var parameters = constructor.parameters;
 
         // Verify the signature of the default constructor
         if (parameters.length == 1) {
-          var configParameter = parameters[0];
+          var configMirror = parameters[0].type as ClassMirror;
 
-          if (configParameter.type.isSubtypeOf(configMirror)) {
-            var modelDecoder;
+          _logger.fine('Found parameter ${configMirror.simpleName}');
 
-            // Find the decoder for the type
-            for (var decoder in decoders) {
-              var modelMirror = decoder.superinterfaces.firstWhere(
-                  (interface) => interface.isSubclassOf(decoderMirror)
-              ).typeArguments[0];
+          if (configMirror.isSubclassOf(builderConfigMirror)) {
+            // Find the decoder for the builder config type
+            var configDecoderMirror = _findDecoder(
+                configMirror,
+                decoderMirror,
+                decoders
+            );
 
-              if (modelMirror.isSubtypeOf(configParameter.type)) {
-                modelDecoder = decoder;
+            if (configDecoderMirror != null) {
+              _logger.fine('Found decoder ${configDecoderMirror.simpleName} of type ${configMirror.simpleName}');
 
-                break;
+              // Get the generic type for the builder config
+              var configTypeArguments = configMirror.typeArguments;
+              var targetMirror = configTypeArguments.length == 1
+                  ? configTypeArguments[0] as ClassMirror
+                  : null;
+
+              if ((targetMirror != null) && (targetMirror.isSubclassOf(targetConfigMirror))) {
+                // Find the decoder for the target config type
+                var targetDecoderMirror = _findDecoder(
+                    targetMirror,
+                    decoderMirror,
+                    decoders
+                );
+
+                if (targetDecoderMirror != null) {
+                  _logger.fine('Found decoder ${targetDecoderMirror.simpleName} of type ${targetMirror.simpleName}');
+                  _logger.info('Registering ${builder.simpleName}');
+
+                  registerBuilderCreator(
+                      registerAs,
+                      _defaultBuilderCreator(
+                          builder,
+                          configDecoderMirror,
+                          targetDecoderMirror
+                      )
+                  );
+                } else {
+                  _logger.warning('Could not find decoder for ${targetMirror.simpleName}');
+                }
+              } else {
+                _logger.warning('No target config type specified for ${configMirror.simpleName}');
               }
-            }
-
-            if (modelDecoder != null) {
-              registerBuilderCreator(
-                  registerAs,
-                  _defaultBuilderCreator(builder, modelDecoder)
-              );
             } else {
-              print('Could not find decoder');
+              _logger.warning('Could not find decoder for ${configMirror.simpleName}');
             }
           } else {
-            print('Unknown config type');
+            _logger.warning('Unknown config type for ${builder.simpleName} ${configMirror.simpleName}');
           }
         } else {
-          print('Could not register');
+          _logger.warning('Default constructor for ${builder.simpleName} does not match expected signature; unable to register');
         }
       } else {
-        print('Unknown');
+        _logger.warning('${builder.simpleName} has no registration');
       }
     }
   }
@@ -208,6 +246,7 @@ class BuilderManager {
     var importsBuild = libraries.where((mirror) {
       for (var dependency in mirror.libraryDependencies) {
         if (dependency.targetLibrary == import) {
+          _logger.fine('Found library to search ${mirror.simpleName} at ${mirror.uri}');
           return true;
         }
       }
@@ -223,9 +262,13 @@ class BuilderManager {
 
       for (var declaration in declarations) {
         if (declaration is ClassMirror) {
+          _logger.fine('Found class ${declaration.simpleName}');
+
           // See if the declaration is a subclass
           if (declaration.isSubclassOf(baseClass)) {
             classes.add(declaration);
+
+            _logger.info('Class ${declaration.simpleName} is a subclass of ${baseClass.simpleName}');
 
             break;
           }
@@ -234,6 +277,8 @@ class BuilderManager {
           for (var interface in declaration.superinterfaces) {
             if (interface.isSubclassOf(baseClass)) {
               classes.add(declaration);
+
+              _logger.info('Class ${declaration.simpleName} has a superinterface of ${baseClass.simpleName}');
 
               break;
             }
@@ -245,11 +290,38 @@ class BuilderManager {
     return classes;
   }
 
+  /// Searches the [decoders] for an implementation of [decoderMirror] that
+  /// converts the [model] class.
+  static ClassMirror _findDecoder(ClassMirror model,
+                                  ClassMirror decoderMirror,
+                                  List<ClassMirror> decoders) {
+    var modelDecoder;
+
+    // Find the decoder for the type
+    for (var decoder in decoders) {
+      var modelMirror = decoder.superinterfaces.firstWhere(
+          (interface) => interface.isSubclassOf(decoderMirror)
+      ).typeArguments[0] as ClassMirror;
+
+      if (modelMirror.isSubclassOf(model)) {
+        modelDecoder = decoder;
+
+        break;
+      }
+    }
+
+    return modelDecoder;
+  }
+
   /// Creates a new [ModelDecoder] by instantiating a new object through the
   /// class [mirror].
-  static ModelDecoder _createModelDecoder(ClassMirror mirror) =>
-      mirror.newInstance(_defaultConstructor, [])
-          .reflectee as ModelDecoder;
+  static ModelDecoder _createModelDecoder(ClassMirror mirror,
+                                         {Map<Symbol, dynamic> namedArguments}) {
+    namedArguments ?? <Symbol, dynamic>{};
+
+    return mirror.newInstance(_defaultConstructor, [], namedArguments)
+        .reflectee as ModelDecoder;
+  }
 
   /// Creates a new [SourceBuilder] by instantiating a new object through the
   /// class [mirror] and the [config].
@@ -258,11 +330,20 @@ class BuilderManager {
       mirror.newInstance(_defaultConstructor, [config])
           .reflectee as SourceBuilder;
 
-  /// Creates a function which uses the [builderMirror] and [decoderMirror]
-  /// to instantiate a [SourceBuilder].
+  /// Creates a function which uses the [builderMirror] to instantiate a
+  /// [SourceBuilder].
+  ///
+  /// A generic instance of [ModelDecoder] is created by using the
+  /// [targetMirror] and [targetMirror].
   static BuilderCreator _defaultBuilderCreator(ClassMirror builderMirror,
-                                               ClassMirror decoderMirror) {
-    var decoder = _createModelDecoder(decoderMirror);
+                                               ClassMirror configMirror,
+                                               ClassMirror targetMirror) {
+    var decoder = _createModelDecoder(
+        configMirror,
+        namedArguments: <Symbol, dynamic>{
+          #targetConfigDecoder: _createModelDecoder(targetMirror)
+        }
+    );
 
     return (input) {
       var config = decoder.convert(input) as BuilderConfig;
