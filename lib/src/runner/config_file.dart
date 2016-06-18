@@ -27,7 +27,7 @@ import 'formatter_config_convert.dart';
 
 /// Loads the configuration at the given [path].
 Future<Map> loadConfig(String path) async {
-  var config = await readYaml/*<Map>*/(p.join(path));
+  var config = await readYaml/*<Map>*/(p.join(path), clone: true);
 
   return transformConfig(config);
 }
