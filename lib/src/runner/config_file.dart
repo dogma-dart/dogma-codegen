@@ -26,7 +26,9 @@ import 'formatter_config_convert.dart';
 //---------------------------------------------------------------------
 
 /// Loads the configuration at the given [path].
-Future<Map> loadConfig(String path) async {
+///
+/// This will return the individual build steps for the build.
+Future<List<Map>> loadConfig(String path) async {
   var config = await readYaml/*<Map>*/(p.join(path), clone: true);
 
   return transformConfig(config);
@@ -36,111 +38,50 @@ Future<Map> loadConfig(String path) async {
 ///
 /// The transform is used to apply default values to the configuration that is
 /// then used to deserialize the config.
-Map transformConfig(Map input) {
-  var output = {};
+List<Map> transformConfig(Map input) {
+  // Get the defaults for a builder config
+  var builderDefaults = input['defaults'] ?? {};
 
-  // Get the default values
-  var defaults = _getDefaults(input);
-
-  // Run through the steps
-  var steps = input['steps'] as List<Map>;
-  var previousStep;
+  // Iterate through the steps
+  var steps = input['steps'] as List<Map> ?? <Map>[];
 
   for (var value in steps) {
-    // Should contain a single key and value
-    assert(value.keys.length == 1);
-
-    // Get the name and step
-    var name = value.keys.first;
-    var step = value[name] as Map;
-
-    // Apply global defaults
-    _applyDefaults(step, defaults);
-
-    step['input_package'] ??= currentPackageName;
-    step[BuilderConfigDecoder.outputLibraryDirectiveKey] ??= 'lib/src/$name';
-
-    // Set the input step
-    var inputSet = _parseInputSet(step['input_set']);
-
-    // See if the previous step should apply
-    if (inputSet.isEmpty) {
-      assert(previousStep != null);
-
-      inputSet.add(
-          '${previousStep[BuilderConfigDecoder.outputLibraryDirectiveKey]}/*.dart');
+    if (value.keys.length != 1) {
+      throw new ArgumentError('Build step not properly configured');
     }
 
-    step['input_set'] = inputSet;
+    // Get the step
+    var name = value.keys.first;
+    var step = value[name];
 
-    // Set the previous step
-    previousStep = step;
+    // Apply the defaults
+    _applyDefaults(step, builderDefaults);
+
+    step[BuilderConfigDecoder.libraryOutputKey] ??= 'lib/src/$name';
+
+    // Apply the target defaults
+    var targetDefaults = step['defaults'] as Map ?? {};
+
+    var targets = step['targets'] as Map ?? {};
+
+    targets.forEach((_, targetValue) {
+      _applyDefaults(targetValue, targetDefaults);
+    });
   }
 
-  return output;
+  return steps;
 }
 
-/// Applies the [defaults] to the [step].
-void _applyDefaults(Map step, Map defaults) {
-  step[BuilderConfigDecoder.copyrightKey] ??=
-      defaults[BuilderConfigDecoder.copyrightKey];
-  step[BuilderConfigDecoder.outputLibraryDirectiveKey] ??=
-      defaults[BuilderConfigDecoder.outputLibraryDirectiveKey];
-  step[BuilderConfigDecoder.outputBuildTimestampsKey] ??=
-      defaults[BuilderConfigDecoder.outputBuildTimestampsKey];
+void _applyDefaults(Map value, Map defaults) {
+  // Iterate over the map
+  defaults.forEach((key, apply) {
+    // See if the value needs to be applied recursively
+    if (apply is Map) {
+      value[key] ??= {};
 
-  var formatter = step[BuilderConfigDecoder.formatterKey];
-
-  if (formatter == null) {
-    step[BuilderConfigDecoder.formatterKey] =
-        defaults[BuilderConfigDecoder.formatterKey];
-  } else {
-    var formatterDefaults = defaults[BuilderConfigDecoder.formatterKey];
-
-    formatter[FormatterConfigDecoder.lineEndingKey] ??=
-        formatterDefaults[FormatterConfigDecoder.lineEndingKey];
-    formatter[FormatterConfigDecoder.pageWidthKey] ??=
-        formatterDefaults[FormatterConfigDecoder.pageWidthKey];
-    formatter[FormatterConfigDecoder.indentKey] ??=
-        formatterDefaults[FormatterConfigDecoder.indentKey];
-  }
-}
-
-/// Gets the defaults for the [input].
-///
-/// This is used to get the default values that should be applied to each
-/// individual step.
-Map _getDefaults(Map input) {
-  var defaults = input['defaults'] ?? {};
-
-  defaults[BuilderConfigDecoder.copyrightKey] ??= '';
-  defaults[BuilderConfigDecoder.outputLibraryDirectiveKey] ??= false;
-  defaults[BuilderConfigDecoder.outputBuildTimestampsKey] ??= true;
-
-  // Create the formatter
-  var formatter = defaults[BuilderConfigDecoder.formatterKey] ?? {};
-
-  formatter[FormatterConfigDecoder.lineEndingKey] ??=
-      Platform.isWindows ? '\n' : '\r\n';
-  formatter[FormatterConfigDecoder.pageWidthKey] ??= 80;
-  formatter[FormatterConfigDecoder.indentKey] ??= 0;
-
-  defaults[BuilderConfigDecoder.formatterKey] = formatter;
-
-  return defaults;
-}
-
-/// Parses an input set from the [value].
-///
-/// The config allows input sets to be specified as a list of string or just
-/// a string. This handles transforming the values.
-List<String> _parseInputSet(dynamic value) {
-  if (value == null) {
-    return <String>[];
-  } else if (value is String) {
-    return <String>[value];
-  } else {
-    assert(value is List);
-    return value as List<String>;
-  }
+      _applyDefaults(value[key], apply);
+    } else {
+      value[key] ??= apply;
+    }
+  });
 }
