@@ -50,7 +50,7 @@ class BuilderConfigDecoder<T extends TargetConfig> extends Converter<Map, Builde
   /// The [FormatterConfig] decoder to use.
   final ModelDecoder<FormatterConfig> formatterConfigDecoder;
   /// The [TargetConfig] decoder to use.
-  final ModelDecoder<TargetConfig> targetConfigDecoder;
+  final ModelDecoder<T> targetConfigDecoder;
 
   //---------------------------------------------------------------------
   // Constructor
@@ -75,6 +75,8 @@ class BuilderConfigDecoder<T extends TargetConfig> extends Converter<Map, Builde
     model.copyright = input[copyrightKey];
     model.outputLibraryDirective = input[outputLibraryDirectiveKey];
     model.outputBuildTimestamps = input[outputBuildTimestampsKey];
+
+    model.defaultTarget = targetConfigDecoder.convert(input['defaults'] ?? {});
 
     model.formatterConfig =
         formatterConfigDecoder.convert(input[formatterKey], model.formatterConfig);
