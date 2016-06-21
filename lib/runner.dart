@@ -15,4 +15,5 @@ export 'src/runner/builder_manager.dart';
 export 'src/runner/formatter_config_convert.dart';
 export 'src/runner/main.dart';
 export 'src/runner/register_builder.dart';
+export 'src/runner/runner.dart';
 export 'src/runner/target_config_convert.dart';
