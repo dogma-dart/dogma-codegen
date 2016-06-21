@@ -25,6 +25,9 @@ import 'formatter_config_convert.dart';
 // Library contents
 //---------------------------------------------------------------------
 
+const String inputSetKey = 'input_set';
+const String inputPackageKey = 'input_package';
+
 /// Loads the configuration at the given [path].
 ///
 /// This will return the individual build steps for the build.
@@ -59,6 +62,9 @@ List<Map> transformConfig(Map input) {
 
     step[BuilderConfigDecoder.libraryOutputKey] ??= 'lib/src/$name';
 
+    step[inputPackageKey] ??= currentPackageName;
+    step[inputSetKey] = _stringList(step[inputSetKey]);
+
     // Apply the target defaults
     var targetDefaults = step['defaults'] as Map ?? {};
 
@@ -84,4 +90,18 @@ void _applyDefaults(Map value, Map defaults) {
       value[key] ??= apply;
     }
   });
+}
+
+List<String> _stringList(dynamic value) {
+  if (value == null) {
+    return <String>[];
+  }
+
+  if (value is String) {
+    return <String>[value];
+  } else if (value is List<String>) {
+    return value;
+  } else {
+    throw new ArgumentError.value(value, 'Is not a String or List of String');
+  }
 }
