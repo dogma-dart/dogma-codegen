@@ -41,7 +41,7 @@ void generateLibraryDeclaration(LibraryMetadata metadata,
       pathSegments = pathSegments.sublist(1);
     }
 
-    name = snakeCase('${package}_${pathSegments.join('_')}');
+    name = snakeCase('$package.${pathSegments.join('.')};');
   }
 
   buffer.writeln('library $name');
