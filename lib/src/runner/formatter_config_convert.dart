@@ -53,9 +53,9 @@ class FormatterConfigDecoder extends Converter<Map, FormatterConfig>
   FormatterConfig convert(Map input, [FormatterConfig model]) {
     model ??= create();
 
-    model.lineEnding = input[lineEndingKey];
-    model.pageWidth = input[pageWidthKey];
-    model.indent = input[indentKey];
+    model.lineEnding = input[lineEndingKey] ?? FormatterConfig.lineEndingDefault;
+    model.pageWidth = input[pageWidthKey] ?? FormatterConfig.pageWidthDefault;
+    model.indent = input[indentKey] ?? FormatterConfig.indentDefault;
 
     return model;
   }
