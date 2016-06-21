@@ -25,9 +25,9 @@ import 'target_config_convert.dart';
 
 /// Decoder for a [BuilderConfig].
 class BuilderConfigDecoder<T extends TargetConfig> extends Converter<Map, BuilderConfig<T>>
-                           implements ModelDecoder<BuilderConfig<T>> {
+                                                implements ModelDecoder<BuilderConfig<T>> {
   //---------------------------------------------------------------------
-  // Member variables
+  // Class variables
   //---------------------------------------------------------------------
 
   /// The key for the library output.
@@ -71,21 +71,23 @@ class BuilderConfigDecoder<T extends TargetConfig> extends Converter<Map, Builde
   BuilderConfig<T> convert(Map input, [BuilderConfig<T> model]) {
     model ??= create();
 
-    model.libraryOutput = input[libraryOutputKey];
-    model.copyright = input[copyrightKey];
-    model.outputLibraryDirective = input[outputLibraryDirectiveKey];
-    model.outputBuildTimestamps = input[outputBuildTimestampsKey];
+    model.libraryOutput = input[libraryOutputKey] ?? currentPackageName;
+    model.copyright = input[copyrightKey] ?? BuilderConfig.copyrightDefault;
+    model.outputLibraryDirective = input[outputLibraryDirectiveKey] ?? BuilderConfig.outputLibraryDirectiveDefault;
+    model.outputBuildTimestamps = input[outputBuildTimestampsKey] ?? BuilderConfig.outputBuildTimestampsDefault;
 
     model.defaultTarget = targetConfigDecoder.convert(input['defaults'] ?? {});
 
     model.formatterConfig =
-        formatterConfigDecoder.convert(input[formatterKey], model.formatterConfig);
+        formatterConfigDecoder.convert(input[formatterKey] ?? {}, model.formatterConfig);
 
     var targets = <String, TargetConfig>{};
 
     input[targetsKey].forEach((key, value) {
       targets[key] = targetConfigDecoder.convert(value);
     });
+
+    model.targets = targets;
 
     return model;
   }
