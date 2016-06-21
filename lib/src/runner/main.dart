@@ -20,6 +20,7 @@ import 'package:logging/logging.dart';
 import '../../build.dart';
 import 'builder_manager.dart';
 import 'config_file.dart';
+import 'runner.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -55,5 +56,16 @@ Future<Null> main(List<String> args) async {
     var builder = manager.createBuilder(name, config);
 
     builders.add(builder);
+
+    var inputPackage = config[inputPackageKey];
+    var inputValues = config[inputSetKey] as List<String>;
+
+    var inputSet = new InputSet(inputPackage, inputValues);
+    inputs.add(inputSet);
   }
+
+  // Create the build phases
+  var phases = createPhases(builders, inputs);
+
+  await buildProject(phases);
 }
