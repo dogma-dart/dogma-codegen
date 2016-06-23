@@ -11,6 +11,7 @@ library dogma_codegen.build;
 
 export 'src/build/analyzer_step.dart';
 export 'src/build/asset.dart';
+export 'src/build/asset_output.dart';
 export 'src/build/builder_config.dart';
 export 'src/build/configurable.dart';
 export 'src/build/formatter_config.dart';
