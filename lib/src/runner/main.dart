@@ -8,7 +8,6 @@
 //---------------------------------------------------------------------
 
 import 'dart:async';
-import 'dart:convert';
 
 //---------------------------------------------------------------------
 // Imports
@@ -20,6 +19,7 @@ import 'package:logging/logging.dart';
 import '../../build.dart';
 import 'builder_manager.dart';
 import 'config_file.dart';
+import 'input_set_convert.dart';
 import 'runner.dart';
 
 //---------------------------------------------------------------------
@@ -42,11 +42,10 @@ Future<Null> main(List<String> args) async {
   // Read the configuration file
   var config = await loadConfig('dogma.yaml');
 
-  print(JSON.encode(config));
-
   // Create the builders and input sets
   var inputs = <InputSet>[];
   var builders = <SourceBuilder>[];
+  var inputSetDecoder = new InputSetDecoder();
 
   for (var value in config) {
     assert(value.length == 1);
@@ -54,13 +53,9 @@ Future<Null> main(List<String> args) async {
     var config = value[name];
 
     var builder = manager.createBuilder(name, config);
-
     builders.add(builder);
 
-    var inputPackage = config[inputPackageKey];
-    var inputValues = config[inputSetKey] as List<String>;
-
-    var inputSet = new InputSet(inputPackage, inputValues);
+    var inputSet = inputSetDecoder.convert(config);
     inputs.add(inputSet);
   }
 
