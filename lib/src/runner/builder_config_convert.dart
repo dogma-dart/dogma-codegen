@@ -83,7 +83,7 @@ class BuilderConfigDecoder<T extends TargetConfig> extends Converter<Map, Builde
 
     var targets = <String, TargetConfig>{};
 
-    input[targetsKey].forEach((key, value) {
+    input[targetsKey]?.forEach((key, value) {
       targets[key] = targetConfigDecoder.convert(value);
     });
 
