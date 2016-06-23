@@ -8,7 +8,6 @@
 //---------------------------------------------------------------------
 
 import 'dart:async';
-import 'dart:io';
 
 //---------------------------------------------------------------------
 // Imports
@@ -19,14 +18,11 @@ import 'package:dogma_source_analyzer/path.dart' as p;
 import '../../build.dart';
 import '../../io.dart';
 import 'builder_config_convert.dart';
-import 'formatter_config_convert.dart';
+import 'input_set_convert.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
-
-const String inputSetKey = 'input_set';
-const String inputPackageKey = 'input_package';
 
 /// Loads the configuration at the given [path].
 ///
@@ -62,8 +58,9 @@ List<Map> transformConfig(Map input) {
 
     step[BuilderConfigDecoder.libraryOutputKey] ??= 'lib/src/$name';
 
-    step[inputPackageKey] ??= currentPackageName;
-    step[inputSetKey] = _stringList(step[inputSetKey]);
+    step[InputSetDecoder.inputPackageKey] ??= currentPackageName;
+    step[InputSetDecoder.inputSetKey] =
+        _stringList(step[InputSetDecoder.inputSetKey]);
 
     // Apply the target defaults
     var targetDefaults = step['defaults'] as Map ?? {};
