@@ -15,9 +15,9 @@ import 'dart:async';
 
 import 'package:build/build.dart';
 import 'package:dart_style/dart_style.dart';
-import 'package:meta/meta.dart';
 
 import 'asset.dart';
+import 'asset_output.dart';
 import 'builder_config.dart';
 import 'configurable.dart';
 import 'formatter_config.dart';
@@ -49,6 +49,7 @@ import 'view_step.dart';
 /// implementations of the steps being implemented.
 abstract class SourceBuilder<T extends TargetConfig> extends Builder
                                                         with Configurable<T>,
+                                                             AssetOutput<T>,
                                                              LibraryHeaderGenerationStep
                                                   implements MetadataStep,
                                                              SourceGenerationStep,
@@ -117,19 +118,4 @@ abstract class SourceBuilder<T extends TargetConfig> extends Builder
 
   @override
   List<AssetId> declareOutputs(AssetId inputId) => [outputAssetId(inputId)];
-
-  AssetId outputAssetId(AssetId inputId) {
-    // \TODO Move into path package
-    var path = inputId.path;
-    var split = path.lastIndexOf('/');
-    var original = path.substring(split + 1);
-
-    return new AssetId(
-        package,
-        '${config.libraryOutput}/${filename(original)}'
-    );
-  }
-
-  @protected
-  String filename(String original) => original;
 }
