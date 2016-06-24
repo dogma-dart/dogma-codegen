@@ -31,6 +31,7 @@ class _BuilderTestConfig extends BuilderConfig {
   String test;
 }
 
+// ignore: unused_element
 class _BuilderTestConfigDecoder extends Converter<Map, _BuilderTestConfig>
                              implements ModelDecoder<_BuilderTestConfig> {
   final ModelDecoder<BuilderConfig> builderConfigDecoder;
@@ -54,6 +55,7 @@ class _BuilderTestConfigDecoder extends Converter<Map, _BuilderTestConfig>
 }
 
 @RegisterBuilder('test')
+// ignore: unused_element
 class _BuilderTest extends SourceBuilder {
   _BuilderTest(_BuilderTestConfig config)
       : super(config);
