@@ -19,6 +19,24 @@ import 'type_metadata.dart';
 // Library contents
 //---------------------------------------------------------------------
 
+class Field {
+  final FieldMetadata metadata;
+
+  Field(this.metadata);
+
+  @override
+  String toString() {
+    var enclosingMetadata = metadata.enclosingMetadata;
+
+    print('Enclosing ${enclosingMetadata.name}');
+
+    var prefix = enclosingMetadata is ClassMetadata
+        ? '${enclosingMetadata.name}.' : '';
+
+    return '$prefix${metadata.name}';
+  }
+}
+
 /// Definition of a function that generates the source code for a field.
 ///
 /// The source code generated is written into the [buffer].
