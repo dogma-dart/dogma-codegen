@@ -27,47 +27,52 @@ const String _defaultsTo = 'defaultsTo';
 void main() {
   test('required', () {
     var parameter = new ParameterMetadata(_value, _type);
+    var parameterThis = new ParameterMetadata(_value, _type, isInitializer: true);
 
     expect(generateParameter(parameter), _expectedRequired);
-    expect(generateRequiredParameter(parameter, false), _expectedRequired);
-    expect(generateParameter(parameter, useThis: true), _expectedThisRequired);
-    expect(generateRequiredParameter(parameter, true), _expectedThisRequired);
+    expect(generateRequiredParameter(parameter), _expectedRequired);
+    expect(generateParameter(parameterThis), _expectedThisRequired);
+    expect(generateRequiredParameter(parameterThis), _expectedThisRequired);
   });
   test('optional', () {
     var parameter = new ParameterMetadata(_value, _type, parameterKind: ParameterKind.positional);
+    var parameterThis = new ParameterMetadata(_value, _type, parameterKind: ParameterKind.positional, isInitializer: true);
 
     expect(generateParameter(parameter), _expectedRequired);
-    expect(generatePositionalParameter(parameter, false), _expectedRequired);
-    expect(generateParameter(parameter, useThis: true), _expectedThisRequired);
-    expect(generatePositionalParameter(parameter, true), _expectedThisRequired);
+    expect(generatePositionalParameter(parameter), _expectedRequired);
+    expect(generateParameter(parameterThis), _expectedThisRequired);
+    expect(generatePositionalParameter(parameterThis), _expectedThisRequired);
   });
   test('optional with default', () {
     var parameter = new ParameterMetadata(_value, _type, parameterKind: ParameterKind.positional, defaultValue: _defaultsTo);
+    var parameterThis = new ParameterMetadata(_value, _type, parameterKind: ParameterKind.positional, defaultValue: _defaultsTo, isInitializer: true);
     var expected = '$_expectedRequired=\'$_defaultsTo\'';
     var expectedThis = '$_expectedThisRequired=\'defaultsTo\'';
 
     expect(generateParameter(parameter), expected);
-    expect(generatePositionalParameter(parameter, false), expected);
-    expect(generateParameter(parameter, useThis: true), expectedThis);
-    expect(generatePositionalParameter(parameter, true), expectedThis);
+    expect(generatePositionalParameter(parameter), expected);
+    expect(generateParameter(parameterThis), expectedThis);
+    expect(generatePositionalParameter(parameterThis), expectedThis);
   });
   test('named', () {
     var parameter = new ParameterMetadata(_value, _type, parameterKind: ParameterKind.named);
+    var parameterThis = new ParameterMetadata(_value, _type, parameterKind: ParameterKind.named, isInitializer: true);
 
     expect(generateParameter(parameter), _expectedRequired);
-    expect(generateNamedParameter(parameter, false), _expectedRequired);
-    expect(generateParameter(parameter, useThis: true), _expectedThisRequired);
-    expect(generateNamedParameter(parameter, true), _expectedThisRequired);
+    expect(generateNamedParameter(parameter), _expectedRequired);
+    expect(generateParameter(parameterThis), _expectedThisRequired);
+    expect(generateNamedParameter(parameterThis), _expectedThisRequired);
   });
   test('named with default', () {
     var parameter = new ParameterMetadata(_value, _type, parameterKind: ParameterKind.named, defaultValue: _defaultsTo);
+    var parameterThis = new ParameterMetadata(_value, _type, parameterKind: ParameterKind.named, defaultValue: _defaultsTo, isInitializer: true);
     var expected = '$_expectedRequired:\'$_defaultsTo\'';
     var expectedThis = '$_expectedThisRequired:\'defaultsTo\'';
 
     expect(generateParameter(parameter), expected);
-    expect(generateNamedParameter(parameter, false), expected);
-    expect(generateParameter(parameter, useThis: true), expectedThis);
-    expect(generateNamedParameter(parameter, true), expectedThis);
+    expect(generateNamedParameter(parameter), expected);
+    expect(generateParameter(parameterThis), expectedThis);
+    expect(generateNamedParameter(parameterThis), expectedThis);
   });
   test('parameters', () {
     var r0 = new ParameterMetadata('r0', _type);
