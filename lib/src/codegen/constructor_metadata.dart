@@ -64,18 +64,6 @@ void generateConstructorDefinition(ConstructorMetadata metadata,
   // Write out metadata
   generateAnnotatedMetadata(metadata, buffer, annotationGenerators);
 
-  var clazz = metadata.enclosingMetadata as ClassMetadata;
-  var fields = clazz.fields;
-  var useThisOn = <ParameterMetadata>[];
-
-  for (var parameter in metadata.parameters) {
-    for (var field in fields) {
-      if ((field.name == parameter.name) && (field.type == parameter.type)) {
-        useThisOn.add(parameter);
-      }
-    }
-  }
-
   // Write the constructor declaration
   generateConstructorDeclaration(metadata, buffer);
 
