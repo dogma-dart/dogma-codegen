@@ -23,12 +23,8 @@ typedef void ConstructorGenerator(ConstructorMetadata constructor, StringBuffer 
 
 /// Generates a constructor declaration with the given [metadata] into the
 /// [buffer].
-///
-/// The [useThis] value generates a declaration using the shorthand for setting
-/// fields within the class where this.field is used.
 void generateConstructorDeclaration(ConstructorMetadata metadata,
-                                    StringBuffer buffer,
-                                   {bool useThis: false}) {
+                                    StringBuffer buffer) {
   // Write out the factory declaration
   if (metadata.isFactory) {
     buffer.write('factory ');
@@ -50,7 +46,7 @@ void generateConstructorDeclaration(ConstructorMetadata metadata,
   }
 
   // Write out the parameters
-  generateParameters(metadata.parameters, buffer, useThis: useThis);
+  generateParameters(metadata.parameters, buffer);
 }
 
 /// Generates a constructor definition with the given [metadata] into the
@@ -59,21 +55,29 @@ void generateConstructorDeclaration(ConstructorMetadata metadata,
 /// An [initializerListGenerator] can be used to fill out an initializer list
 /// within the constructor. A [generator] is used to make the definition of the
 /// constructor.
-///
-/// The [useThis] value generates a declaration using the shorthand for setting
-/// fields within the class where this.field is used.
 void generateConstructorDefinition(ConstructorMetadata metadata,
                                    StringBuffer buffer,
                                   {ConstructorGenerator initializerListGenerator,
                                    ConstructorGenerator generator,
-                                   bool useThis: false,
                                    bool useArrow: false,
                                    List<AnnotationGenerator> annotationGenerators}) {
   // Write out metadata
   generateAnnotatedMetadata(metadata, buffer, annotationGenerators);
 
+  var clazz = metadata.enclosingMetadata as ClassMetadata;
+  var fields = clazz.fields;
+  var useThisOn = <ParameterMetadata>[];
+
+  for (var parameter in metadata.parameters) {
+    for (var field in fields) {
+      if ((field.name == parameter.name) && (field.type == parameter.type)) {
+        useThisOn.add(parameter);
+      }
+    }
+  }
+
   // Write the constructor declaration
-  generateConstructorDeclaration(metadata, buffer, useThis: useThis);
+  generateConstructorDeclaration(metadata, buffer);
 
   // Write the initializerList
   if (initializerListGenerator != null) {
@@ -89,15 +93,3 @@ void generateConstructorDefinition(ConstructorMetadata metadata,
     buffer.writeln(';');
   }
 }
-
-/// Generates a constructor definition with the given [metadata] into the
-/// [buffer] where each parameter corresponds to a field.
-void generateFinalConstructor(ConstructorMetadata metadata,
-                              StringBuffer buffer,
-                             {List<AnnotationGenerator> annotationGenerators}) =>
-    generateConstructorDefinition(
-        metadata,
-        buffer,
-        useThis: true,
-        annotationGenerators: annotationGenerators
-    );

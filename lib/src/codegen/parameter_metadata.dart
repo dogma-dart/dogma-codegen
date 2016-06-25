@@ -19,13 +19,8 @@ import 'type_metadata.dart';
 //---------------------------------------------------------------------
 
 /// Generates the [parameters] into the [buffer].
-///
-/// If [useThis] is used then the type is not output into the parameter and
-/// instead it is prefixed with a `this.`. Only set [useThis] to true when
-/// generating constructors.
 void generateParameters(Iterable<ParameterMetadata> parameters,
-                        StringBuffer buffer,
-                       {bool useThis: false}) {
+                        StringBuffer buffer) {
   // Write the opening parenthesis
   buffer.write('(');
 
@@ -36,7 +31,7 @@ void generateParameters(Iterable<ParameterMetadata> parameters,
       parameters
           .where(requiredParameterMatch)
           .map/*<String>*/(
-              (parameter) => generateRequiredParameter(parameter, useThis)
+              (parameter) => generateRequiredParameter(parameter)
           )
   );
 
@@ -45,7 +40,7 @@ void generateParameters(Iterable<ParameterMetadata> parameters,
       parameters
           .where(positionalParameterMatch)
           .map/*<String>*/(
-              (parameter) => generateRequiredParameter(parameter, useThis)
+              (parameter) => generateRequiredParameter(parameter)
           )
   );
 
@@ -58,7 +53,7 @@ void generateParameters(Iterable<ParameterMetadata> parameters,
       parameters
           .where(namedParameterMatch)
           .map/*<String>*/(
-              (parameter) => generateRequiredParameter(parameter, useThis)
+              (parameter) => generateRequiredParameter(parameter)
           )
   );
 
@@ -78,24 +73,20 @@ void generateParameters(Iterable<ParameterMetadata> parameters,
 /// This will determine what type of parameter is present before generating
 /// the code. If the type is known then the specific generator function should
 /// be called instead.
-///
-/// If [useThis] is `true` then the value will be prefixed with `this`.
-String generateParameter(ParameterMetadata parameter, {bool useThis: false}) {
+String generateParameter(ParameterMetadata parameter) {
   switch (parameter.parameterKind) {
     case ParameterKind.required:
-      return generateRequiredParameter(parameter, useThis);
+      return generateRequiredParameter(parameter);
     case ParameterKind.positional:
-      return generatePositionalParameter(parameter, useThis);
+      return generatePositionalParameter(parameter);
     default: // ParameterKind.named:
-      return generateNamedParameter(parameter, useThis);
+      return generateNamedParameter(parameter);
   }
 }
 
 /// Generates the source code for a required [parameter].
-///
-/// If [useThis] is `true` then the value will be prefixed with `this`.
-String generateRequiredParameter(ParameterMetadata parameter, bool useThis) {
-  var prefix = useThis
+String generateRequiredParameter(ParameterMetadata parameter) {
+  var prefix = parameter.isInitializer
       ? 'this.'
       : generateType(parameter.type) + ' ';
 
@@ -103,16 +94,12 @@ String generateRequiredParameter(ParameterMetadata parameter, bool useThis) {
 }
 
 /// Generates the source code for a positional [parameter].
-///
-/// If [useThis] is `true` then the value will be prefixed with `this`.
-String generatePositionalParameter(ParameterMetadata parameter, bool useThis) =>
-    '${generateRequiredParameter(parameter, useThis)}${_generateDefaultValue(parameter, '=')}';
+String generatePositionalParameter(ParameterMetadata parameter) =>
+    '${generateRequiredParameter(parameter)}${_generateDefaultValue(parameter, '=')}';
 
 /// Generates the source code for a named [parameter].
-///
-/// If [useThis] is `true` then the value will be prefixed with `this`.
-String generateNamedParameter(ParameterMetadata parameter, bool useThis) =>
-    '${generateRequiredParameter(parameter, useThis)}${_generateDefaultValue(parameter, ':')}';
+String generateNamedParameter(ParameterMetadata parameter) =>
+    '${generateRequiredParameter(parameter)}${_generateDefaultValue(parameter, ':')}';
 
 /// Generates the default value for the [parameter].
 ///
