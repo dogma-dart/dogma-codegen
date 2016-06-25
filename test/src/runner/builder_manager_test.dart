@@ -27,7 +27,7 @@ import 'package:dogma_codegen/runner.dart';
 // Library contents
 //---------------------------------------------------------------------
 
-class _BuilderTestConfig extends BuilderConfig {
+class _BuilderTestConfig extends TargetConfig {
   String test;
 }
 
@@ -46,8 +46,6 @@ class _BuilderTestConfigDecoder extends Converter<Map, _BuilderTestConfig>
   _BuilderTestConfig convert(Map input, [_BuilderTestConfig model]) {
     model ??= create();
 
-    builderConfigDecoder.convert(input, model);
-
     model.test = input['test'];
 
     return model;
@@ -56,8 +54,8 @@ class _BuilderTestConfigDecoder extends Converter<Map, _BuilderTestConfig>
 
 @RegisterBuilder('test')
 // ignore: unused_element
-class _BuilderTest extends SourceBuilder {
-  _BuilderTest(_BuilderTestConfig config)
+class _BuilderTest extends SourceBuilder<_BuilderTestConfig> {
+  _BuilderTest(BuilderConfig<_BuilderTestConfig> config)
       : super(config);
 
   @override
@@ -97,16 +95,20 @@ void main() {
         'page_width': 80,
         'indent': 0
       },
-      'test': 'success'
+      'defaults': {
+        'test': 'success'
+      }
     };
 
     var builder = manager.createBuilder('test', input);
 
     expect(builder is _BuilderTest, isTrue);
-    expect(builder.config is _BuilderTestConfig, isTrue);
+    expect(builder.config is BuilderConfig, isTrue);
+    expect(builder.config.defaultTarget is _BuilderTestConfig, isTrue);
 
-    var config = builder.config as _BuilderTestConfig;
+    var config = builder.config.defaultTarget as _BuilderTestConfig;
+    var defaults = input['defaults'] as Map;
 
-    expect(config.test, input['test']);
+    expect(config.test, defaults['test']);
   });
 }
