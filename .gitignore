@@ -19,6 +19,9 @@
 *.js.map
 *.info.json
 
+# Directory created by build
+.dart_tool/
+
 # Directory created by dartdoc
 doc/api/
 
@@ -26,5 +29,10 @@ doc/api/
 # (Library packages only! Remove pattern if developing an application package)
 pubspec.lock
 
-# IntelliJ files
+# Files created by developer environment
 .idea/
+*.iml
+*.ipr
+*.iws
+.idea/
+.DS_Store
