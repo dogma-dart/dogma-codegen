@@ -46,7 +46,17 @@ Uri assetUriTransform(Uri input) {
   var package = pathSegments[0];
   var path = pathSegments.sublist(1).join('/');
 
-  return (package == currentPackageName)
-      ? p.join(path)
-      : new Uri(scheme: 'package', path: path);
+  return _assetUri(package, path);
 }
+
+/// Gets the Uri from the [input] asset id.
+Uri assetIdUri(AssetId input) => _assetUri(input.package, input.path);
+
+/// Converts the [package] and [path] into a Uri.
+///
+/// If the [package] is equal to the current package name a File Uri will be
+/// returned; otherwise a package Uri will be returned.
+Uri _assetUri(String package, String path) =>
+    (package == currentPackageName)
+        ? p.join(path)
+        : p.join(path, base: Uri.parse('package:$package'));
